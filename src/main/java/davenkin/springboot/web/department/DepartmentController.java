@@ -1,6 +1,6 @@
 package davenkin.springboot.web.department;
 
-import davenkin.springboot.web.common.utils.ResponseId;
+import deviceet.common.utils.ResponseId;
 import davenkin.springboot.web.department.command.CreateDepartmentCommand;
 import davenkin.springboot.web.department.command.DepartmentCommandService;
 import jakarta.validation.Valid;

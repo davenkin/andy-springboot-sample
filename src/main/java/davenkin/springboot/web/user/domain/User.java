@@ -9,9 +9,9 @@ import lombok.experimental.FieldNameConstants;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import static davenkin.springboot.web.common.Constants.USER_COLLECTION;
+import static deviceet.common.Constants.USER_COLLECTION;
 import static davenkin.springboot.web.common.model.AggregateRootType.USER;
-import static davenkin.springboot.web.common.utils.SnowflakeIdGenerator.newSnowflakeId;
+import static deviceet.common.utils.SnowflakeIdGenerator.newSnowflakeId;
 import static lombok.AccessLevel.PRIVATE;
 
 @Getter

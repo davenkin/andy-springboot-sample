@@ -1,6 +1,6 @@
 package davenkin.springboot.web.common.domainevent.publish;
 
-import davenkin.springboot.web.common.configuration.profile.NonBuildProfile;
+import davenkin.springboot.web.common.configuration.profile.NonCiProfile;
 import davenkin.springboot.web.common.domainevent.DomainEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +11,7 @@ import java.util.concurrent.CompletableFuture;
 
 // Send domain events to Kafka
 // This is the only place where event publishing touches Kafka, hence the coupling to Kafka is minimised
-@NonBuildProfile
+@NonCiProfile
 @Slf4j
 @Component
 @RequiredArgsConstructor

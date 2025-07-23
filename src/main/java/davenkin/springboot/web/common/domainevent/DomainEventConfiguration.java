@@ -3,7 +3,7 @@ package davenkin.springboot.web.common.domainevent;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.client.model.changestream.ChangeStreamDocument;
 import com.mongodb.client.model.changestream.OperationType;
-import davenkin.springboot.web.common.configuration.profile.NonBuildProfile;
+import davenkin.springboot.web.common.configuration.profile.NonCiProfile;
 import davenkin.springboot.web.common.domainevent.publish.DomainEventPublisher;
 import davenkin.springboot.web.common.domainevent.publish.PublishingDomainEvent;
 import lombok.extern.slf4j.Slf4j;
@@ -28,9 +28,9 @@ import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 import org.springframework.util.backoff.ExponentialBackOff;
 
-import static davenkin.springboot.web.common.Constants.PUBLISHING_DOMAIN_EVENT_COLLECTION;
+import static deviceet.common.Constants.PUBLISHING_DOMAIN_EVENT_COLLECTION;
 
-@NonBuildProfile
+@NonCiProfile
 @Slf4j
 @Configuration
 @EnableKafkaRetryTopic

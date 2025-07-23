@@ -1,4 +1,4 @@
-package davenkin.springboot.web;
+package deviceet;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

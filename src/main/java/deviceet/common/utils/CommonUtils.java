@@ -1,4 +1,4 @@
-package davenkin.springboot.web.common.utils;
+package deviceet.common.utils;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -6,7 +6,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
-
+//todo:split
 public class CommonUtils {
     private static final String CGLIB_CLASS_SEPARATOR = "$$";
 

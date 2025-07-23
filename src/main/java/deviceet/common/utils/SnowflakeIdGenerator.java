@@ -1,4 +1,4 @@
-package davenkin.springboot.web.common.utils;
+package deviceet.common.utils;
 
 import org.apache.commons.lang3.RandomUtils;
 

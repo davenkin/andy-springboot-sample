@@ -1,6 +1,6 @@
 package davenkin.springboot.web.common.configuration;
 
-import davenkin.springboot.web.common.configuration.profile.NonBuildProfile;
+import davenkin.springboot.web.common.configuration.profile.NonCiProfile;
 import davenkin.springboot.web.common.domainevent.publish.DomainEventPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +10,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
 @Slf4j
-@NonBuildProfile
+@NonCiProfile
 @Configuration
 @EnableScheduling
 @RequiredArgsConstructor

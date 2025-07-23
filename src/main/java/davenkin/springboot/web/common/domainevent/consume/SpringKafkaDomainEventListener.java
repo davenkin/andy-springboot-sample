@@ -1,6 +1,6 @@
 package davenkin.springboot.web.common.domainevent.consume;
 
-import davenkin.springboot.web.common.configuration.profile.NonBuildProfile;
+import davenkin.springboot.web.common.configuration.profile.NonCiProfile;
 import davenkin.springboot.web.common.domainevent.DomainEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 // This is the only place where event consuming touches Kafka, hence the coupling to Kafka is minimised
 
 // Normally we use @NonBuildProfile to disable it for build pipeline
-@NonBuildProfile
+@NonCiProfile
 @Slf4j
 @Component
 @RequiredArgsConstructor

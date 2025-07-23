@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
-import static davenkin.springboot.web.common.utils.CommonUtils.joinMongoFields;
+import static deviceet.common.utils.CommonUtils.joinMongoFields;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 @Slf4j

@@ -11,8 +11,6 @@ server:
 spring:
   application:
     name: deviceet-device-management-service
-  profiles:
-    active: local # default profile
   kafka:
     consumer:
       auto-offset-reset: earliest
@@ -23,7 +21,7 @@ spring:
 
 mongock:
   enabled: true
-  migration-scan-package: deviceet.common.migration
+  migration-scan-package: davenkin.springboot.web.common.changelog
   transactional: true
   lock-repository-name: mongock-lock
-  migration-repository-name: mongock-migration
+  migration-repository-name: mongock-change-log

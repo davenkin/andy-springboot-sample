@@ -1,6 +1,6 @@
 package davenkin.springboot.web.user;
 
-import davenkin.springboot.web.common.utils.ResponseId;
+import deviceet.common.utils.ResponseId;
 import davenkin.springboot.web.user.command.CreateUserCommand;
 import davenkin.springboot.web.user.command.UpdateUserNameCommand;
 import davenkin.springboot.web.user.command.UserCommandService;

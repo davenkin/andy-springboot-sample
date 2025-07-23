@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static davenkin.springboot.web.common.utils.CommonUtils.singleParameterizedArgumentClassOf;
+import static deviceet.common.utils.CommonUtils.singleParameterizedArgumentClassOf;
 import static java.util.Comparator.comparingInt;
 
 // The entry point for handling a domain event, it finds all eligible handlers and call them one by one

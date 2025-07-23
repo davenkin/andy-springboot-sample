@@ -10,7 +10,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
-import static davenkin.springboot.web.common.utils.CommonUtils.requireNonBlank;
+import static deviceet.common.utils.CommonUtils.requireNonBlank;
 import static java.util.Objects.requireNonNull;
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
@@ -25,7 +25,7 @@ public abstract class AggregateRoot {
 
     // Domain events are stored temporarily in the aggregate root
     // Domain events are not persisted together with the aggregate roots as events will be stored in separately
-    // @Transient here is very import for not persisting events with aggregate root, otherwise we need to do this manually by ourselves
+    // @Transient here is very important for not persisting events with aggregate root, otherwise we need to do this manually by ourselves
     @Transient
     private List<DomainEvent> events;
 

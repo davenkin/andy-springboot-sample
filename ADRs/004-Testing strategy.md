@@ -30,4 +30,4 @@ When writing integration tests, follow the below guidelines:
   domain events, you can just verify the
   event exists in database(we are using the [transactional outbox pattern](https://microservices.io/patterns/data/transactional-outbox.html)
   so domain events will firstly be persisted into database then publish to Kafka using another thread).
-- Authentication and authorization are not covered in integration tests, let's cover that in manual testing.
+- Authentication related testing is covered in integration tests, let's cover that in manual testing.

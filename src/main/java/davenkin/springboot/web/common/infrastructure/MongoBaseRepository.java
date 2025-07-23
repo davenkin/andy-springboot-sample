@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static davenkin.springboot.web.common.utils.CommonUtils.requireNonBlank;
-import static davenkin.springboot.web.common.utils.CommonUtils.singleParameterizedArgumentClassOf;
+import static deviceet.common.utils.CommonUtils.requireNonBlank;
+import static deviceet.common.utils.CommonUtils.singleParameterizedArgumentClassOf;
 import static java.util.Comparator.comparing;
 import static java.util.Objects.requireNonNull;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;

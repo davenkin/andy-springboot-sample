@@ -10,8 +10,8 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.test.context.ActiveProfiles;
 
-import static davenkin.springboot.web.common.Constants.BUILD_PROFILE;
-import static davenkin.springboot.web.common.utils.CommonUtils.requireNonBlank;
+import static deviceet.common.Constants.CI_PROFILE;
+import static deviceet.common.utils.CommonUtils.requireNonBlank;
 import static java.util.Objects.requireNonNull;
 import static org.junit.jupiter.api.parallel.ExecutionMode.CONCURRENT;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
@@ -20,7 +20,7 @@ import static org.springframework.data.domain.Sort.by;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
 
-@ActiveProfiles(BUILD_PROFILE)
+@ActiveProfiles(CI_PROFILE)
 @Execution(CONCURRENT)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 public abstract class BaseTest {

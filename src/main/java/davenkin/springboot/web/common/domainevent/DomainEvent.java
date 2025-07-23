@@ -12,8 +12,8 @@ import lombok.experimental.FieldNameConstants;
 
 import java.time.Instant;
 
-import static davenkin.springboot.web.common.utils.CommonUtils.requireNonBlank;
-import static davenkin.springboot.web.common.utils.SnowflakeIdGenerator.newSnowflakeId;
+import static deviceet.common.utils.CommonUtils.requireNonBlank;
+import static deviceet.common.utils.SnowflakeIdGenerator.newSnowflakeId;
 import static java.util.Objects.requireNonNull;
 import static lombok.AccessLevel.PROTECTED;
 

@@ -10,10 +10,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-import static davenkin.springboot.web.common.Constants.MONGO_ID;
+import static deviceet.common.Constants.MONGO_ID;
 import static davenkin.springboot.web.common.domainevent.publish.DomainEventPublishStatus.*;
 import static davenkin.springboot.web.common.domainevent.publish.PublishingDomainEvent.Fields.*;
-import static davenkin.springboot.web.common.utils.CommonUtils.requireNonBlank;
+import static deviceet.common.utils.CommonUtils.requireNonBlank;
 import static java.util.Objects.requireNonNull;
 import static org.springframework.data.domain.Sort.Direction.ASC;
 import static org.springframework.data.domain.Sort.by;
