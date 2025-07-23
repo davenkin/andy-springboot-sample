@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: springboot-mongo-kafka-eda-template
+    name: deviceet-device-management-service
   kafka:
     consumer:
       auto-offset-reset: earliest

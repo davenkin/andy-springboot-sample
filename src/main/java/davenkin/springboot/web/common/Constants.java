@@ -2,6 +2,8 @@ package davenkin.springboot.web.common;
 
 public class Constants {
     public static final String MONGO_ID = "_id";
+    public static final String BUILD_PROFILE = "build";
+    public static final String NON_BUILD_PROFILE = "!" + BUILD_PROFILE;
     public static final String SHEDLOCK_COLLECTION = "shedlock";
     public static final String USER_COLLECTION = "user";
     public static final String DEPARTMENT_COLLECTION = "department";

@@ -1,4 +1,4 @@
-package davenkin.springboot.web.about;
+package deviceet.about;
 
 
 import lombok.AllArgsConstructor;

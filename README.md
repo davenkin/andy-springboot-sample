@@ -21,3 +21,8 @@
   directly, after that open
   `http://localhost:6123/about` to check if the application runs successfully.
 - To stop local infrastructure, run `./stop-docker-compose.sh` to shut down all docker containers.
+- To run tests, locate them inside IDE and run them directly from there.
+
+## Architecture Decision Records (ADRs)
+
+This project uses [Architecture Decision Records (ADRs)](https://adr.github.io/) to document important architectural decisions. Each ADR is stored in the `ADRs` directory and follows a specific format.
