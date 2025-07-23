@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: springboot-mongo-kafka-eda-template
+  kafka:
+    consumer:
+      auto-offset-reset: earliest
+#      enable-auto-commit: false
+#    listener:
+#      ack-mode: batch
+
+
+mongock:
+  enabled: true
+  migration-scan-package: davenkin.springboot.web.common.changelog
+  transactional: true
+  lock-repository-name: mongock-lock
+  migration-repository-name: mongock-change-log
