@@ -11,8 +11,8 @@
 
 ### How to run locally
 
-- First you need to setup local infrastructure, run `./start-docker-compose.sh` to start mongo and kafka docker
-  containers.
+- First you need to setup local infrastructure, run `./start-docker-compose.sh` to start MongoDB, Kafka, Kafka UI and
+  Keycloak docker containers.
     - MongoDB: localhost:27123
     - Kafka: localhost:9123
     - Kafka UI: [http://localhost:8123](http://localhost:8123)
