@@ -1,16 +1,16 @@
 ### Introduction
 
-- Backend template for UDS platform solutions.
+- Device management API for deviceet.
 
 ### How to run
 
 - run `./start-docker-compose.sh` to start mongo and kafka docker containers
-    - MongoDB: localhost:27017
-    - Kafka: localhost:9092
-    - Kafka UI: [http://localhost:8070](http://localhost:8070)
-- `./mvnw spring-boot:run` and open `http://localhost:8080/about`
-- Or run `main()` in `SpringBootWebApplication` in IDE directly
-- Run all tests
+    - MongoDB: localhost:27123
+    - Kafka: localhost:9123
+    - Kafka UI: [http://localhost:8123](http://localhost:8123)
+    - Keycloak: [http://localhost:7123](http://localhost:7123)
+- `./mvnw spring-boot:run`,or run `main()` in `SpringBootWebApplication` in IDE directly,then open
+  `http://localhost:6123/about` to check if the application runs successfully
 - run `./stop-docker-compose.sh` to shut down all docker containers
 
 ### Tech stack

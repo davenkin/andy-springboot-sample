@@ -9,10 +9,10 @@
   </parent>
 
   <groupId>com.andy</groupId>
-  <artifactId>andy-solution-backend</artifactId>
+  <artifactId>deviceet-device-management-service</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>andy-solution-backend</name>
-  <description>Backend template for UDS platform solutions.</description>
+  <name>deviceet-device-management-service</name>
+  <description>Device management API for deviceet.</description>
 
   <properties>
     <java.version>17</java.version>
@@ -60,7 +60,7 @@
 
     <dependency>
       <groupId>org.springframework.boot</groupId>
-      <!--Only for using WebClient and WebTestClient-->
+      <!--Used only for WebClient-->
       <artifactId>spring-boot-starter-webflux</artifactId>
     </dependency>
 

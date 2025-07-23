@@ -1,3 +1,6 @@
+server:
+  port: 6123
+
 spring:
   application:
     name: springboot-mongo-kafka-eda-template
