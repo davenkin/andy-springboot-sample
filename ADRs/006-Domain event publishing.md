@@ -7,3 +7,4 @@ todo: impl
 ## Decision
 
 ## Implementation
+- JsonDeserializer is configured in `DomainEventConfiguration`

@@ -1,4 +1,24 @@
 services:
+  mongodb:
+    image: mongo:7
+    ports:
+      - "27123:27017"
+    environment:
+      - "MONGO_INITDB_DATABASE=deviceet-local"
+    volumes:
+      - deviceet-local-volume-mongo:/data/db
+    command: mongod --replSet rs0
+    healthcheck:
+      test: |
+        mongosh --eval "try { rs.status().ok } catch (e) { rs.initiate({ _id: 'rs0', members: [{ _id: 0, host: 'localhost:27017' }] }).ok }"
+      start_period: 0s
+      interval: 500ms
+      timeout: 5s
+      retries: 5
+    networks:
+      - deviceet-local-network
+    restart: always
+
   kafka:
     image: apache/kafka:3.8.0
     ports:
@@ -17,6 +37,9 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
       KAFKA_NUM_PARTITIONS: 3
+    networks:
+      - deviceet-local-network
+    restart: always
 
   kafka_ui:
     image: provectuslabs/kafka-ui:v0.7.2
@@ -25,27 +48,39 @@ services:
     environment:
       - KAFKA_CLUSTERS_0_NAME=local
       - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9093
-
-  mongodb:
-    image: mongo:7
-    container_name: mongodb
-    ports:
-      - "27123:27017"
-    command: mongod --replSet rs0
-    healthcheck:
-      test: |
-        mongosh --eval "try { rs.status().ok } catch (e) { rs.initiate({ _id: 'rs0', members: [{ _id: 0, host: 'localhost:27017' }] }).ok }"
-      start_period: 0s
-      interval: 500ms
-      timeout: 5s
-      retries: 5
+    networks:
+      - deviceet-local-network
+    restart: always
 
   keycloak:
     image: quay.io/keycloak/keycloak:26.2.5
-    container_name: keycloak
     ports:
       - "7123:8080"
     environment:
       - KC_BOOTSTRAP_ADMIN_USERNAME=admin
       - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
     command: start-dev
+    networks:
+      - deviceet-local-network
+    restart: always
+
+  mry-redis:
+    image: redis:7.4.2
+    ports:
+      - "6123:6379"
+    volumes:
+      - deviceet-local-volume-redis:/data
+    command: redis-server --requirepass aredissecret
+    networks:
+      - deviceet-local-network
+    restart: always
+
+networks:
+  deviceet-local-network:
+    driver: bridge
+
+volumes:
+  deviceet-local-volume-mongo:
+    driver: local
+  deviceet-local-volume-redis:
+    driver: local

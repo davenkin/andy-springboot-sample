@@ -31,3 +31,10 @@ When writing integration tests, follow the below guidelines:
   event exists in database(we are using the [transactional outbox pattern](https://microservices.io/patterns/data/transactional-outbox.html)
   so domain events will firstly be persisted into database then publish to Kafka using another thread).
 - Authentication related testing is covered in integration tests, let's cover that in manual testing.
+- All tests are integration tests:
+  - Kafka: we don't test any Kafka related code, neither event publishing nore event consumer
+  - Redis: 
+  - Mongo:
+  - Keycloak:
+  - All external HTTP services: Needs to be mocked
+- Every test uses a IDs for the entities under test

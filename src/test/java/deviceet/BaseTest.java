@@ -1,8 +1,8 @@
 package deviceet;
 
-import davenkin.springboot.web.common.domainevent.DomainEvent;
-import davenkin.springboot.web.common.domainevent.DomainEventType;
-import davenkin.springboot.web.common.domainevent.publish.PublishingDomainEvent;
+import deviceet.common.domainevent.DomainEvent;
+import deviceet.common.domainevent.DomainEventType;
+import deviceet.common.domainevent.publish.PublishingDomainEvent;
 import org.junit.jupiter.api.parallel.Execution;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

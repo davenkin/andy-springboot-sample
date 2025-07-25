@@ -1,3 +1,9 @@
 spring:
   autoconfigure:
     exclude: org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration
+
+de:
+  flapdoodle:
+    mongodb:
+      embedded:
+        version: 6.0.2

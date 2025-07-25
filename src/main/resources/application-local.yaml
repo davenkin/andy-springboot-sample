@@ -1,5 +1,5 @@
 server:
-  port: 6123
+  port: 5123
   shutdown: graceful
   tomcat:
     accept-count: 100
@@ -11,7 +11,17 @@ server:
 spring:
   application:
     name: deviceet-device-management-service
+  data:
+    mongodb:
+      uri: mongodb://localhost:27123/deviceet-local
+    redis:
+      database: 0
+      host: localhost
+      port: 6123
+      password: aredissecret
+      timeout: 10000
   kafka:
+    bootstrap-servers: localhost:9123
     consumer:
       auto-offset-reset: earliest
 #      enable-auto-commit: false
