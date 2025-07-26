@@ -13,13 +13,6 @@ spring:
     name: deviceet-device-management-service
   profiles:
     active: local # default profile
-  kafka:
-    consumer:
-      auto-offset-reset: earliest
-#      enable-auto-commit: false
-#    listener:
-#      ack-mode: batch
-
 
 mongock:
   enabled: true

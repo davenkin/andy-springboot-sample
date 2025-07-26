@@ -1,4 +1,4 @@
-package deviceet.common.domainevent;
+package deviceet.common.event;
 
 import deviceet.common.model.AggregateRootType;
 import lombok.Getter;

@@ -1,6 +1,6 @@
-package deviceet.common.domainevent.publish;
+package deviceet.common.event.publish;
 
-import deviceet.common.domainevent.DomainEvent;
+import deviceet.common.event.DomainEvent;
 
 import java.util.concurrent.CompletableFuture;
 

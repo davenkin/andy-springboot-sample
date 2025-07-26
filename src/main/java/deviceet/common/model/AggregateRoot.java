@@ -1,6 +1,6 @@
 package deviceet.common.model;
 
-import deviceet.common.domainevent.DomainEvent;
+import deviceet.common.event.DomainEvent;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Transient;
@@ -23,9 +23,8 @@ public abstract class AggregateRoot {
     private String id;
     private AggregateRootType type;
 
-    // Domain events are stored temporarily in the aggregate root
-    // Domain events are not persisted together with the aggregate roots as events will be stored in separately
-    // @Transient here is very important for not persisting events with aggregate root, otherwise we need to do this manually by ourselves
+    // Domain events are stored temporarily in the aggregate root and are not persisted together with the aggregate roots as events will be stored in separately
+    // @Transient is very important for not persisting events with the aggregate root, otherwise we need to do this manually by ourselves
     @Transient
     private List<DomainEvent> events;
 
@@ -44,8 +43,8 @@ public abstract class AggregateRoot {
         this.createdAt = Instant.now();
     }
 
-    // raiseEvent() only stores events in aggregate root temporarily, the events will be persisted into DB by Repository along with saving aggregate roots
-    // The actual sending of events to Kafka is handled by DomainEventPublisher
+    // raiseEvent() only stores events in aggregate root temporarily, the events will then be persisted into DB by Repository within the same transaction of saving aggregate roots
+    // The actual sending of events to messaging middleware is handled by DomainEventPublisher
     protected void raiseEvent(DomainEvent event) {
         requireNonNull(event.getType(), "Domain event type must not be null.");
         requireNonBlank(event.getArId(), "Domain event aggregate root ID must not be null.");

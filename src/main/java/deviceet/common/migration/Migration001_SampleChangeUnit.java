@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 
 @Slf4j
 @ChangeUnit(id = "sampleChangeUnit", order = "001", author = "andy")
-public class SampleChangeUnit {
+public class Migration001_SampleChangeUnit {
 
     @Execution
     public void sampleExecute(MongoTemplate mongoTemplate) {

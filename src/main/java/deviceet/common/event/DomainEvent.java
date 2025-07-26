@@ -1,4 +1,4 @@
-package deviceet.common.domainevent;
+package deviceet.common.event;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;

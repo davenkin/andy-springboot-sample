@@ -9,7 +9,7 @@ import lombok.experimental.FieldNameConstants;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import static deviceet.common.Constants.USER_COLLECTION;
+import static deviceet.common.utils.Constants.USER_COLLECTION;
 import static deviceet.common.model.AggregateRootType.USER;
 import static deviceet.common.utils.SnowflakeIdGenerator.newSnowflakeId;
 import static lombok.AccessLevel.PRIVATE;

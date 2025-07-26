@@ -1,11 +1,11 @@
 package deviceet.user.domain.event;
 
-import deviceet.common.domainevent.DomainEvent;
+import deviceet.common.event.DomainEvent;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.TypeAlias;
 
-import static deviceet.common.domainevent.DomainEventType.USER_CREATED;
+import static deviceet.common.event.DomainEventType.USER_CREATED;
 import static lombok.AccessLevel.PRIVATE;
 
 @Getter

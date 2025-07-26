@@ -1,8 +1,8 @@
 package deviceet;
 
-import deviceet.common.domainevent.DomainEvent;
-import deviceet.common.domainevent.DomainEventType;
-import deviceet.common.domainevent.publish.PublishingDomainEvent;
+import deviceet.common.event.DomainEvent;
+import deviceet.common.event.DomainEventType;
+import deviceet.common.event.publish.PublishingDomainEvent;
 import org.junit.jupiter.api.parallel.Execution;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,8 +10,8 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.test.context.ActiveProfiles;
 
-import static deviceet.common.Constants.CI_PROFILE;
 import static deviceet.common.utils.CommonUtils.requireNonBlank;
+import static deviceet.common.utils.Constants.CI_PROFILE;
 import static java.util.Objects.requireNonNull;
 import static org.junit.jupiter.api.parallel.ExecutionMode.CONCURRENT;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
@@ -20,8 +20,8 @@ import static org.springframework.data.domain.Sort.by;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
 
-@ActiveProfiles(CI_PROFILE)
 @Execution(CONCURRENT)
+@ActiveProfiles(CI_PROFILE)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 public abstract class BaseTest {
 

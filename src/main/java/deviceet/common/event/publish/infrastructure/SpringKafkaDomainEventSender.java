@@ -1,7 +1,8 @@
-package deviceet.common.domainevent.publish;
+package deviceet.common.event.publish.infrastructure;
 
 import deviceet.common.configuration.profile.NonCiProfile;
-import deviceet.common.domainevent.DomainEvent;
+import deviceet.common.event.DomainEvent;
+import deviceet.common.event.publish.DomainEventSender;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -11,9 +12,9 @@ import java.util.concurrent.CompletableFuture;
 
 // Send domain events to Kafka
 // This is the only place where event publishing touches Kafka, hence the coupling to Kafka is minimised
-@NonCiProfile
 @Slf4j
 @Component
+@NonCiProfile
 @RequiredArgsConstructor
 public class SpringKafkaDomainEventSender implements DomainEventSender {
     private static final String KAFKA_DOMAIN_EVENT_TOPIC_SUFFIX = "_domain_event";

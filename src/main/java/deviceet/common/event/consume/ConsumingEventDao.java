@@ -1,4 +1,4 @@
-package deviceet.common.domainevent.consume;
+package deviceet.common.event.consume;
 
 import com.mongodb.client.result.UpdateResult;
 import lombok.RequiredArgsConstructor;
@@ -10,26 +10,27 @@ import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 
-import static deviceet.common.domainevent.consume.ConsumingDomainEvent.Fields.*;
+import static deviceet.common.event.consume.ConsumingEvent.Fields.*;
+import static deviceet.common.event.consume.ConsumingEvent.Fields.handler;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
 
-// Upon consuming, record the event in DB to avoid duplicated event handling
+// Upon consuming, record the event in DB to avoid duplicated event consuming
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class ConsumingDomainEventDao<T> {
+public class ConsumingEventDao<T> {
     private final MongoTemplate mongoTemplate;
 
     // return true means this event has never been consumed before
-    public boolean recordAsConsumed(ConsumingDomainEvent<T> consumingDomainEvent, String handlerName) {
-        Query query = query(where(eventId).is(consumingDomainEvent.getEventId()).and(ConsumingDomainEvent.Fields.handlerName).is(handlerName));
+    public boolean recordAsConsumed(ConsumingEvent<T> consumingEvent, AbstractEventHandler<T> handler) {
+        Query query = query(where(eventId).is(consumingEvent.getEventId()).and(ConsumingEvent.Fields.handler).is(handler.getName()));
 
         Update update = new Update()
-                .setOnInsert(type, consumingDomainEvent.getType())
+                .setOnInsert(type, consumingEvent.getType())
                 .setOnInsert(consumedAt, Instant.now());
 
-        UpdateResult result = this.mongoTemplate.update(ConsumingDomainEvent.class)
+        UpdateResult result = this.mongoTemplate.update(ConsumingEvent.class)
                 .matching(query)
                 .apply(update)
                 .upsert();

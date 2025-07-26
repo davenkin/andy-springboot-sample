@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Profile;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-import static deviceet.common.Constants.CI_PROFILE;
+import static deviceet.common.utils.Constants.CI_PROFILE;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Profile(CI_PROFILE)

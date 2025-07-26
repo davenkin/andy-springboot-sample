@@ -1,11 +1,11 @@
-package deviceet.common.domainevent;
+package deviceet.common.event;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.client.model.changestream.ChangeStreamDocument;
 import com.mongodb.client.model.changestream.OperationType;
 import deviceet.common.configuration.profile.NonCiProfile;
-import deviceet.common.domainevent.publish.DomainEventPublisher;
-import deviceet.common.domainevent.publish.PublishingDomainEvent;
+import deviceet.common.event.publish.DomainEventPublisher;
+import deviceet.common.event.publish.PublishingDomainEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.serialization.Deserializer;
 import org.bson.Document;
@@ -20,21 +20,19 @@ import org.springframework.data.mongodb.core.messaging.DefaultMessageListenerCon
 import org.springframework.data.mongodb.core.messaging.MessageListener;
 import org.springframework.data.mongodb.core.messaging.MessageListenerContainer;
 import org.springframework.kafka.annotation.EnableKafkaRetryTopic;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.listener.DeadLetterPublishingRecoverer;
 import org.springframework.kafka.listener.DefaultErrorHandler;
 import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 import org.springframework.util.backoff.ExponentialBackOff;
 
-import static deviceet.common.Constants.PUBLISHING_DOMAIN_EVENT_COLLECTION;
+import static deviceet.common.utils.Constants.PUBLISHING_EVENT_COLLECTION;
 
-@NonCiProfile
 @Slf4j
+@NonCiProfile
 @Configuration
 @EnableKafkaRetryTopic
-public class DomainEventConfiguration {
+public class EventConfiguration {
 
     @Bean(destroyMethod = "stop")
     MessageListenerContainer mongoDomainEventChangeStreamListenerContainer(MongoTemplate mongoTemplate,
@@ -47,7 +45,7 @@ public class DomainEventConfiguration {
                         (MessageListener<ChangeStreamDocument<Document>, PublishingDomainEvent>) message -> {
                             domainEventPublisher.publishStagedDomainEvents();
                         })
-                .collection(PUBLISHING_DOMAIN_EVENT_COLLECTION)
+                .collection(PUBLISHING_EVENT_COLLECTION)
                 .filter(new Document("$match", new Document("operationType", OperationType.INSERT.getValue())))
                 .build(), PublishingDomainEvent.class);
         container.start();
@@ -71,7 +69,7 @@ public class DomainEventConfiguration {
     public DefaultKafkaConsumerFactoryCustomizer defaultKafkaConsumerFactoryCustomizer(ObjectMapper objectMapper) {
         return producerFactory -> {
             // don't use type info in Kafka headers for deserialization, but the uses the Jackson annotations(@JsonTypeInfo) on DomainEvent itself to decrease coupling to Kafka
-            // also as by default Kafka used full class name in the header, not using this make our code more refactor friendly as we can not freely change the event's package
+            // also as by default Kafka used full class name in the header, not using this make our code more refactor friendly as otherwise we can not freely change the event's package
             Deserializer valueDeserializer = new JsonDeserializer<>(DomainEvent.class, objectMapper, false);
 
             //we must wrap the JsonDeserializer into an ErrorHandlingDeserializer, otherwise deserialization error will result in endless message retry
@@ -80,12 +78,12 @@ public class DomainEventConfiguration {
         };
     }
 
-    // The DefaultErrorHandler retries 3 times upon exceptions, after that if exception persists then move the message to DLT.
     @Bean
-    public DefaultErrorHandler kafkaErrorHandler(KafkaTemplate<String, Object> kafkaTemplate) {
-        ExponentialBackOff exponentialBackOff = new ExponentialBackOff(1000L, 2);
+    public DefaultErrorHandler kafkaErrorHandler() {
+        ExponentialBackOff exponentialBackOff = new ExponentialBackOff(500L, 2);
         exponentialBackOff.setMaxAttempts(2); // the message will be delivered 2 + 1 = 3 times
-        DeadLetterPublishingRecoverer recoverer = new DeadLetterPublishingRecoverer(kafkaTemplate);
-        return new DefaultErrorHandler(recoverer, exponentialBackOff);
+        return new DefaultErrorHandler(exponentialBackOff);
     }
 }
+
+

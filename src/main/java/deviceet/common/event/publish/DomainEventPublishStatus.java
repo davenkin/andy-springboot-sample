@@ -1,4 +1,4 @@
-package deviceet.common.domainevent.publish;
+package deviceet.common.event.publish;
 
 public enum DomainEventPublishStatus {
     CREATED,

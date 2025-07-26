@@ -8,8 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-// Command here means the "C" of CQRS
-
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -30,7 +28,7 @@ public class UserCommandService {
         User user = this.userRepository.byId(userId);
         user.updateName(name);
         userRepository.save(user);
-        log.info("Updated name of user {}.", userId);
+        log.info("Updated name for user {}.", userId);
     }
 
 }

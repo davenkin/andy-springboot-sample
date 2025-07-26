@@ -1,7 +1,7 @@
-package deviceet.common;
+package deviceet.common.infrastructure;
 
-import deviceet.common.domainevent.DomainEvent;
-import deviceet.common.domainevent.publish.PublishingDomainEventDao;
+import deviceet.common.event.DomainEvent;
+import deviceet.common.event.publish.PublishingDomainEventDao;
 import deviceet.common.model.AggregateRoot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;

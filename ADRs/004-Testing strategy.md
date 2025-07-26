@@ -30,7 +30,7 @@ When writing integration tests, follow the below guidelines:
   domain events, you can just verify the
   event exists in database(we are using the [transactional outbox pattern](https://microservices.io/patterns/data/transactional-outbox.html)
   so domain events will firstly be persisted into database then publish to Kafka using another thread).
-- Authentication related testing is covered in integration tests, let's cover that in manual testing.
+- Authentication related testing is not covered in integration tests, let's cover that in manual testing.
 - All tests are integration tests:
   - Kafka: we don't test any Kafka related code, neither event publishing nore event consumer
   - Redis: 
@@ -38,3 +38,5 @@ When writing integration tests, follow the below guidelines:
   - Keycloak:
   - All external HTTP services: Needs to be mocked
 - Every test uses a IDs for the entities under test
+- CiProfile and NonCiProfile
+- Scheduling(`SchedulingConfiguration`) is disabled, which means no background jobs will be triggering

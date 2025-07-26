@@ -1,0 +1,14 @@
+- Mongo
+  - 不用spring的repository
+  - 启用transaction
+  - 使用mongock，命名规范
+- ShedLock
+  - 直接用于定时任务
+  - LockingTaskExecutor可以直接调用
+- CommandService
+  - 需要将Principal传进去，从CommandService以后就不要再依赖ThreadLocal来获取Spring Security中的用户信息了
+  - 门面，标定一次用例，不应该只为HTTP的controller服务
+- HTTP请求处理流程
+  - 写数据请求，command service是门面，是业务用例的入口，然后通过repository加载聚合根对象，调用聚合根对象上的业务方法，再通过repository保存聚合根
+  - 读数据请求
+  - command，query，response使用record表示
