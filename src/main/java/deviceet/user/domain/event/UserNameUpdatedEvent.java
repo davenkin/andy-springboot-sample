@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.TypeAlias;
 
-import static deviceet.common.event.DomainEventType.USER_NAME_UPDATED;
+import static deviceet.common.event.DomainEventType.USER_NAME_UPDATED_EVENT;
 import static lombok.AccessLevel.PRIVATE;
 
 @Getter
@@ -15,8 +15,8 @@ public class UserNameUpdatedEvent extends DomainEvent {
     private String oldName;
     private String newName;
 
-    public UserNameUpdatedEvent(String oldName, String newName, String userId) {
-        super(USER_NAME_UPDATED, userId);
+    public UserNameUpdatedEvent(String userId, String oldName, String newName) {
+        super(USER_NAME_UPDATED_EVENT, userId);
         this.oldName = oldName;
         this.newName = newName;
     }

@@ -7,8 +7,8 @@ import static deviceet.common.model.AggregateRootType.USER;
 
 @Getter
 public enum DomainEventType {
-    USER_CREATED(USER),
-    USER_NAME_UPDATED(USER),
+    USER_CREATED_EVENT(USER),
+    USER_NAME_UPDATED_EVENT(USER),
     ;
     private final AggregateRootType arType;
 

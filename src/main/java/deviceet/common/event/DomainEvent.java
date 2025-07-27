@@ -21,21 +21,18 @@ import static lombok.AccessLevel.PROTECTED;
         property = "type",
         visible = true)
 @JsonSubTypes(value = {
-        @JsonSubTypes.Type(value = UserCreatedEvent.class, name = "USER_CREATED"),
-        @JsonSubTypes.Type(value = UserNameUpdatedEvent.class, name = "USER_NAME_UPDATED"),
+        @JsonSubTypes.Type(value = UserCreatedEvent.class, name = "USER_CREATED_EVENT"),
+        @JsonSubTypes.Type(value = UserNameUpdatedEvent.class, name = "USER_NAME_UPDATED_EVENT"),
 })
 
 @Getter
 @FieldNameConstants
 @NoArgsConstructor(access = PROTECTED)
 public abstract class DomainEvent {
-
     private String id;
     private String arId;
     private DomainEventType type;
-
     private AggregateRootType arType;
-
     private Instant raisedAt;
 
     protected DomainEvent(DomainEventType type, String arId) {

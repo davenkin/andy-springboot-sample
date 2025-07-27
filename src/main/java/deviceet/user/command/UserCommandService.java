@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import static deviceet.common.utils.Constants.PLATFORM_TENANT_ID;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -19,16 +21,16 @@ public class UserCommandService {
     public String createUser(String name) {
         User user = userFactory.createUser(name);
         userRepository.save(user);
-        log.info("Created user {}.", user.getId());
+        log.info("Created user[{}].", user.getId());
         return user.getId();
     }
 
     @Transactional
     public void updateUserName(String userId, String name) {
-        User user = this.userRepository.byId(userId);
+        User user = this.userRepository.byId(userId, PLATFORM_TENANT_ID);
         user.updateName(name);
         userRepository.save(user);
-        log.info("Updated name for user {}.", userId);
+        log.info("Updated name for user[{}].", userId);
     }
 
 }

@@ -18,6 +18,7 @@ import static java.time.Duration.ofMillis;
 import static java.time.Duration.ofMinutes;
 import static java.time.Instant.now;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
+import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 
 // Publishes all staged domain events
 @Slf4j
@@ -38,7 +39,9 @@ public class DomainEventPublisher {
             var result = lockingTaskExecutor.executeWithLock(this::doPublishStagedDomainEvents,
                     new LockConfiguration(now(), "publish-domain-events", ofMinutes(1), ofMillis(1)));
             List<String> publishedEventIds = result.getResult();
-            log.info("Published domain events {}.", publishedEventIds);
+            if (isNotEmpty(publishedEventIds)) {
+                log.info("Published domain events {}.", publishedEventIds);
+            }
         } catch (Throwable e) {
             log.error("Error happened while publish domain events.", e);
         }

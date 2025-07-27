@@ -3,6 +3,7 @@ package deviceet.common.model;
 import deviceet.common.event.DomainEvent;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.FieldNameConstants;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.annotation.Version;
 
@@ -17,10 +18,12 @@ import static lombok.AccessLevel.PROTECTED;
 
 // Base class for all aggregate roots
 @Getter
+@FieldNameConstants
 // The no arg constructor is used by Jackson and Spring Data etc. to create objects
 @NoArgsConstructor(access = PROTECTED)
 public abstract class AggregateRoot {
     private String id;
+    private String tenantId;
     private AggregateRootType type;
 
     // Domain events are stored temporarily in the aggregate root and are not persisted together with the aggregate roots as events will be stored in separately
@@ -34,11 +37,13 @@ public abstract class AggregateRoot {
     @Getter(PRIVATE)
     private Long _version;
 
-    protected AggregateRoot(String id, AggregateRootType type) {
+    protected AggregateRoot(String id, String tenantId, AggregateRootType type) {
         requireNonBlank(id, "ID must not be blank.");
+        requireNonBlank(tenantId, "Tenant ID must not be blank.");
         requireNonNull(type, "Type must not be null.");
 
         this.id = id;
+        this.tenantId = tenantId;
         this.type = type;
         this.createdAt = Instant.now();
     }

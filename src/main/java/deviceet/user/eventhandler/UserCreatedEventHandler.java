@@ -12,11 +12,6 @@ import org.springframework.stereotype.Component;
 public class UserCreatedEventHandler extends AbstractEventHandler<UserCreatedEvent> {
 
     @Override
-    public boolean isTransactional() {
-        return true;
-    }
-
-    @Override
     public void handle(UserCreatedEvent event) {
         log.info("Send email to admin after user[{}] created.", event.getName());
     }

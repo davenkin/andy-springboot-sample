@@ -79,7 +79,7 @@ public class EventConfiguration {
     }
 
     @Bean
-    public DefaultErrorHandler kafkaErrorHandler() {
+    public DefaultErrorHandler kafkaErrorHandler() {// todo: do we need this if we are already handle retry by ourselves
         ExponentialBackOff exponentialBackOff = new ExponentialBackOff(500L, 2);
         exponentialBackOff.setMaxAttempts(2); // the message will be delivered 2 + 1 = 3 times
         return new DefaultErrorHandler(exponentialBackOff);

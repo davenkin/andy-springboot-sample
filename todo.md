@@ -12,3 +12,5 @@
   - 写数据请求，command service是门面，是业务用例的入口，然后通过repository加载聚合根对象，调用聚合根对象上的业务方法，再通过repository保存聚合根
   - 读数据请求
   - command，query，response使用record表示
+- 异常处理
+- 缓存

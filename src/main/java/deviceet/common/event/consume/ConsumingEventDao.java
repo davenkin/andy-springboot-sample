@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 import java.time.Instant;
 
 import static deviceet.common.event.consume.ConsumingEvent.Fields.*;
-import static deviceet.common.event.consume.ConsumingEvent.Fields.handler;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
 
