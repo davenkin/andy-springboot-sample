@@ -14,3 +14,4 @@
   - command，query，response使用record表示
 - 异常处理
 - 缓存
+- 为基础设施添加测试
