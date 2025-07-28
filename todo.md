@@ -21,3 +21,4 @@
 - 接收请求时，我们需要保证tenant是可信的，即：
   - 如果是root用户，可以通过http的header传入tenantId
   - 如果是tenant下的用户，那么必须从JWT中获取tenantId
+- RestClient：1，使用当前用户的jwt，2，使用service account

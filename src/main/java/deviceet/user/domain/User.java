@@ -29,7 +29,7 @@ public class User extends AggregateRoot {
     public User(String name) {
         super(newUserId(), PLATFORM_TENANT_ID, USER);
         this.name = name;
-        raiseEvent(new UserCreatedEvent(name, this.getId()));
+        raiseEvent(new UserCreatedEvent(this));
     }
 
     public static String newUserId() {
@@ -41,7 +41,7 @@ public class User extends AggregateRoot {
             return;
         }
 
-        UserNameUpdatedEvent userNameUpdatedEvent = new UserNameUpdatedEvent(this.getId(), name, newName);
+        UserNameUpdatedEvent userNameUpdatedEvent = new UserNameUpdatedEvent(name, newName, this);
         this.name = newName;
         raiseEvent(userNameUpdatedEvent);
     }

@@ -1,6 +1,7 @@
 package deviceet.user.domain.event;
 
 import deviceet.common.event.DomainEvent;
+import deviceet.user.domain.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.TypeAlias;
@@ -14,8 +15,8 @@ import static lombok.AccessLevel.PRIVATE;
 public class UserCreatedEvent extends DomainEvent {
     private String name;
 
-    public UserCreatedEvent(String name, String userId) {
-        super(USER_CREATED_EVENT, userId);
-        this.name = name;
+    public UserCreatedEvent(User user) {
+        super(USER_CREATED_EVENT, user);
+        this.name = user.getName();
     }
 }

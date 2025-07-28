@@ -4,6 +4,7 @@ import deviceet.common.event.DomainEvent;
 import deviceet.common.event.publish.PublishingDomainEventDao;
 import deviceet.common.exception.ServiceException;
 import deviceet.common.model.AggregateRoot;
+import deviceet.common.operator.CurrentOperatorProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -40,6 +41,9 @@ public abstract class AbstractMongoRepository<AR extends AggregateRoot> {
 
     @Autowired
     private PublishingDomainEventDao publishingDomainEventDao;
+
+    @Autowired
+    private CurrentOperatorProvider currentOperatorProvider;
 
     @Transactional
     public void save(AR ar) {
@@ -165,6 +169,8 @@ public abstract class AbstractMongoRepository<AR extends AggregateRoot> {
     private void stageEvents(List<DomainEvent> events) {
         if (isNotEmpty(events)) {
             List<DomainEvent> orderedEvents = events.stream().sorted(comparing(DomainEvent::getRaisedAt)).toList();
+            String raisedBy = currentOperatorProvider.currentOperator();
+            orderedEvents.forEach(event -> event.raisedBy(raisedBy));
             publishingDomainEventDao.stage(orderedEvents);
         }
     }
