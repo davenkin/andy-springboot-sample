@@ -9,5 +9,5 @@ import static deviceet.common.utils.Constants.NON_CI_PROFILE;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Profile(NON_CI_PROFILE)
-public @interface NonCiProfile {
+public @interface DisableForCI {
 }

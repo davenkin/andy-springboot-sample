@@ -9,6 +9,8 @@ import lombok.experimental.FieldNameConstants;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Objects;
+
 import static deviceet.common.model.AggregateRootType.USER;
 import static deviceet.common.utils.Constants.PLATFORM_TENANT_ID;
 import static deviceet.common.utils.Constants.USER_COLLECTION;
@@ -35,6 +37,10 @@ public class User extends AggregateRoot {
     }
 
     public void updateName(String newName) {
+        if (Objects.equals(newName, this.name)) {
+            return;
+        }
+
         UserNameUpdatedEvent userNameUpdatedEvent = new UserNameUpdatedEvent(this.getId(), name, newName);
         this.name = newName;
         raiseEvent(userNameUpdatedEvent);

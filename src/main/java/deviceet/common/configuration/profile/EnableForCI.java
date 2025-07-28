@@ -9,5 +9,5 @@ import static deviceet.common.utils.Constants.CI_PROFILE;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Profile(CI_PROFILE)
-public @interface CiProfile {
+public @interface EnableForCI {
 }

@@ -1,10 +1,10 @@
 spring:
   autoconfigure:
-    exclude: org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration
+    exclude: org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration # Disable Kafka
   cache:
-    type: simple
+    type: simple # Use in-memory cache instead of Redis
 
-de:
+de: # Use embedded Mongo
   flapdoodle:
     mongodb:
       embedded:

@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.test.context.ActiveProfiles;
 
+import static deviceet.common.utils.CommonUtils.mongoConcatFields;
 import static deviceet.common.utils.CommonUtils.requireNonBlank;
 import static deviceet.common.utils.Constants.CI_PROFILE;
 import static java.util.Objects.requireNonNull;
@@ -20,8 +21,10 @@ import static org.springframework.data.domain.Sort.by;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
 
+@SuppressWarnings("unchecked")
 @Execution(CONCURRENT)
 @ActiveProfiles(CI_PROFILE)
+//@ActiveProfiles(LOCAL_PROFILE) // To run tests against local profile, comment in "@ActiveProfiles(LOCAL_PROFILE)" and comment out "@ActiveProfiles(CI_PROFILE)"
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 public abstract class BaseTest {
 
@@ -33,9 +36,10 @@ public abstract class BaseTest {
         requireNonNull(type, "Domain event type must not be null.");
         requireNonNull(eventClass, "Domain event class must not be null.");
 
-        Query query = query(where(PublishingDomainEvent.Fields.event + "." + DomainEvent.Fields.arId).is(arId)
-                .and(PublishingDomainEvent.Fields.event + "." + DomainEvent.Fields.type).is(type))
+        Query query = query(where(mongoConcatFields(PublishingDomainEvent.Fields.event, DomainEvent.Fields.arId)).is(arId)
+                .and(mongoConcatFields(PublishingDomainEvent.Fields.event, DomainEvent.Fields.type)).is(type))
                 .with(by(DESC, PublishingDomainEvent.Fields.raisedAt));
-        return (T) mongoTemplate.findOne(query, PublishingDomainEvent.class).getEvent();
+        PublishingDomainEvent domainEvent = mongoTemplate.findOne(query, PublishingDomainEvent.class);
+        return domainEvent == null ? null : (T) domainEvent.getEvent();
     }
 }

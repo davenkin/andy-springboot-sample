@@ -1,7 +1,7 @@
 package deviceet.common.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import deviceet.common.configuration.profile.NonCiProfile;
+import deviceet.common.configuration.profile.DisableForCI;
 import deviceet.user.domain.CachedTenantUsers;
 import org.springframework.boot.autoconfigure.cache.RedisCacheManagerBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
@@ -13,7 +13,7 @@ import static java.time.Duration.ofDays;
 import static org.springframework.data.redis.cache.RedisCacheConfiguration.defaultCacheConfig;
 import static org.springframework.data.redis.serializer.RedisSerializationContext.SerializationPair.fromSerializer;
 
-@NonCiProfile
+@DisableForCI
 @Configuration(proxyBeanMethods = false)
 public class RedisCacheConfiguration {
     private static final String CACHE_PREFIX = "Cache:";

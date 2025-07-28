@@ -1,6 +1,6 @@
 package deviceet.common.configuration;
 
-import deviceet.common.configuration.profile.NonCiProfile;
+import deviceet.common.configuration.profile.DisableForCI;
 import deviceet.common.event.publish.DomainEventPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.Scheduled;
 
 @Slf4j
-@NonCiProfile
+@DisableForCI
 @Configuration
 @RequiredArgsConstructor
 @EnableSchedulerLock(defaultLockAtMostFor = "60m", defaultLockAtLeastFor = "10s")

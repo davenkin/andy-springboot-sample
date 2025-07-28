@@ -1,5 +1,6 @@
 package deviceet.user;
 
+import deviceet.common.security.Principal;
 import deviceet.common.utils.ResponseId;
 import deviceet.user.command.CreateUserCommand;
 import deviceet.user.command.UpdateUserNameCommand;

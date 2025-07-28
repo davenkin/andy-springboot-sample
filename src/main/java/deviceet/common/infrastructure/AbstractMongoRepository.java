@@ -95,6 +95,25 @@ public abstract class AbstractMongoRepository<AR extends AggregateRoot> {
         stageEvents(events);
     }
 
+    public AR byId(String id) {
+        requireNonBlank(id, arType() + " ID must not be blank.");
+
+        Object it = mongoTemplate.findById(id, arClass());
+        if (it == null) {
+            throw new ServiceException(AR_NOT_FOUND, "AR not found.",
+                    mapOf("type", arType(), "id", id));
+        }
+
+        return (AR) it;
+    }
+
+    public Optional<AR> byIdOptional(String id) {
+        requireNonBlank(id, arType() + " ID must not be blank.");
+
+        Object it = mongoTemplate.findById(id, arClass());
+        return it == null ? empty() : Optional.of((AR) it);
+    }
+
     public AR byId(String id, String tenantId) {
         requireNonBlank(tenantId, "Tenant ID must not be blank.");
         requireNonBlank(id, arType() + " ID must not be blank.");

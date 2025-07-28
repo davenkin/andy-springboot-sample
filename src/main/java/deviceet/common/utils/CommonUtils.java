@@ -38,4 +38,8 @@ public class CommonUtils {
         return null;
     }
 
+    public static String mongoConcatFields(String... fields) {
+        return String.join(".", fields);
+    }
+
 }

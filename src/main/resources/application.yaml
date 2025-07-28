@@ -12,7 +12,7 @@ spring:
   application:
     name: deviceet-device-management-service
   profiles:
-    active: local # default profile
+    active: local # use "local" profile by default for local run
 
 mongock:
   enabled: true

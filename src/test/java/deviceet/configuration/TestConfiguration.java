@@ -2,11 +2,11 @@ package deviceet.configuration;
 
 import de.flapdoodle.embed.mongo.commands.MongodArguments;
 import de.flapdoodle.embed.mongo.config.Storage;
-import deviceet.common.configuration.profile.CiProfile;
+import deviceet.common.configuration.profile.EnableForCI;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-@CiProfile
+@EnableForCI
 @Configuration
 public class TestConfiguration {
     @Bean

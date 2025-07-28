@@ -15,3 +15,9 @@
 - 异常处理
 - 缓存
 - 为基础设施添加测试
+- 优先使用record
+- 由于测试运行时没有启动redis，因此在引入新的缓存对象时，请在本地运行保证缓存能够正常地工作，比如缓存是否生效以及序列化/反序列化是否正常工作，通过在BaseTest中启用local profile可以完成测试
+- ar的id需要全局唯一，不能在tenant下唯一，可以直接通过id定位到一个ar，而不用必须传入tenantId，当然在业务上需要tenantId来界定时，比如同时传入id和tenantId
+- 接收请求时，我们需要保证tenant是可信的，即：
+  - 如果是root用户，可以通过http的header传入tenantId
+  - 如果是tenant下的用户，那么必须从JWT中获取tenantId

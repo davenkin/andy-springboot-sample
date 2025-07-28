@@ -1,6 +1,6 @@
 package deviceet.common.event.consume.infrastructure;
 
-import deviceet.common.configuration.profile.NonCiProfile;
+import deviceet.common.configuration.profile.DisableForCI;
 import deviceet.common.event.DomainEvent;
 import deviceet.common.event.consume.ConsumingEvent;
 import deviceet.common.event.consume.EventConsumer;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-@NonCiProfile// Normally we use @NonBuildProfile to disable it for build pipeline
+@DisableForCI// Disable Kafka for CI
 @RequiredArgsConstructor
 public class SpringKafkaEventListener {
     private final EventConsumer<DomainEvent> eventConsumer;
