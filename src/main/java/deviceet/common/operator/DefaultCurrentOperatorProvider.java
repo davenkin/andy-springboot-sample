@@ -8,6 +8,6 @@ import org.springframework.stereotype.Component;
 public class DefaultCurrentOperatorProvider implements CurrentOperatorProvider {
     @Override
     public String currentOperator() {
-        return "";//todo: get operator from JWT of the current thread, or return null
+        return null;//todo: get operator from JWT of the current thread, or return null
     }
 }

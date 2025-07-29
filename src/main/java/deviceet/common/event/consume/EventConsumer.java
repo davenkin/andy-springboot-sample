@@ -78,7 +78,7 @@ public class EventConsumer<T> {
         backOffPolicy.setMultiplier(2.0);
 
         retryTemplate.setBackOffPolicy(backOffPolicy);
-        retryTemplate.setRetryPolicy(new SimpleRetryPolicy(2));
+        retryTemplate.setRetryPolicy(new SimpleRetryPolicy(3));
         return retryTemplate;
     }
 }

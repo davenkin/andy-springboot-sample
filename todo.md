@@ -22,3 +22,6 @@
   - 如果是root用户，可以通过http的header传入tenantId
   - 如果是tenant下的用户，那么必须从JWT中获取tenantId
 - WebClient：1，使用当前用户的jwt，2，使用service account
+- never use @Data
+- 时间戳全部用Instant
+- 

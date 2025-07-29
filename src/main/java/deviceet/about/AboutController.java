@@ -20,4 +20,8 @@ public class AboutController {
                 .deployTime(deployTime)
                 .build();
     }
+
+    @GetMapping(value = "/favicon.ico")
+    public void favicon() {
+    }
 }

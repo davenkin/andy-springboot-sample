@@ -9,8 +9,8 @@ public class Constants {
     public static final String LOCAL_PROFILE = "local";
     public static final String NON_CI_PROFILE = DISABLE_PROFILE_PREFIX + CI_PROFILE;
 
-    public static final String PUBLISHING_EVENT_COLLECTION = "publishing_event";
-    public static final String CONSUMING_EVENT_COLLECTION = "consuming_event";
+    public static final String PUBLISHING_EVENT_COLLECTION = "publishing-event";
+    public static final String CONSUMING_EVENT_COLLECTION = "consuming-event";
 
     //Database
     public static final String SHEDLOCK_COLLECTION = "shedlock";
