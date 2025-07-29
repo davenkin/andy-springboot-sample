@@ -24,7 +24,6 @@ import static lombok.AccessLevel.PROTECTED;
 public abstract class AggregateRoot {
     private String id;
     private String tenantId;
-    private AggregateRootType type;
 
     // Domain events are stored temporarily in the aggregate root and are not persisted together with the aggregate roots as events will be stored in separately
     // @Transient is very important for not persisting events with the aggregate root, otherwise we need to do this manually by ourselves
@@ -37,14 +36,12 @@ public abstract class AggregateRoot {
     @Getter(PRIVATE)
     private Long _version;
 
-    protected AggregateRoot(String id, String tenantId, AggregateRootType type) {
+    protected AggregateRoot(String id, String tenantId) {
         requireNonBlank(id, "ID must not be blank.");
         requireNonBlank(tenantId, "Tenant ID must not be blank.");
-        requireNonNull(type, "Type must not be null.");
 
         this.id = id;
         this.tenantId = tenantId;
-        this.type = type;
         this.createdAt = Instant.now();
     }
 
@@ -63,5 +60,9 @@ public abstract class AggregateRoot {
         }
 
         return events;
+    }
+
+    public void clearEvents() {
+        this.events = null;
     }
 }

@@ -35,9 +35,10 @@ public class CommonConfiguration {
     @Bean
     public Jackson2ObjectMapperBuilderCustomizer jacksonObjectMapperCustomizer() {
         return builder -> {
-            builder.visibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE)
-                    .visibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY)
-                    .featuresToDisable(WRITE_DATES_AS_TIMESTAMPS, WRITE_DURATIONS_AS_TIMESTAMPS, FAIL_ON_UNKNOWN_PROPERTIES);
+            builder.visibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY)
+                    .featuresToDisable(WRITE_DATES_AS_TIMESTAMPS,
+                            WRITE_DURATIONS_AS_TIMESTAMPS,
+                            FAIL_ON_UNKNOWN_PROPERTIES);
         };
     }
 

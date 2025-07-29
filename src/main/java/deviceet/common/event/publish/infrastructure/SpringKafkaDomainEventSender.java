@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.concurrent.CompletableFuture;
 
+import static deviceet.common.utils.Constants.KAFKA_DOMAIN_EVENT_TOPIC;
+
 // Send domain events to Kafka
 // This is the only place where event publishing touches Kafka, hence the coupling to Kafka is minimised
 @Slf4j
@@ -17,13 +19,11 @@ import java.util.concurrent.CompletableFuture;
 @DisableForCI
 @RequiredArgsConstructor
 public class SpringKafkaDomainEventSender implements DomainEventSender {
-    private static final String KAFKA_DOMAIN_EVENT_TOPIC_SUFFIX = "_domain_event";
     private final KafkaTemplate<String, DomainEvent> kafkaTemplate;
 
     @Override
     public CompletableFuture<String> send(DomainEvent event) {
-        String topic = event.getArType().name().toLowerCase() + KAFKA_DOMAIN_EVENT_TOPIC_SUFFIX;
-        return this.kafkaTemplate.send(topic, event.getArId(), event)
+        return this.kafkaTemplate.send(KAFKA_DOMAIN_EVENT_TOPIC, event.getArId(), event)
                 .thenApply(record -> record.getProducerRecord().value().getId());
     }
 }

@@ -11,7 +11,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Objects;
 
-import static deviceet.common.model.AggregateRootType.USER;
 import static deviceet.common.utils.Constants.PLATFORM_TENANT_ID;
 import static deviceet.common.utils.Constants.USER_COLLECTION;
 import static deviceet.common.utils.SnowflakeIdGenerator.newSnowflakeId;
@@ -27,7 +26,7 @@ public class User extends AggregateRoot {
     private String name;
 
     public User(String name) {
-        super(newUserId(), PLATFORM_TENANT_ID, USER);
+        super(newUserId(), PLATFORM_TENANT_ID);//PLATFORM_TENANT_ID传进来
         this.name = name;
         raiseEvent(new UserCreatedEvent(this));
     }

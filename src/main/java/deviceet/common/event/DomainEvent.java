@@ -1,7 +1,6 @@
 package deviceet.common.event;
 
 import deviceet.common.model.AggregateRoot;
-import deviceet.common.model.AggregateRootType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
@@ -20,7 +19,6 @@ public abstract class DomainEvent {
     private String arId;
     private String arTenantId;
     private DomainEventType type;
-    private AggregateRootType arType;
     private Instant raisedAt;
     private String raisedBy;
 
@@ -32,7 +30,6 @@ public abstract class DomainEvent {
         this.arId = ar.getId();
         this.arTenantId = ar.getTenantId();
         this.type = type;
-        this.arType = ar.getType();
         this.raisedAt = Instant.now();
     }
 

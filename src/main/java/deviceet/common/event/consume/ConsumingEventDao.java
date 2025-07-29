@@ -8,8 +8,6 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
-import java.time.Instant;
-
 import static deviceet.common.event.consume.ConsumingEvent.Fields.*;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
@@ -27,7 +25,7 @@ public class ConsumingEventDao<T> {
 
         Update update = new Update()
                 .setOnInsert(type, consumingEvent.getType())
-                .setOnInsert(consumedAt, Instant.now());
+                .setOnInsert(consumedAt, consumingEvent.getConsumedAt());
 
         UpdateResult result = this.mongoTemplate.update(ConsumingEvent.class)
                 .matching(query)

@@ -22,13 +22,9 @@ import static lombok.AccessLevel.PRIVATE;
 @TypeAlias("PUBLISHING_DOMAIN_EVENT")
 public class PublishingDomainEvent {
     private String id;
-
     private DomainEvent event;
-
     private DomainEventPublishStatus status;
-
     private int publishedCount;
-
     private Instant raisedAt;
 
     public PublishingDomainEvent(DomainEvent event) {

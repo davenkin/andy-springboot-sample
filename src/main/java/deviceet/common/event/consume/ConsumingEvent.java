@@ -34,5 +34,7 @@ public class ConsumingEvent<T> {
         this.eventId = eventId;
         this.type = event.getClass().getName();
         this.event = event;
+        this.handler = null;
+        this.consumedAt = Instant.now();
     }
 }

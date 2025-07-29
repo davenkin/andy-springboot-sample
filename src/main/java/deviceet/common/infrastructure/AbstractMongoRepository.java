@@ -55,6 +55,7 @@ public abstract class AbstractMongoRepository<AR extends AggregateRoot> {
 
         mongoTemplate.save(ar);
         stageEvents(ar.getEvents());
+        ar.clearEvents();
     }
 
     @Transactional
@@ -69,6 +70,7 @@ public abstract class AbstractMongoRepository<AR extends AggregateRoot> {
                 events.addAll(ar.getEvents());
             }
             mongoTemplate.save(ar);
+            ar.clearEvents();
         });
 
         stageEvents(events);
@@ -81,6 +83,7 @@ public abstract class AbstractMongoRepository<AR extends AggregateRoot> {
 
         mongoTemplate.remove(ar);
         stageEvents(ar.getEvents());
+        ar.clearEvents();
     }
 
     @Transactional
@@ -96,6 +99,7 @@ public abstract class AbstractMongoRepository<AR extends AggregateRoot> {
                 events.addAll(ar.getEvents());
             }
             ids.add(ar.getId());
+            ar.clearEvents();
         });
 
         mongoTemplate.remove(query(where(MONGO_ID).in(ids)), arClass);
