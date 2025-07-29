@@ -25,3 +25,6 @@
 - never use @Data
 - 时间戳全部用Instant
 - EventConsumer只所以使用自己的retry而不直接使用spring kafka的，主要是是我们当前的事件消费机制是一个事件可以被多个event handler独立消费，因此需要为每个event handler独立进行retry，而spring kafka无法做到这一点。
+- event和event handler不能随便移动位置，因为：
+  - event：spring kafka通过event的FQCN进行序列化和反序列化
+  - event handler：事件处理机制通过event handler的 FQCN来达到幂等消费，具体请参考`ConsumingEventDao.recordAsConsumed()`
