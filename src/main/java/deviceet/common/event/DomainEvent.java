@@ -1,11 +1,7 @@
 package deviceet.common.event;
 
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import deviceet.common.model.AggregateRoot;
 import deviceet.common.model.AggregateRootType;
-import deviceet.user.domain.event.UserCreatedEvent;
-import deviceet.user.domain.event.UserNameUpdatedEvent;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
@@ -15,15 +11,6 @@ import java.time.Instant;
 import static deviceet.common.utils.SnowflakeIdGenerator.newSnowflakeId;
 import static java.util.Objects.requireNonNull;
 import static lombok.AccessLevel.PROTECTED;
-
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME,
-        include = JsonTypeInfo.As.EXISTING_PROPERTY,
-        property = "type",
-        visible = true)
-@JsonSubTypes(value = {
-        @JsonSubTypes.Type(value = UserCreatedEvent.class, name = "USER_CREATED_EVENT"),
-        @JsonSubTypes.Type(value = UserNameUpdatedEvent.class, name = "USER_NAME_UPDATED_EVENT"),
-})
 
 @Getter
 @FieldNameConstants

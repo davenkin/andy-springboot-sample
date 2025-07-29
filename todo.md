@@ -24,4 +24,4 @@
 - WebClient：1，使用当前用户的jwt，2，使用service account
 - never use @Data
 - 时间戳全部用Instant
-- 
+- EventConsumer只所以使用自己的retry而不直接使用spring kafka的，主要是是我们当前的事件消费机制是一个事件可以被多个event handler独立消费，因此需要为每个event handler独立进行retry，而spring kafka无法做到这一点。
