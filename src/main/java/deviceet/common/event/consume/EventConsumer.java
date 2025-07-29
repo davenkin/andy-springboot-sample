@@ -9,17 +9,13 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
-import static deviceet.common.utils.CommonUtils.singleParameterizedArgumentClassOf;
 import static java.util.Comparator.comparingInt;
 
 // todo: added test, e.g. multiple handlers can handle the same events independently
 @Slf4j
 @Component
 public class EventConsumer<T> {
-    private final Map<String, Class<?>> handlerToEventMapping = new ConcurrentHashMap<>();
     private final List<AbstractEventHandler<T>> handlers;
     private final ConsumingEventDao<T> consumingEventDao;
     private final TransactionTemplate transactionTemplate;
@@ -41,7 +37,7 @@ public class EventConsumer<T> {
 
         log.debug("Start consume event[{}:{}].", event.getType(), event.getEventId());
         this.handlers.stream()
-                .filter(handler -> canHandle(handler, event.getEvent()))
+                .filter(handler -> handler.canHandle(event.getEvent()))
                 .sorted(comparingInt(AbstractEventHandler::priority))
                 .forEach(handler -> {
                     try {
@@ -72,18 +68,6 @@ public class EventConsumer<T> {
             log.warn("Event[{}:{}] has already been consumed by handler[{}], skip handling.",
                     consumingEvent.getEventId(), consumingEvent.getType(), handler.getName());
         }
-    }
-
-    private boolean canHandle(AbstractEventHandler<T> handler, T event) {
-        String handlerClassName = handler.getName();
-
-        if (!this.handlerToEventMapping.containsKey(handlerClassName)) {
-            Class<?> handlerEventClass = singleParameterizedArgumentClassOf(handler.getClass());
-            this.handlerToEventMapping.put(handlerClassName, handlerEventClass);
-        }
-
-        Class<?> finalHandlerEventClass = this.handlerToEventMapping.get(handlerClassName);
-        return finalHandlerEventClass != null && finalHandlerEventClass.isAssignableFrom(event.getClass());
     }
 
     private RetryTemplate buildRetryTemplate() {

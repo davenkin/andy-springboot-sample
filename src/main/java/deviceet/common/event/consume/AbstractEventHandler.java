@@ -1,7 +1,14 @@
 package deviceet.common.event.consume;
 
+import static deviceet.common.utils.CommonUtils.singleParameterizedArgumentClassOf;
+
 // All event handler should extend this class
 public abstract class AbstractEventHandler<T> {
+    private final Class<?> eventClass;
+
+    protected AbstractEventHandler() {
+        this.eventClass = singleParameterizedArgumentClassOf(this.getClass());
+    }
 
     public boolean isIdempotent() {
         return false; // By default, all handlers are assumed to be not idempotent
@@ -17,6 +24,10 @@ public abstract class AbstractEventHandler<T> {
 
     public String getName() {
         return this.getClass().getName();
+    }
+
+    public boolean canHandle(T event) {
+        return this.eventClass.isAssignableFrom(event.getClass());
     }
 
     public abstract void handle(T event);
