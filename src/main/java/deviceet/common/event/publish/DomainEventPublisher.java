@@ -40,7 +40,7 @@ public class DomainEventPublisher {
                     new LockConfiguration(now(), "publish-domain-events", ofMinutes(1), ofMillis(1)));
             List<String> publishedEventIds = result.getResult();
             if (isNotEmpty(publishedEventIds)) {
-                log.info("Published domain events {}.", publishedEventIds);
+                log.debug("Published domain events {}.", publishedEventIds);
             }
         } catch (Throwable e) {
             log.error("Error happened while publish domain events.", e);

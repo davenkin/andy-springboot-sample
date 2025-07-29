@@ -12,7 +12,6 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static com.google.common.collect.ImmutableSet.toImmutableSet;
 import static deviceet.common.exception.ErrorCode.AR_NOT_FOUND;
@@ -34,8 +33,6 @@ import static org.springframework.data.mongodb.core.query.Query.query;
 @Slf4j
 @SuppressWarnings({"unchecked"})
 public abstract class AbstractMongoRepository<AR extends AggregateRoot> {
-    private final Map<String, Class<?>> arClassMapper = new ConcurrentHashMap<>();
-
     @Autowired
     protected MongoTemplate mongoTemplate;
 
@@ -44,6 +41,12 @@ public abstract class AbstractMongoRepository<AR extends AggregateRoot> {
 
     @Autowired
     private CurrentOperatorProvider currentOperatorProvider;
+
+    private final Class<?> arClass;
+
+    protected AbstractMongoRepository() {
+        this.arClass = singleParameterizedArgumentClassOf(this.getClass());
+    }
 
     @Transactional
     public void save(AR ar) {
@@ -95,14 +98,14 @@ public abstract class AbstractMongoRepository<AR extends AggregateRoot> {
             ids.add(ar.getId());
         });
 
-        mongoTemplate.remove(query(where(MONGO_ID).in(ids)), arClass());
+        mongoTemplate.remove(query(where(MONGO_ID).in(ids)), arClass);
         stageEvents(events);
     }
 
     public AR byId(String id) {
         requireNonBlank(id, arType() + " ID must not be blank.");
 
-        Object it = mongoTemplate.findById(id, arClass());
+        Object it = mongoTemplate.findById(id, arClass);
         if (it == null) {
             throw new ServiceException(AR_NOT_FOUND, "AR not found.",
                     mapOf("type", arType(), "id", id));
@@ -114,7 +117,7 @@ public abstract class AbstractMongoRepository<AR extends AggregateRoot> {
     public Optional<AR> byIdOptional(String id) {
         requireNonBlank(id, arType() + " ID must not be blank.");
 
-        Object it = mongoTemplate.findById(id, arClass());
+        Object it = mongoTemplate.findById(id, arClass);
         return it == null ? empty() : Optional.of((AR) it);
     }
 
@@ -123,7 +126,7 @@ public abstract class AbstractMongoRepository<AR extends AggregateRoot> {
         requireNonBlank(id, arType() + " ID must not be blank.");
         Query query = query(where(AggregateRoot.Fields.tenantId).is(tenantId).and(MONGO_ID).is(id));
 
-        Object ar = mongoTemplate.findOne(query, arClass());
+        Object ar = mongoTemplate.findOne(query, arClass);
         if (ar == null) {
             throw new ServiceException(AR_NOT_FOUND, "AR not found.",
                     mapOf("type", arType(), "id", id, "tenantId", tenantId));
@@ -136,7 +139,7 @@ public abstract class AbstractMongoRepository<AR extends AggregateRoot> {
         requireNonBlank(id, arType() + " ID must not be blank.");
         Query query = query(where(AggregateRoot.Fields.tenantId).is(tenantId).and(MONGO_ID).is(id));
 
-        Object ar = mongoTemplate.findOne(query, arClass());
+        Object ar = mongoTemplate.findOne(query, arClass);
         return ar == null ? empty() : Optional.of((AR) ar);
     }
 
@@ -145,25 +148,11 @@ public abstract class AbstractMongoRepository<AR extends AggregateRoot> {
         requireNonBlank(id, arType() + " ID must not be blank.");
 
         Query query = query(where(AggregateRoot.Fields.tenantId).is(tenantId).and(MONGO_ID).is(id));
-        return mongoTemplate.exists(query, arClass());
-    }
-
-
-    private Class<?> arClass() {
-        String className = this.getClass().getName();
-
-        if (!arClassMapper.containsKey(className)) {
-            Class<?> arClass = singleParameterizedArgumentClassOf(this.getClass());
-            if (arClass != null) {
-                arClassMapper.put(className, arClass);
-            }
-        }
-
-        return arClassMapper.get(className);
+        return mongoTemplate.exists(query, arClass);
     }
 
     private String arType() {
-        return arClass().getSimpleName();
+        return this.arClass.getSimpleName();
     }
 
     private void stageEvents(List<DomainEvent> events) {
