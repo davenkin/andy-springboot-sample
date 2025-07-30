@@ -7,6 +7,7 @@ import deviceet.common.configuration.profile.DisableForCI;
 import deviceet.common.event.publish.DomainEventPublisher;
 import deviceet.common.event.publish.PublishingDomainEvent;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.common.TopicPartition;
 import org.bson.Document;
 import org.springframework.boot.autoconfigure.kafka.DefaultKafkaConsumerFactoryCustomizer;
 import org.springframework.boot.autoconfigure.kafka.DefaultKafkaProducerFactoryCustomizer;
@@ -18,9 +19,13 @@ import org.springframework.data.mongodb.core.messaging.ChangeStreamRequest;
 import org.springframework.data.mongodb.core.messaging.DefaultMessageListenerContainer;
 import org.springframework.data.mongodb.core.messaging.MessageListener;
 import org.springframework.data.mongodb.core.messaging.MessageListenerContainer;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.listener.DeadLetterPublishingRecoverer;
+import org.springframework.kafka.listener.DefaultErrorHandler;
 import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.kafka.support.serializer.JsonSerializer;
+import org.springframework.util.backoff.ExponentialBackOff;
 
 import static deviceet.common.utils.Constants.PUBLISHING_EVENT_COLLECTION;
 
@@ -28,6 +33,7 @@ import static deviceet.common.utils.Constants.PUBLISHING_EVENT_COLLECTION;
 @DisableForCI
 @Configuration
 public class EventConfiguration {
+    private static final String dltSuffix = "-dlt";
 
     @Bean(destroyMethod = "stop")
     MessageListenerContainer mongoDomainEventChangeStreamListenerContainer(MongoTemplate mongoTemplate,
@@ -52,7 +58,6 @@ public class EventConfiguration {
         return producerFactory -> producerFactory.setValueSerializer(new JsonSerializer<>(objectMapper));
     }
 
-
     @Bean
     public DefaultKafkaConsumerFactoryCustomizer defaultKafkaConsumerFactoryCustomizer(ObjectMapper objectMapper) {
         return consumerFactory -> {
@@ -62,6 +67,21 @@ public class EventConfiguration {
             //we must wrap the JsonDeserializer into an ErrorHandlingDeserializer, otherwise deserialization error will result in endless message retry
             consumerFactory.setValueDeserializer(new ErrorHandlingDeserializer(valueDeserializer));
         };
+    }
+
+    @Bean
+    public DefaultErrorHandler defaultErrorHandler(KafkaTemplate<String, Object> kafkaTemplate) {
+        ExponentialBackOff backOff = new ExponentialBackOff(500L, 2);
+        backOff.setMaxAttempts(2); // the message will be processed at most [2 + 1 = 3] times
+        DeadLetterPublishingRecoverer recoverer = new DeadLetterPublishingRecoverer(
+                kafkaTemplate,
+                (record, ex) -> {
+                    String dlt = record.topic() + dltSuffix;
+                    log.error("Error consuming message[key={}], moving to dead letter topic[{}].", record.key(), dlt, ex);
+                    return new TopicPartition(dlt, record.partition());
+                }
+        );
+        return new DefaultErrorHandler(recoverer, backOff);
     }
 }
 

@@ -49,7 +49,7 @@ public class Principal {
         return this.roles.contains(role);
     }
 
-    public void checkHasRole(Role role) {
+    public void checkRole(Role role) {
         if (!this.hasRole(role)) {
             throw accessDeniedException();
         }

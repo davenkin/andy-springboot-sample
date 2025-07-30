@@ -1,16 +1,16 @@
 package deviceet.common.event.consume;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.retry.backoff.ExponentialBackOffPolicy;
-import org.springframework.retry.policy.SimpleRetryPolicy;
-import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static java.util.Comparator.comparingInt;
+import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 
 // todo: added test, e.g. multiple handlers can handle the same events independently
 @Slf4j
@@ -19,7 +19,6 @@ public class EventConsumer<T> {
     private final List<AbstractEventHandler<T>> handlers;
     private final ConsumingEventDao<T> consumingEventDao;
     private final TransactionTemplate transactionTemplate;
-    private final RetryTemplate retryTemplate;
 
     public EventConsumer(List<AbstractEventHandler<T>> handlers,
                          ConsumingEventDao<T> consumingEventDao,
@@ -27,7 +26,6 @@ public class EventConsumer<T> {
         this.handlers = handlers;
         this.consumingEventDao = consumingEventDao;
         this.transactionTemplate = new TransactionTemplate(transactionManager);
-        this.retryTemplate = this.buildRetryTemplate();
     }
 
     public void consume(ConsumingEvent<T> event) {
@@ -36,29 +34,30 @@ public class EventConsumer<T> {
         }
 
         log.debug("Start consume event[{}:{}].", event.getType(), event.getEventId());
+        Set<String> errorHandlers = new HashSet<>();
         this.handlers.stream()
                 .filter(handler -> handler.canHandle(event.getEvent()))
                 .sorted(comparingInt(AbstractEventHandler::priority))
                 .forEach(handler -> {
                     try {
-                        retryTemplate.execute(
-                                context -> {
-                                    if (handler.isTransactional()) {
-                                        this.transactionTemplate.execute(status -> {
-                                            recordAndHandle(handler, event);
-                                            return null;
-                                        });
-                                    } else {
-                                        recordAndHandle(handler, event);
-                                    }
-                                    return null;
-                                }
-                        );
-                    } catch (Throwable t) {
-                        log.error("Error occurred while handling event[{}:{}] by {}.",
-                                event.getType(), event.getEventId(), handler.getName(), t);
+                        if (handler.isTransactional()) {
+                            this.transactionTemplate.execute(status -> {
+                                recordAndHandle(handler, event);
+                                return null;
+                            });
+                        } else {
+                            recordAndHandle(handler, event);
+                        }
+                    } catch (Throwable ex) {
+                        log.error("Error while handling event[{}:{}] by [{}]: ",
+                                event.getType(), event.getEventId(), handler.getName(), ex);
+                        errorHandlers.add(handler.getName());
                     }
                 });
+
+        if (isNotEmpty(errorHandlers)) {
+            throw new RuntimeException("Error while consuming event[" + event.getType() + ":" + event.getEventId() + "] by the following handlers: " + errorHandlers);
+        }
     }
 
     private void recordAndHandle(AbstractEventHandler<T> handler, ConsumingEvent<T> consumingEvent) {
@@ -68,17 +67,5 @@ public class EventConsumer<T> {
             log.warn("Event[{}:{}] has already been consumed by handler[{}], skip handling.",
                     consumingEvent.getEventId(), consumingEvent.getType(), handler.getName());
         }
-    }
-
-    private RetryTemplate buildRetryTemplate() {
-        RetryTemplate retryTemplate = new RetryTemplate();
-
-        ExponentialBackOffPolicy backOffPolicy = new ExponentialBackOffPolicy();
-        backOffPolicy.setInitialInterval(500);
-        backOffPolicy.setMultiplier(2.0);
-
-        retryTemplate.setBackOffPolicy(backOffPolicy);
-        retryTemplate.setRetryPolicy(new SimpleRetryPolicy(3));
-        return retryTemplate;
     }
 }

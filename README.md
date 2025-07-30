@@ -21,7 +21,8 @@
 - Then to run the application locally, run `./mvnw spring-boot:run`,or run `main()` in `SpringBootWebApplication` in IDE
   directly, after that open
   `http://localhost:5123/about` to check if the application runs successfully.
-- To stop local infrastructure, run `./stop-docker-compose.sh` to shut down all docker containers.
+- To stop local docker compose without deleting data, run `./stop-docker-compose.sh`.
+- To stop local docker compose and delete data, run `./clear-docker-compose.sh`.
 
 ### How to run tests
 
