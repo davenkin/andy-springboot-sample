@@ -3,7 +3,7 @@ package deviceet.common.infrastructure;
 import deviceet.common.event.DomainEvent;
 import deviceet.common.event.publish.PublishingDomainEventDao;
 import deviceet.common.exception.ServiceException;
-import deviceet.common.model.AggregateRoot;
+import deviceet.common.model.AbstractEntity;
 import deviceet.common.operator.CurrentOperatorProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 
 import static com.google.common.collect.ImmutableSet.toImmutableSet;
-import static deviceet.common.exception.ErrorCode.AR_NOT_FOUND;
-import static deviceet.common.exception.ErrorCode.NOT_SAME_TENANT;
+import static deviceet.common.exception.ErrorCode.ENTITY_NOT_FOUND;
+import static deviceet.common.exception.ErrorCode.NOT_SAME_ORG;
 import static deviceet.common.utils.CommonUtils.requireNonBlank;
 import static deviceet.common.utils.CommonUtils.singleParameterizedArgumentClassOf;
 import static deviceet.common.utils.Constants.MONGO_ID;
@@ -32,7 +32,7 @@ import static org.springframework.data.mongodb.core.query.Query.query;
 
 @Slf4j
 @SuppressWarnings({"unchecked"})
-public abstract class AbstractMongoRepository<AR extends AggregateRoot> {
+public abstract class AbstractMongoRepository<ENTITY extends AbstractEntity> {
     @Autowired
     protected MongoTemplate mongoTemplate;
 
@@ -42,121 +42,121 @@ public abstract class AbstractMongoRepository<AR extends AggregateRoot> {
     @Autowired
     private CurrentOperatorProvider currentOperatorProvider;
 
-    private final Class<?> arClass;
+    private final Class<?> entityClass;
 
     protected AbstractMongoRepository() {
-        this.arClass = singleParameterizedArgumentClassOf(this.getClass());
+        this.entityClass = singleParameterizedArgumentClassOf(this.getClass());
     }
 
     @Transactional
-    public void save(AR ar) {
-        requireNonNull(ar, arType() + " must not be null.");
-        requireNonBlank(ar.getId(), arType() + " ID must not be blank.");
+    public void save(ENTITY entity) {
+        requireNonNull(entity, entityType() + " must not be null.");
+        requireNonBlank(entity.getId(), entityType() + " ID must not be blank.");
 
-        mongoTemplate.save(ar);
-        stageEvents(ar.getEvents());
-        ar.clearEvents();
+        mongoTemplate.save(entity);
+        stageEvents(entity.getEvents());
+        entity.clearEvents();
     }
 
     @Transactional
-    public void save(List<AR> ars) {
-        if (isEmpty(ars)) {
+    public void save(List<ENTITY> entities) {
+        if (isEmpty(entities)) {
             return;
         }
-        checkSameTenant(ars);
+        checkSameOrg(entities);
         List<DomainEvent> events = new ArrayList<>();
-        ars.forEach(ar -> {
-            if (isNotEmpty(ar.getEvents())) {
-                events.addAll(ar.getEvents());
+        entities.forEach(entity -> {
+            if (isNotEmpty(entity.getEvents())) {
+                events.addAll(entity.getEvents());
             }
-            mongoTemplate.save(ar);
-            ar.clearEvents();
+            mongoTemplate.save(entity);
+            entity.clearEvents();
         });
 
         stageEvents(events);
     }
 
     @Transactional
-    public void delete(AR ar) {
-        requireNonNull(ar, arType() + " must not be null.");
-        requireNonBlank(ar.getId(), arType() + " ID must not be blank.");
+    public void delete(ENTITY entity) {
+        requireNonNull(entity, entityType() + " must not be null.");
+        requireNonBlank(entity.getId(), entityType() + " ID must not be blank.");
 
-        mongoTemplate.remove(ar);
-        stageEvents(ar.getEvents());
-        ar.clearEvents();
+        mongoTemplate.remove(entity);
+        stageEvents(entity.getEvents());
+        entity.clearEvents();
     }
 
     @Transactional
-    public void delete(List<AR> ars) {
-        if (isEmpty(ars)) {
+    public void delete(List<ENTITY> entities) {
+        if (isEmpty(entities)) {
             return;
         }
-        checkSameTenant(ars);
+        checkSameOrg(entities);
         List<DomainEvent> events = new ArrayList<>();
         Set<String> ids = new HashSet<>();
-        ars.forEach(ar -> {
-            if (isNotEmpty(ar.getEvents())) {
-                events.addAll(ar.getEvents());
+        entities.forEach(entity -> {
+            if (isNotEmpty(entity.getEvents())) {
+                events.addAll(entity.getEvents());
             }
-            ids.add(ar.getId());
-            ar.clearEvents();
+            ids.add(entity.getId());
+            entity.clearEvents();
         });
 
-        mongoTemplate.remove(query(where(MONGO_ID).in(ids)), arClass);
+        mongoTemplate.remove(query(where(MONGO_ID).in(ids)), entityClass);
         stageEvents(events);
     }
 
-    public AR byId(String id) {
-        requireNonBlank(id, arType() + " ID must not be blank.");
+    public ENTITY byId(String id) {
+        requireNonBlank(id, entityType() + " ID must not be blank.");
 
-        Object it = mongoTemplate.findById(id, arClass);
+        Object it = mongoTemplate.findById(id, entityClass);
         if (it == null) {
-            throw new ServiceException(AR_NOT_FOUND, "AR not found.",
-                    mapOf("type", arType(), "id", id));
+            throw new ServiceException(ENTITY_NOT_FOUND, "Entity not found.",
+                    mapOf("type", entityType(), "id", id));
         }
 
-        return (AR) it;
+        return (ENTITY) it;
     }
 
-    public Optional<AR> byIdOptional(String id) {
-        requireNonBlank(id, arType() + " ID must not be blank.");
+    public Optional<ENTITY> byIdOptional(String id) {
+        requireNonBlank(id, entityType() + " ID must not be blank.");
 
-        Object it = mongoTemplate.findById(id, arClass);
-        return it == null ? empty() : Optional.of((AR) it);
+        Object it = mongoTemplate.findById(id, entityClass);
+        return it == null ? empty() : Optional.of((ENTITY) it);
     }
 
-    public AR byId(String id, String tenantId) {
-        requireNonBlank(tenantId, "Tenant ID must not be blank.");
-        requireNonBlank(id, arType() + " ID must not be blank.");
-        Query query = query(where(AggregateRoot.Fields.tenantId).is(tenantId).and(MONGO_ID).is(id));
+    public ENTITY byId(String id, String orgId) {
+        requireNonBlank(orgId, "orgId must not be blank.");
+        requireNonBlank(id, entityType() + " ID must not be blank.");
+        Query query = query(where(AbstractEntity.Fields.orgId).is(orgId).and(MONGO_ID).is(id));
 
-        Object ar = mongoTemplate.findOne(query, arClass);
-        if (ar == null) {
-            throw new ServiceException(AR_NOT_FOUND, "AR not found.",
-                    mapOf("type", arType(), "id", id, "tenantId", tenantId));
+        Object entity = mongoTemplate.findOne(query, entityClass);
+        if (entity == null) {
+            throw new ServiceException(ENTITY_NOT_FOUND, "Entity not found.",
+                    mapOf("type", entityType(), "id", id, "orgId", orgId));
         }
-        return (AR) ar;
+        return (ENTITY) entity;
     }
 
-    public Optional<AR> byIdOptional(String id, String tenantId) {
-        requireNonBlank(tenantId, "Tenant ID must not be blank.");
-        requireNonBlank(id, arType() + " ID must not be blank.");
-        Query query = query(where(AggregateRoot.Fields.tenantId).is(tenantId).and(MONGO_ID).is(id));
+    public Optional<ENTITY> byIdOptional(String id, String orgId) {
+        requireNonBlank(orgId, "orgId must not be blank.");
+        requireNonBlank(id, entityType() + " ID must not be blank.");
+        Query query = query(where(AbstractEntity.Fields.orgId).is(orgId).and(MONGO_ID).is(id));
 
-        Object ar = mongoTemplate.findOne(query, arClass);
-        return ar == null ? empty() : Optional.of((AR) ar);
+        Object entity = mongoTemplate.findOne(query, entityClass);
+        return entity == null ? empty() : Optional.of((ENTITY) entity);
     }
 
-    public boolean exists(String id, String tenantId) {
-        requireNonBlank(tenantId, "Tenant ID must not be blank.");
-        requireNonBlank(id, arType() + " ID must not be blank.");
+    public boolean exists(String id, String orgId) {
+        requireNonBlank(orgId, "orgId must not be blank.");
+        requireNonBlank(id, entityType() + " ID must not be blank.");
 
-        Query query = query(where(AggregateRoot.Fields.tenantId).is(tenantId).and(MONGO_ID).is(id));
-        return mongoTemplate.exists(query, arClass);
+        Query query = query(where(AbstractEntity.Fields.orgId).is(orgId).and(MONGO_ID).is(id));
+        return mongoTemplate.exists(query, entityClass);
     }
 
-    private String arType() {
-        return this.arClass.getSimpleName();
+    private String entityType() {
+        return this.entityClass.getSimpleName();
     }
 
     private void stageEvents(List<DomainEvent> events) {
@@ -168,11 +168,11 @@ public abstract class AbstractMongoRepository<AR extends AggregateRoot> {
         }
     }
 
-    private void checkSameTenant(Collection<AR> ars) {
-        Set<String> tenantIds = ars.stream().map(AR::getTenantId).collect(toImmutableSet());
-        if (tenantIds.size() > 1) {
-            Set<String> allArIds = ars.stream().map(AggregateRoot::getId).collect(toImmutableSet());
-            throw new ServiceException(NOT_SAME_TENANT, "All ARs should belong to the same tenant.", "arIds", allArIds);
+    private void checkSameOrg(Collection<ENTITY> entities) {
+        Set<String> orgIdS = entities.stream().map(ENTITY::getOrgId).collect(toImmutableSet());
+        if (orgIdS.size() > 1) {
+            Set<String> allEntityIds = entities.stream().map(AbstractEntity::getId).collect(toImmutableSet());
+            throw new ServiceException(NOT_SAME_ORG, "All entities should belong to the same organization.", "entityIds", allEntityIds);
         }
     }
 }

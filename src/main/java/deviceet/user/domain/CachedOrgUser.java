@@ -3,5 +3,5 @@ package deviceet.user.domain;
 import lombok.Builder;
 
 @Builder
-public record CachedTenantUser(String id, String name) {
+public record CachedOrgUser(String id, String name) {
 }

@@ -21,9 +21,9 @@ import static lombok.AccessLevel.PROTECTED;
 @FieldNameConstants
 // The no arg constructor is used by Jackson and Spring Data etc. to create objects
 @NoArgsConstructor(access = PROTECTED)
-public abstract class AggregateRoot {
+public abstract class AbstractEntity {
     private String id;
-    private String tenantId;
+    private String orgId;
 
     // Domain events are stored temporarily in the aggregate root and are not persisted together with the aggregate roots as events will be stored in separately
     // @Transient is very important for not persisting events with the aggregate root, otherwise we need to do this manually by ourselves
@@ -36,12 +36,12 @@ public abstract class AggregateRoot {
     @Getter(PRIVATE)
     private Long _version;
 
-    protected AggregateRoot(String id, String tenantId) {
-        requireNonBlank(id, "ID must not be blank.");
-        requireNonBlank(tenantId, "Tenant ID must not be blank.");
+    protected AbstractEntity(String id, String orgId) {
+        requireNonBlank(id, "id must not be blank.");
+        requireNonBlank(orgId, "orgId must not be blank.");
 
         this.id = id;
-        this.tenantId = tenantId;
+        this.orgId = orgId;
         this.createdAt = Instant.now();
     }
 
@@ -49,7 +49,7 @@ public abstract class AggregateRoot {
     // The actual sending of events to messaging middleware is handled by DomainEventPublisher
     protected void raiseEvent(DomainEvent event) {
         requireNonNull(event.getType(), "Domain event type must not be null.");
-        requireNonBlank(event.getArId(), "Domain event aggregate root ID must not be null.");
+        requireNonBlank(event.getEntityId(), "Domain event aggregate root ID must not be null.");
 
         events().add(event);
     }

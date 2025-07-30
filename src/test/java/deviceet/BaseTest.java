@@ -31,12 +31,12 @@ public abstract class BaseTest {
     @Autowired
     protected MongoTemplate mongoTemplate;
 
-    protected <T extends DomainEvent> T latestEventFor(String arId, DomainEventType type, Class<T> eventClass) {
-        requireNonBlank(arId, "AR ID must not be blank.");
-        requireNonNull(type, "Domain event type must not be null.");
-        requireNonNull(eventClass, "Domain event class must not be null.");
+    protected <T extends DomainEvent> T latestEventFor(String entityId, DomainEventType type, Class<T> eventClass) {
+        requireNonBlank(entityId, "entityId must not be blank.");
+        requireNonNull(type, "type must not be null.");
+        requireNonNull(eventClass, "eventClass must not be null.");
 
-        Query query = query(where(mongoConcatFields(PublishingDomainEvent.Fields.event, DomainEvent.Fields.arId)).is(arId)
+        Query query = query(where(mongoConcatFields(PublishingDomainEvent.Fields.event, DomainEvent.Fields.entityId)).is(entityId)
                 .and(mongoConcatFields(PublishingDomainEvent.Fields.event, DomainEvent.Fields.type)).is(type))
                 .with(by(DESC, PublishingDomainEvent.Fields.raisedAt));
         PublishingDomainEvent domainEvent = mongoTemplate.findOne(query, PublishingDomainEvent.class);

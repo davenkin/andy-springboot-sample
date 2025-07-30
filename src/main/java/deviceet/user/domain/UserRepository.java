@@ -5,7 +5,7 @@ import java.util.List;
 public interface UserRepository {
     void save(User user);
 
-    User byId(String id, String tenantId);
+    User byId(String id, String orgId);
 
-    List<CachedTenantUser> cachedTenantUsers(String tenantId);
+    List<CachedOrgUser> cachedOrgUsers(String orgId);
 }

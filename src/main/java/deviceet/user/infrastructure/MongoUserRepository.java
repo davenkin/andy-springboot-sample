@@ -1,7 +1,7 @@
 package deviceet.user.infrastructure;
 
 import deviceet.common.infrastructure.AbstractMongoRepository;
-import deviceet.user.domain.CachedTenantUser;
+import deviceet.user.domain.CachedOrgUser;
 import deviceet.user.domain.User;
 import deviceet.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,41 +18,41 @@ public class MongoUserRepository extends AbstractMongoRepository<User> implement
     private final CachedMongoUserRepository cachedMongoUserRepository;
 
     @Override
-    public void save(User user) {
-        super.save(user);
-        this.cachedMongoUserRepository.evictCachedTenantUsers(user.getTenantId());
+    public void save(User entity) {
+        super.save(entity);
+        this.cachedMongoUserRepository.evictCachedOrgUsers(entity.getOrgId());
     }
 
     @Override
-    public void save(List<User> users) {
-        if (isEmpty(users)) {
+    public void save(List<User> entities) {
+        if (isEmpty(entities)) {
             return;
         }
 
-        super.save(users);
-        this.cachedMongoUserRepository.evictCachedTenantUsers(users.get(0).getTenantId());
+        super.save(entities);
+        this.cachedMongoUserRepository.evictCachedOrgUsers(entities.get(0).getOrgId());
     }
 
     @Override
-    public void delete(User user) {
-        super.delete(user);
-        this.cachedMongoUserRepository.evictCachedTenantUsers(user.getTenantId());
+    public void delete(User entity) {
+        super.delete(entity);
+        this.cachedMongoUserRepository.evictCachedOrgUsers(entity.getOrgId());
     }
 
     @Override
-    public void delete(List<User> users) {
-        if (isEmpty(users)) {
+    public void delete(List<User> entities) {
+        if (isEmpty(entities)) {
             return;
         }
 
-        super.delete(users);
-        this.cachedMongoUserRepository.evictCachedTenantUsers(users.get(0).getTenantId());
+        super.delete(entities);
+        this.cachedMongoUserRepository.evictCachedOrgUsers(entities.get(0).getOrgId());
     }
 
     @Override
-    public List<CachedTenantUser> cachedTenantUsers(String tenantId) {
-        requireNonBlank(tenantId, "Tenant ID must not be blank.");
+    public List<CachedOrgUser> cachedOrgUsers(String orgId) {
+        requireNonBlank(orgId, "orgId must not be blank.");
 
-        return cachedMongoUserRepository.cachedTenantUsers(tenantId).users();
+        return cachedMongoUserRepository.cachedOrgUsers(orgId).users();
     }
 }

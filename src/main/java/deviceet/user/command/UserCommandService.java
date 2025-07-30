@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import static deviceet.common.utils.Constants.PLATFORM_TENANT_ID;
+import static deviceet.common.utils.Constants.PLATFORM_ORG_ID;
 
 @Slf4j
 @Component
@@ -27,7 +27,7 @@ public class UserCommandService {
 
     @Transactional
     public void updateUserName(String userId, String name) {
-        User user = this.userRepository.byId(userId, PLATFORM_TENANT_ID);
+        User user = this.userRepository.byId(userId, PLATFORM_ORG_ID);
         user.updateName(name);
         userRepository.save(user);
         log.info("Updated name for user[{}].", userId);

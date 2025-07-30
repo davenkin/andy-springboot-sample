@@ -6,9 +6,9 @@ import java.util.stream.Stream;
 import static java.util.stream.Collectors.toSet;
 
 public enum Role {
-    TENANT_IT_ADMIN(Set.of()),
-    TENANT_ADMIN(Set.of(TENANT_IT_ADMIN)),
-    ROOT(Set.of(TENANT_IT_ADMIN, TENANT_ADMIN));
+    ORG_IT_ADMIN(Set.of()),
+    ORG_ADMIN(Set.of(ORG_IT_ADMIN)),
+    ROOT(Set.of(ORG_IT_ADMIN, ORG_ADMIN));
 
     private final Set<Role> impliedRoles;
 

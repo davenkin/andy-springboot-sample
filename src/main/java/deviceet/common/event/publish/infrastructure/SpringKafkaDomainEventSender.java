@@ -23,7 +23,7 @@ public class SpringKafkaDomainEventSender implements DomainEventSender {
 
     @Override
     public CompletableFuture<String> send(DomainEvent event) {
-        return this.kafkaTemplate.send(KAFKA_DOMAIN_EVENT_TOPIC, event.getArId(), event)
+        return this.kafkaTemplate.send(KAFKA_DOMAIN_EVENT_TOPIC, event.getEntityId(), event)
                 .thenApply(record -> record.getProducerRecord().value().getId());
     }
 }

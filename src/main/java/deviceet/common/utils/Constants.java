@@ -3,7 +3,7 @@ package deviceet.common.utils;
 public class Constants {
     public static final String MONGO_ID = "_id";
     @Deprecated
-    public static final String PLATFORM_TENANT_ID = "PLATFORM_TENANT_ID";//todo:检查当前不应该有AR是PLATFORM_TENANT_ID
+    public static final String PLATFORM_ORG_ID = "PLATFORM_ORG_ID";//todo:检查当前不应该有entity是PLATFORM_ORG_ID
 
     public static final String DISABLE_PROFILE_PREFIX = "!";
     public static final String CI_PROFILE = "ci";
@@ -19,6 +19,6 @@ public class Constants {
     public static final String USER_COLLECTION = "user";
 
     //Cache
-    public static final String TENANT_USERS_CACHE = "TENANT_USERS";
+    public static final String ORG_USERS_CACHE = "ORG_USERS";
 
 }

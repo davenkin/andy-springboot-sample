@@ -44,7 +44,7 @@ decisions. Each ADR is stored in the `ADRs` directory and follows a specific for
 
 ## Terminology
 
-| Term   | Chinese | Abbreviation | Description                                                                                              |
-|--------|---------|--------------|----------------------------------------------------------------------------------------------------------|
-| User   | 用户      |              | Represents a user under a tenant                                                                         |
-| Tenant | 租户      |              | A tenant is a client containing it's own data resources, including a set of users, a set of devices etc. |
+| Term         | Chinese | Abbreviation | Description                                                                                                     |
+|--------------|---------|--------------|-----------------------------------------------------------------------------------------------------------------|
+| User         | 用户      |              | Represents a user under an organization.                                                                        |
+| Organization | 组织（租户）  |     Org         | An organization is a client containing it's own data resources, including a set of users, a set of devices etc. |
