@@ -15,7 +15,7 @@ import static org.springframework.data.redis.serializer.RedisSerializationContex
 
 @DisableForCI
 @Configuration(proxyBeanMethods = false)
-public class RedisCacheConfiguration {
+public class RedisConfiguration {
     private static final String CACHE_PREFIX = "Cache:";
 
     @Bean

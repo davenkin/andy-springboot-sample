@@ -29,5 +29,6 @@
   - event：spring kafka通过event的FQCN进行序列化和反序列化
   - event handler：事件处理机制通过event handler的 FQCN来达到幂等消费，具体请参考`ConsumingEventDao.recordAsConsumed()`
 - 全局尽量使用同一个ObjectMapper实例
-- ar改名为BaseEntity
+- ar改名为AbstractEntity
 - 我们不使用spring security进行角色验证，而是在command service中通过Principal.checkHasRole()等方法验证权限，让权限管控离业务逻辑更近，更具内聚性，另外也方便以后扩展成ARBC。
+- 如何使用pagination和sorting，可以使用spring的Pageable和Page<>

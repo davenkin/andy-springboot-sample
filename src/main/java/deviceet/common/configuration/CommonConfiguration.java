@@ -15,9 +15,11 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.retry.annotation.EnableRetry;
+import org.springframework.scheduling.SchedulingTaskExecutor;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
 import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES;
 import static com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS;
@@ -28,7 +30,6 @@ import static deviceet.common.utils.Constants.SHEDLOCK_COLLECTION;
 @EnableRetry
 @EnableAsync
 @EnableCaching
-@EnableScheduling
 @Configuration
 public class CommonConfiguration {
 
@@ -52,6 +53,14 @@ public class CommonConfiguration {
         executor.initialize();
         executor.setThreadNamePrefix("default-");
         return executor;
+    }
+
+    @Bean
+    public SchedulingTaskExecutor threadPoolTaskScheduler() {
+        ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
+        scheduler.setPoolSize(5);
+        scheduler.setThreadNamePrefix("scheduling-");
+        return scheduler;
     }
 
     @Bean
