@@ -1,7 +1,7 @@
 package deviceet.user.infrastructure;
 
 import deviceet.common.infrastructure.AbstractMongoRepository;
-import deviceet.common.model.AbstractEntity;
+import deviceet.common.model.Entity;
 import deviceet.user.domain.CachedOrgUser;
 import deviceet.user.domain.CachedOrgUsers;
 import deviceet.user.domain.User;
@@ -32,7 +32,7 @@ public class CachedMongoUserRepository extends AbstractMongoRepository<User> {
     public CachedOrgUsers cachedOrgUsers(String orgId) {
         requireNonBlank(orgId, "orgId must not be blank.");
 
-        Query query = query(where(AbstractEntity.Fields.orgId).is(orgId)).with(by(ASC, "createdAt"));
+        Query query = query(where(Entity.Fields.orgId).is(orgId)).with(by(ASC, "createdAt"));
         query.fields().include("name");
 
         List<CachedOrgUser> cachedOrgUsers = mongoTemplate.find(query, CachedOrgUser.class, USER_COLLECTION);

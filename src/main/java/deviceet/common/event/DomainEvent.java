@@ -1,6 +1,6 @@
 package deviceet.common.event;
 
-import deviceet.common.model.AbstractEntity;
+import deviceet.common.model.Entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
@@ -22,7 +22,7 @@ public abstract class DomainEvent {
     private Instant raisedAt;
     private String raisedBy;
 
-    protected DomainEvent(DomainEventType type, AbstractEntity entity) {
+    protected DomainEvent(DomainEventType type, Entity entity) {
         requireNonNull(type, "type must not be null.");
         requireNonNull(entity, "entity must not be null.");
 

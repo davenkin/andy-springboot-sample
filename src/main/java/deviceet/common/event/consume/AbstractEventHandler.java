@@ -22,11 +22,11 @@ public abstract class AbstractEventHandler<T> {
         return 0; // Smaller value means higher priority and will be handled first
     }
 
-    public String getName() {
+    public final String getName() {
         return this.getClass().getName();
     }
 
-    public boolean canHandle(T event) {
+    public final boolean canHandle(T event) {
         return this.eventClass.isAssignableFrom(event.getClass());
     }
 

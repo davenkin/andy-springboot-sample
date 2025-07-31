@@ -7,8 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 @Slf4j
-@ChangeUnit(id = "sampleChangeUnit", order = "001", author = "andy")
-public class Migration001_SampleChangeUnit {
+@ChangeUnit(id = "sample", order = "001", author = "andy")
+public class Migration001_Sample {
 
     @Execution
     public void sampleExecute(MongoTemplate mongoTemplate) {

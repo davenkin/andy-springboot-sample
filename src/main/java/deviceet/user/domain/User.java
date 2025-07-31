@@ -1,6 +1,6 @@
 package deviceet.user.domain;
 
-import deviceet.common.model.AbstractEntity;
+import deviceet.common.model.Entity;
 import deviceet.user.domain.event.UserCreatedEvent;
 import deviceet.user.domain.event.UserNameUpdatedEvent;
 import lombok.Getter;
@@ -21,7 +21,7 @@ import static lombok.AccessLevel.PRIVATE;
 @FieldNameConstants
 @Document(USER_COLLECTION)
 @NoArgsConstructor(access = PRIVATE)
-public class User extends AbstractEntity {
+public class User extends Entity {
 
     private String name;
 
@@ -39,9 +39,8 @@ public class User extends AbstractEntity {
         if (Objects.equals(newName, this.name)) {
             return;
         }
-
-        UserNameUpdatedEvent userNameUpdatedEvent = new UserNameUpdatedEvent(name, newName, this);
+        String oldName = this.name;
         this.name = newName;
-        raiseEvent(userNameUpdatedEvent);
+        raiseEvent(new UserNameUpdatedEvent(oldName, newName, this));
     }
 }

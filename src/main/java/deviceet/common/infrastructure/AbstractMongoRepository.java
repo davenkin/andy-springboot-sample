@@ -3,7 +3,7 @@ package deviceet.common.infrastructure;
 import deviceet.common.event.DomainEvent;
 import deviceet.common.event.publish.PublishingDomainEventDao;
 import deviceet.common.exception.ServiceException;
-import deviceet.common.model.AbstractEntity;
+import deviceet.common.model.Entity;
 import deviceet.common.operator.CurrentOperatorProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ import static org.springframework.data.mongodb.core.query.Query.query;
 
 @Slf4j
 @SuppressWarnings({"unchecked"})
-public abstract class AbstractMongoRepository<ENTITY extends AbstractEntity> {
+public abstract class AbstractMongoRepository<E extends Entity> {
     @Autowired
     protected MongoTemplate mongoTemplate;
 
@@ -49,7 +49,7 @@ public abstract class AbstractMongoRepository<ENTITY extends AbstractEntity> {
     }
 
     @Transactional
-    public void save(ENTITY entity) {
+    public void save(E entity) {
         requireNonNull(entity, entityType() + " must not be null.");
         requireNonBlank(entity.getId(), entityType() + " ID must not be blank.");
 
@@ -59,7 +59,7 @@ public abstract class AbstractMongoRepository<ENTITY extends AbstractEntity> {
     }
 
     @Transactional
-    public void save(List<ENTITY> entities) {
+    public void save(List<E> entities) {
         if (isEmpty(entities)) {
             return;
         }
@@ -77,7 +77,7 @@ public abstract class AbstractMongoRepository<ENTITY extends AbstractEntity> {
     }
 
     @Transactional
-    public void delete(ENTITY entity) {
+    public void delete(E entity) {
         requireNonNull(entity, entityType() + " must not be null.");
         requireNonBlank(entity.getId(), entityType() + " ID must not be blank.");
 
@@ -87,7 +87,7 @@ public abstract class AbstractMongoRepository<ENTITY extends AbstractEntity> {
     }
 
     @Transactional
-    public void delete(List<ENTITY> entities) {
+    public void delete(List<E> entities) {
         if (isEmpty(entities)) {
             return;
         }
@@ -106,7 +106,7 @@ public abstract class AbstractMongoRepository<ENTITY extends AbstractEntity> {
         stageEvents(events);
     }
 
-    public ENTITY byId(String id) {
+    public E byId(String id) {
         requireNonBlank(id, entityType() + " ID must not be blank.");
 
         Object it = mongoTemplate.findById(id, entityClass);
@@ -115,43 +115,43 @@ public abstract class AbstractMongoRepository<ENTITY extends AbstractEntity> {
                     mapOf("type", entityType(), "id", id));
         }
 
-        return (ENTITY) it;
+        return (E) it;
     }
 
-    public Optional<ENTITY> byIdOptional(String id) {
+    public Optional<E> byIdOptional(String id) {
         requireNonBlank(id, entityType() + " ID must not be blank.");
 
         Object it = mongoTemplate.findById(id, entityClass);
-        return it == null ? empty() : Optional.of((ENTITY) it);
+        return it == null ? empty() : Optional.of((E) it);
     }
 
-    public ENTITY byId(String id, String orgId) {
+    public E byId(String id, String orgId) {
         requireNonBlank(orgId, "orgId must not be blank.");
         requireNonBlank(id, entityType() + " ID must not be blank.");
-        Query query = query(where(AbstractEntity.Fields.orgId).is(orgId).and(MONGO_ID).is(id));
+        Query query = query(where(Entity.Fields.orgId).is(orgId).and(MONGO_ID).is(id));
 
         Object entity = mongoTemplate.findOne(query, entityClass);
         if (entity == null) {
             throw new ServiceException(ENTITY_NOT_FOUND, "Entity not found.",
                     mapOf("type", entityType(), "id", id, "orgId", orgId));
         }
-        return (ENTITY) entity;
+        return (E) entity;
     }
 
-    public Optional<ENTITY> byIdOptional(String id, String orgId) {
+    public Optional<E> byIdOptional(String id, String orgId) {
         requireNonBlank(orgId, "orgId must not be blank.");
         requireNonBlank(id, entityType() + " ID must not be blank.");
-        Query query = query(where(AbstractEntity.Fields.orgId).is(orgId).and(MONGO_ID).is(id));
+        Query query = query(where(Entity.Fields.orgId).is(orgId).and(MONGO_ID).is(id));
 
         Object entity = mongoTemplate.findOne(query, entityClass);
-        return entity == null ? empty() : Optional.of((ENTITY) entity);
+        return entity == null ? empty() : Optional.of((E) entity);
     }
 
     public boolean exists(String id, String orgId) {
         requireNonBlank(orgId, "orgId must not be blank.");
         requireNonBlank(id, entityType() + " ID must not be blank.");
 
-        Query query = query(where(AbstractEntity.Fields.orgId).is(orgId).and(MONGO_ID).is(id));
+        Query query = query(where(Entity.Fields.orgId).is(orgId).and(MONGO_ID).is(id));
         return mongoTemplate.exists(query, entityClass);
     }
 
@@ -168,10 +168,10 @@ public abstract class AbstractMongoRepository<ENTITY extends AbstractEntity> {
         }
     }
 
-    private void checkSameOrg(Collection<ENTITY> entities) {
-        Set<String> orgIdS = entities.stream().map(ENTITY::getOrgId).collect(toImmutableSet());
+    private void checkSameOrg(Collection<E> entities) {
+        Set<String> orgIdS = entities.stream().map(E::getOrgId).collect(toImmutableSet());
         if (orgIdS.size() > 1) {
-            Set<String> allEntityIds = entities.stream().map(AbstractEntity::getId).collect(toImmutableSet());
+            Set<String> allEntityIds = entities.stream().map(Entity::getId).collect(toImmutableSet());
             throw new ServiceException(NOT_SAME_ORG, "All entities should belong to the same organization.", "entityIds", allEntityIds);
         }
     }

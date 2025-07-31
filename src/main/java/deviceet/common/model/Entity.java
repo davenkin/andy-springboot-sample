@@ -21,7 +21,7 @@ import static lombok.AccessLevel.PROTECTED;
 @FieldNameConstants
 // The no arg constructor is used by Jackson and Spring Data etc. to create objects
 @NoArgsConstructor(access = PROTECTED)
-public abstract class AbstractEntity {
+public abstract class Entity {
     private String id;
     private String orgId;
 
@@ -36,7 +36,7 @@ public abstract class AbstractEntity {
     @Getter(PRIVATE)
     private Long _version;
 
-    protected AbstractEntity(String id, String orgId) {
+    protected Entity(String id, String orgId) {
         requireNonBlank(id, "id must not be blank.");
         requireNonBlank(orgId, "orgId must not be blank.");
 
