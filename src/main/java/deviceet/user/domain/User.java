@@ -1,6 +1,6 @@
 package deviceet.user.domain;
 
-import deviceet.common.model.Entity;
+import deviceet.common.model.AggregateRoot;
 import deviceet.user.domain.event.UserCreatedEvent;
 import deviceet.user.domain.event.UserNameUpdatedEvent;
 import lombok.Getter;
@@ -21,7 +21,7 @@ import static lombok.AccessLevel.PRIVATE;
 @FieldNameConstants
 @Document(USER_COLLECTION)
 @NoArgsConstructor(access = PRIVATE)
-public class User extends Entity {
+public class User extends AggregateRoot {
 
     private String name;
 

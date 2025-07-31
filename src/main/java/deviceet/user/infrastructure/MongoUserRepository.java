@@ -18,35 +18,35 @@ public class MongoUserRepository extends AbstractMongoRepository<User> implement
     private final CachedMongoUserRepository cachedMongoUserRepository;
 
     @Override
-    public void save(User entity) {
-        super.save(entity);
-        this.cachedMongoUserRepository.evictCachedOrgUsers(entity.getOrgId());
+    public void save(User ar) {
+        super.save(ar);
+        this.cachedMongoUserRepository.evictCachedOrgUsers(ar.getOrgId());
     }
 
     @Override
-    public void save(List<User> entities) {
-        if (isEmpty(entities)) {
+    public void save(List<User> ars) {
+        if (isEmpty(ars)) {
             return;
         }
 
-        super.save(entities);
-        this.cachedMongoUserRepository.evictCachedOrgUsers(entities.get(0).getOrgId());
+        super.save(ars);
+        this.cachedMongoUserRepository.evictCachedOrgUsers(ars.get(0).getOrgId());
     }
 
     @Override
-    public void delete(User entity) {
-        super.delete(entity);
-        this.cachedMongoUserRepository.evictCachedOrgUsers(entity.getOrgId());
+    public void delete(User ar) {
+        super.delete(ar);
+        this.cachedMongoUserRepository.evictCachedOrgUsers(ar.getOrgId());
     }
 
     @Override
-    public void delete(List<User> entities) {
-        if (isEmpty(entities)) {
+    public void delete(List<User> ars) {
+        if (isEmpty(ars)) {
             return;
         }
 
-        super.delete(entities);
-        this.cachedMongoUserRepository.evictCachedOrgUsers(entities.get(0).getOrgId());
+        super.delete(ars);
+        this.cachedMongoUserRepository.evictCachedOrgUsers(ars.get(0).getOrgId());
     }
 
     @Override

@@ -21,12 +21,12 @@ import static lombok.AccessLevel.PROTECTED;
 @FieldNameConstants
 // The no arg constructor is used by Jackson and Spring Data etc. to create objects
 @NoArgsConstructor(access = PROTECTED)
-public abstract class Entity {
+public abstract class AggregateRoot {
     private String id;
     private String orgId;
 
-    // Domain events are stored temporarily in the entity and are not persisted together with the entities as events will be stored in separately
-    // @Transient is very important for not persisting events with the entity, otherwise we need to do this manually by ourselves
+    // Domain events are stored temporarily in the aggregate root and are not persisted together with the entities as events will be stored in separately
+    // @Transient is very important for not persisting events with the aggregate root, otherwise we need to do this manually by ourselves
     @Transient
     private List<DomainEvent> events;
 
@@ -36,7 +36,7 @@ public abstract class Entity {
     @Getter(PRIVATE)
     private Long _version;
 
-    protected Entity(String id, String orgId) {
+    protected AggregateRoot(String id, String orgId) {
         requireNonBlank(id, "id must not be blank.");
         requireNonBlank(orgId, "orgId must not be blank.");
 
@@ -45,11 +45,11 @@ public abstract class Entity {
         this.createdAt = Instant.now();
     }
 
-    // raiseEvent() only stores events in entity temporarily, the events will then be persisted into DB by Repository within the same transaction of saving entities
+    // raiseEvent() only stores events in aggregate root temporarily, the events will then be persisted into DB by Repository within the same transaction of saving entities
     // The actual sending of events to messaging middleware is handled by DomainEventPublisher
     protected void raiseEvent(DomainEvent event) {
         requireNonNull(event.getType(), "Domain event's type must not be null.");
-        requireNonBlank(event.getEntityId(), "Domain event's entityId must not be null.");
+        requireNonBlank(event.getArId(), "Domain event's arId must not be null.");
 
         events().add(event);
     }

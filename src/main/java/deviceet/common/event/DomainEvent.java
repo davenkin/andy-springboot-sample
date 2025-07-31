@@ -1,6 +1,6 @@
 package deviceet.common.event;
 
-import deviceet.common.model.Entity;
+import deviceet.common.model.AggregateRoot;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
@@ -16,19 +16,19 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 public abstract class DomainEvent {
     private String id;
-    private String entityId;
-    private String entityOrgId;
+    private String arId;
+    private String arOrgId;
     private DomainEventType type;
     private Instant raisedAt;
     private String raisedBy;
 
-    protected DomainEvent(DomainEventType type, Entity entity) {
+    protected DomainEvent(DomainEventType type, AggregateRoot ar) {
         requireNonNull(type, "type must not be null.");
-        requireNonNull(entity, "entity must not be null.");
+        requireNonNull(ar, "ar must not be null.");
 
         this.id = newEventId();
-        this.entityId = entity.getId();
-        this.entityOrgId = entity.getOrgId();
+        this.arId = ar.getId();
+        this.arOrgId = ar.getOrgId();
         this.type = type;
         this.raisedAt = Instant.now();
     }
