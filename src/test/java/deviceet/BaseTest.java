@@ -3,14 +3,12 @@ package deviceet;
 import deviceet.common.event.DomainEvent;
 import deviceet.common.event.DomainEventType;
 import deviceet.common.event.publish.PublishingDomainEvent;
-import deviceet.configuration.EmbeddedRedisConfiguration;
 import org.junit.jupiter.api.parallel.Execution;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 
 import static deviceet.common.utils.CommonUtils.mongoConcatFields;
 import static deviceet.common.utils.CommonUtils.requireNonBlank;
@@ -26,9 +24,7 @@ import static org.springframework.data.mongodb.core.query.Query.query;
 @SuppressWarnings("unchecked")
 @Execution(CONCURRENT)
 @ActiveProfiles(CI_PROFILE)
-//@ActiveProfiles(LOCAL_PROFILE) // To run tests against local profile, comment in "@ActiveProfiles(LOCAL_PROFILE)" and comment out "@ActiveProfiles(CI_PROFILE)"
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-//@ContextConfiguration(classes = {EmbeddedRedisConfiguration.class})
 public abstract class BaseTest {
 
     @Autowired

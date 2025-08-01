@@ -7,7 +7,6 @@ public class Constants {
 
     public static final String DISABLE_PROFILE_PREFIX = "!";
     public static final String CI_PROFILE = "ci";
-    public static final String LOCAL_PROFILE = "local";
     public static final String NON_CI_PROFILE = DISABLE_PROFILE_PREFIX + CI_PROFILE;
     public static final String KAFKA_DOMAIN_EVENT_TOPIC = "domain-event-topic";
 
