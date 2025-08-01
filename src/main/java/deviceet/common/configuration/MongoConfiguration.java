@@ -21,7 +21,7 @@ import static org.springframework.data.mongodb.core.WriteResultChecking.EXCEPTIO
 
 @Slf4j
 @EnableMongock
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class MongoConfiguration {
 
     // Make all @Persistent(including @Document and @TypeAlias) annotated class to be managed by Spring Mongo,

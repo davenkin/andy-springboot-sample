@@ -31,7 +31,7 @@ import static deviceet.common.utils.Constants.PUBLISHING_EVENT_COLLECTION;
 
 @Slf4j
 @DisableForCI
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class EventConfiguration {
     private static final String dltSuffix = "-dlt";
 

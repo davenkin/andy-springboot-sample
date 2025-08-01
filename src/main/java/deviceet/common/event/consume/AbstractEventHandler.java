@@ -11,7 +11,7 @@ public abstract class AbstractEventHandler<T> {
     }
 
     public boolean isIdempotent() {
-        return false; // By default, all handlers are assumed to be not idempotent
+        return false; // By default, all handlers are assumed to be not idempotent by themselves
     }
 
     public boolean isTransactional() {

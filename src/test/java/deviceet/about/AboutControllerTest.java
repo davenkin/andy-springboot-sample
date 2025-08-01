@@ -36,5 +36,8 @@ public class AboutControllerTest extends BaseTest {
         System.out.println(count); // todo: change
         List<CachedOrgUser> cachedOrgUsers = userRepository.cachedOrgUsers(PLATFORM_ORG_ID);
         assertEquals(count, cachedOrgUsers.size());
+
+        List<CachedOrgUser> cachedOrgUsers1 = userRepository.cachedOrgUsers(PLATFORM_ORG_ID);
+        System.out.println(cachedOrgUsers1.size());
     }
 }

@@ -13,9 +13,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 
 @Slf4j
 @DisableForCI
-@Configuration
 @EnableScheduling
 @RequiredArgsConstructor
+@Configuration(proxyBeanMethods = false)
 @EnableSchedulerLock(defaultLockAtMostFor = "60m", defaultLockAtLeastFor = "10s")
 public class SchedulingConfiguration {
     private final DomainEventPublisher domainEventPublisher;

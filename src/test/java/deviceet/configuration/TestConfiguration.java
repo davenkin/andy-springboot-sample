@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @EnableForCI
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class TestConfiguration {
     @Bean
     MongodArguments mongodArguments() {
