@@ -1,5 +1,8 @@
 de.flapdoodle.mongodb.embedded.version: 7.0.12  # Use embedded Mongo
 
+mongock:
+  enabled: false
+
 spring:
   autoconfigure:
     exclude: org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration # Disable Kafka

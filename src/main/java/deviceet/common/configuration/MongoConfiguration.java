@@ -1,7 +1,6 @@
 package deviceet.common.configuration;
 
 import io.mongock.runner.springboot.EnableMongock;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.domain.EntityScanner;
 import org.springframework.boot.autoconfigure.mongo.MongoClientSettingsBuilderCustomizer;
 import org.springframework.context.ApplicationContext;
@@ -19,7 +18,6 @@ import static com.mongodb.ReadPreference.secondaryPreferred;
 import static com.mongodb.WriteConcern.MAJORITY;
 import static org.springframework.data.mongodb.core.WriteResultChecking.EXCEPTION;
 
-@Slf4j
 @EnableMongock
 @Configuration(proxyBeanMethods = false)
 public class MongoConfiguration {

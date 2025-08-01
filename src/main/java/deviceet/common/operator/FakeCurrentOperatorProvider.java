@@ -1,10 +1,10 @@
 package deviceet.common.operator;
 
-import deviceet.common.configuration.profile.EnableForCI;
+import deviceet.common.configuration.profile.EnableForIT;
 import org.springframework.stereotype.Component;
 
 @Component
-@EnableForCI
+@EnableForIT
 public class FakeCurrentOperatorProvider implements CurrentOperatorProvider {
     @Override
     public String currentOperator() {

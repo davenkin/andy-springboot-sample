@@ -1,6 +1,5 @@
 package deviceet.configuration;
 
-import deviceet.common.configuration.profile.EnableForCI;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
@@ -9,7 +8,6 @@ import redis.embedded.RedisServer;
 
 import java.io.IOException;
 
-@EnableForCI
 @Configuration(proxyBeanMethods = false)
 public class EmbeddedRedisConfiguration {
     private final RedisServer redisServer;

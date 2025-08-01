@@ -20,7 +20,7 @@ public class ConsumingEventDao<T> {
     private final MongoTemplate mongoTemplate;
 
     // return true means this event has never been consumed before
-    public boolean recordAsConsumed(ConsumingEvent<T> consumingEvent, AbstractEventHandler<T> handler) {
+    public boolean markEventAsConsumedByHandler(ConsumingEvent<T> consumingEvent, AbstractEventHandler<T> handler) {
         Query query = query(where(eventId).is(consumingEvent.getEventId()).and(ConsumingEvent.Fields.handler).is(handler.getName()));
 
         Update update = new Update()

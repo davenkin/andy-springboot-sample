@@ -1,6 +1,6 @@
 package deviceet.common.event.publish.infrastructure;
 
-import deviceet.common.configuration.profile.EnableForCI;
+import deviceet.common.configuration.profile.EnableForIT;
 import deviceet.common.event.DomainEvent;
 import deviceet.common.event.publish.DomainEventSender;
 import lombok.Getter;
@@ -15,7 +15,7 @@ import java.util.concurrent.CompletableFuture;
 @Slf4j
 @Getter
 @Component
-@EnableForCI
+@EnableForIT
 @RequiredArgsConstructor
 public class FakeDomainEventSender implements DomainEventSender {
     private final Map<String, DomainEvent> events = new HashMap<>();

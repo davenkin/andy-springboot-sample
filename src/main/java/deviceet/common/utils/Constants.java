@@ -6,8 +6,8 @@ public class Constants {
     public static final String PLATFORM_ORG_ID = "PLATFORM_ORG_ID";
 
     public static final String DISABLE_PROFILE_PREFIX = "!";
-    public static final String CI_PROFILE = "ci";
-    public static final String NON_CI_PROFILE = DISABLE_PROFILE_PREFIX + CI_PROFILE;
+    public static final String IT_PROFILE = "it";
+    public static final String NON_IT_PROFILE = DISABLE_PROFILE_PREFIX + IT_PROFILE;
     public static final String KAFKA_DOMAIN_EVENT_TOPIC = "domain-event-topic";
 
     public static final String PUBLISHING_EVENT_COLLECTION = "publishing-event";

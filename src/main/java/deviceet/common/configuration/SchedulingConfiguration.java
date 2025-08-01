@@ -1,6 +1,6 @@
 package deviceet.common.configuration;
 
-import deviceet.common.configuration.profile.DisableForCI;
+import deviceet.common.configuration.profile.DisableForIT;
 import deviceet.common.event.DomainEventJobs;
 import deviceet.common.event.publish.DomainEventPublisher;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +12,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
 @Slf4j
-@DisableForCI
+@DisableForIT
 @EnableScheduling
 @RequiredArgsConstructor
 @Configuration(proxyBeanMethods = false)

@@ -1,6 +1,6 @@
 package deviceet.common.event.consume.infrastructure;
 
-import deviceet.common.configuration.profile.DisableForCI;
+import deviceet.common.configuration.profile.DisableForIT;
 import deviceet.common.event.DomainEvent;
 import deviceet.common.event.consume.ConsumingEvent;
 import deviceet.common.event.consume.EventConsumer;
@@ -16,7 +16,7 @@ import static deviceet.common.utils.Constants.KAFKA_DOMAIN_EVENT_TOPIC;
 
 @Slf4j
 @Component
-@DisableForCI// Disable Kafka for CI
+@DisableForIT // Disable Kafka for integration test
 @RequiredArgsConstructor
 public class SpringKafkaEventListener {
     private final EventConsumer<DomainEvent> eventConsumer;
@@ -29,5 +29,6 @@ public class SpringKafkaEventListener {
         this.eventConsumer.consume(new ConsumingEvent<>(event.getId(), event));
     }
 
+// todo: add external device created event
     //you can add more @KafkaListener methods to handle other types of events
 }

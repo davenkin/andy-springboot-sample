@@ -3,7 +3,7 @@ package deviceet.common.event;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.client.model.changestream.ChangeStreamDocument;
 import com.mongodb.client.model.changestream.OperationType;
-import deviceet.common.configuration.profile.DisableForCI;
+import deviceet.common.configuration.profile.DisableForIT;
 import deviceet.common.event.publish.DomainEventPublisher;
 import deviceet.common.event.publish.PublishingDomainEvent;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +30,7 @@ import org.springframework.util.backoff.ExponentialBackOff;
 import static deviceet.common.utils.Constants.PUBLISHING_EVENT_COLLECTION;
 
 @Slf4j
-@DisableForCI
+@DisableForIT
 @Configuration(proxyBeanMethods = false)
 public class EventConfiguration {
     private static final String dltSuffix = "-dlt";

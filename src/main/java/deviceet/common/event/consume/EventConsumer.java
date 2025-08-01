@@ -42,11 +42,11 @@ public class EventConsumer<T> {
                     try {
                         if (handler.isTransactional()) {
                             this.transactionTemplate.execute(status -> {
-                                recordAndHandle(handler, event);
+                                handleIdempotently(handler, event);
                                 return null;
                             });
                         } else {
-                            recordAndHandle(handler, event);
+                            handleIdempotently(handler, event);
                         }
                     } catch (Throwable ex) {
                         log.error("Error while handling event[{}:{}] by [{}]: ",
@@ -60,8 +60,8 @@ public class EventConsumer<T> {
         }
     }
 
-    private void recordAndHandle(AbstractEventHandler<T> handler, ConsumingEvent<T> consumingEvent) {
-        if (handler.isIdempotent() || this.consumingEventDao.recordAsConsumed(consumingEvent, handler)) {
+    private void handleIdempotently(AbstractEventHandler<T> handler, ConsumingEvent<T> consumingEvent) {
+        if (handler.isIdempotent() || this.consumingEventDao.markEventAsConsumedByHandler(consumingEvent, handler)) {
             handler.handle(consumingEvent.getEvent());
         } else {
             log.warn("Event[{}:{}] has already been consumed by handler[{}], skip handling.",

@@ -1,6 +1,6 @@
 package deviceet.common.event.publish.infrastructure;
 
-import deviceet.common.configuration.profile.DisableForCI;
+import deviceet.common.configuration.profile.DisableForIT;
 import deviceet.common.event.DomainEvent;
 import deviceet.common.event.publish.DomainEventSender;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ import static deviceet.common.utils.Constants.KAFKA_DOMAIN_EVENT_TOPIC;
 // This is the only place where event publishing touches Kafka, hence the coupling to Kafka is minimised
 @Slf4j
 @Component
-@DisableForCI
+@DisableForIT
 @RequiredArgsConstructor
 public class SpringKafkaDomainEventSender implements DomainEventSender {
     private final KafkaTemplate<String, DomainEvent> kafkaTemplate;
