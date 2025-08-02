@@ -9,3 +9,7 @@ spring:
   data:
     redis:
       port: 6124 # Use embedded Redis
+  mongodb:
+    uri: mongodb://localhost:27123/deviceet-local
+  cache:
+    type: redis
