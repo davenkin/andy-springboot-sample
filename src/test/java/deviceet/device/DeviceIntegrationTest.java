@@ -58,9 +58,8 @@ public class DeviceIntegrationTest extends IntegrationTest {
     public void should_send_email_upon_device_created_event() {
         ExternalDeviceCreatedEvent externalDeviceCreatedEvent = buildExternalDeviceCreateEvent();
         eventConsumer.consumeExternalEvent(externalDeviceCreatedEvent);
-        Device device = deviceRepository.byId(externalDeviceCreatedEvent.getDeviceId(), externalDeviceCreatedEvent.getOrgId());
 
-        DeviceCreatedEvent internalDeviceCreatedEvent = latestEventFor(device.getId(), DEVICE_CREATED_EVENT, DeviceCreatedEvent.class);
+        DeviceCreatedEvent internalDeviceCreatedEvent = latestEventFor(externalDeviceCreatedEvent.getDeviceId(), DEVICE_CREATED_EVENT, DeviceCreatedEvent.class);
         eventConsumer.consumeDomainEvent(internalDeviceCreatedEvent);
         verify(notificationService, times(1)).notifyOnDeviceCreated(internalDeviceCreatedEvent.getDeviceId());
     }

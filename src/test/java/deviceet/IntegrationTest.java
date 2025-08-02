@@ -30,7 +30,6 @@ import static org.springframework.data.mongodb.core.query.Query.query;
 @Slf4j
 @ActiveProfiles(IT_PROFILE)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-//@TestPropertySource(properties = "spring.autoconfigure.exclude=de.flapdoodle.embed.mongo.spring.autoconfigure.EmbeddedMongoAutoConfiguration")
 public abstract class IntegrationTest {
     private static RedisServer redisServer;
 
