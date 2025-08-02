@@ -11,8 +11,6 @@ import deviceet.device.domain.DeviceRepository;
 import deviceet.device.domain.OsType;
 import deviceet.device.domain.event.DeviceCreatedEvent;
 import deviceet.device.domain.event.DeviceNameConfiguredEvent;
-import deviceet.device.eventhandler.DeviceCreatedEventHandler;
-import deviceet.device.eventhandler.ExternalDeviceRegisteredEventHandler;
 import deviceet.external.ExternalDeviceCreatedEvent;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,12 +33,6 @@ public class DeviceIntegrationTest extends IntegrationTest {
     private DeviceCommandService deviceCommandService;
 
     @Autowired
-    private ExternalDeviceRegisteredEventHandler externalDeviceRegisteredEventHandler;
-
-    @Autowired
-    private DeviceCreatedEventHandler deviceCreatedEventHandler;
-
-    @Autowired
     private DeviceRepository deviceRepository;
 
     @MockitoBean
@@ -49,7 +41,7 @@ public class DeviceIntegrationTest extends IntegrationTest {
     @Test
     public void should_create_device_upon_external_device_created_event() {
         ExternalDeviceCreatedEvent externalDeviceCreatedEvent = buildExternalDeviceCreateEvent();
-        externalDeviceRegisteredEventHandler.handle(externalDeviceCreatedEvent);
+        eventConsumer.consumeExternalEvent(externalDeviceCreatedEvent);
 
         Device device = deviceRepository.byId(externalDeviceCreatedEvent.getDeviceId(), externalDeviceCreatedEvent.getOrgId());
         assertEquals(externalDeviceCreatedEvent.getDeviceName(), device.getReportedName());
@@ -65,18 +57,18 @@ public class DeviceIntegrationTest extends IntegrationTest {
     @Test
     public void should_send_email_upon_device_created_event() {
         ExternalDeviceCreatedEvent externalDeviceCreatedEvent = buildExternalDeviceCreateEvent();
-        externalDeviceRegisteredEventHandler.handle(externalDeviceCreatedEvent);
+        eventConsumer.consumeExternalEvent(externalDeviceCreatedEvent);
         Device device = deviceRepository.byId(externalDeviceCreatedEvent.getDeviceId(), externalDeviceCreatedEvent.getOrgId());
-        DeviceCreatedEvent internalDeviceCreatedEvent = latestEventFor(device.getId(), DEVICE_CREATED_EVENT, DeviceCreatedEvent.class);
 
-        deviceCreatedEventHandler.handle(internalDeviceCreatedEvent);
+        DeviceCreatedEvent internalDeviceCreatedEvent = latestEventFor(device.getId(), DEVICE_CREATED_EVENT, DeviceCreatedEvent.class);
+        eventConsumer.consumeDomainEvent(internalDeviceCreatedEvent);
         verify(notificationService, times(1)).notifyOnDeviceCreated(internalDeviceCreatedEvent.getDeviceId());
     }
 
     @Test
     public void should_configure_device_name() {
         ExternalDeviceCreatedEvent externalDeviceCreatedEvent = buildExternalDeviceCreateEvent();
-        externalDeviceRegisteredEventHandler.handle(externalDeviceCreatedEvent);
+        eventConsumer.consumeExternalEvent(externalDeviceCreatedEvent);
         Principal principal = createPrincipal(externalDeviceCreatedEvent.getOrgId());
         ConfigureDeviceNameCommand configureDeviceNameCommand = ConfigureDeviceNameCommand.builder().name("newName").build();
         deviceCommandService.configureDeviceName(externalDeviceCreatedEvent.getDeviceId(), configureDeviceNameCommand, principal);
@@ -91,7 +83,7 @@ public class DeviceIntegrationTest extends IntegrationTest {
     @Test
     public void should_cache_org_devices() {
         ExternalDeviceCreatedEvent externalDeviceCreatedEvent = buildExternalDeviceCreateEvent();
-        externalDeviceRegisteredEventHandler.handle(externalDeviceCreatedEvent);
+        eventConsumer.consumeExternalEvent(externalDeviceCreatedEvent);
         String key = "Cache:ORG_DEVICES::" + externalDeviceCreatedEvent.getOrgId();
 
         assertFalse(stringRedisTemplate.hasKey(key));

@@ -1,5 +1,7 @@
 package deviceet.common.event.consume;
 
+import deviceet.common.event.DomainEvent;
+import deviceet.external.ExternalEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -26,6 +28,14 @@ public class EventConsumer<T> {
         this.handlers = handlers;
         this.consumingEventDao = consumingEventDao;
         this.transactionTemplate = new TransactionTemplate(transactionManager);
+    }
+
+    public void consumeDomainEvent(DomainEvent event) {
+        this.consume(new ConsumingEvent(event.getId(), event));
+    }
+
+    public void consumeExternalEvent(ExternalEvent event) {
+        this.consume(new ConsumingEvent(event.getId(), event));
     }
 
     public void consume(ConsumingEvent<T> event) {

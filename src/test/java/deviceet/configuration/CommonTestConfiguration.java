@@ -10,7 +10,7 @@ public class CommonTestConfiguration {
     @Bean
     MongodArguments mongodArguments() {
         return MongodArguments.builder()
-                .replication(Storage.of("test", 10))
+                .replication(Storage.of("integration-test", 10))
                 .build();
     }
 }
