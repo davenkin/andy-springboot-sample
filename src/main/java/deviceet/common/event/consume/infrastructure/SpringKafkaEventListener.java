@@ -2,7 +2,6 @@ package deviceet.common.event.consume.infrastructure;
 
 import deviceet.common.configuration.profile.DisableForIT;
 import deviceet.common.event.DomainEvent;
-import deviceet.common.event.consume.ConsumingEvent;
 import deviceet.common.event.consume.EventConsumer;
 import deviceet.external.ExternalEvent;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +27,7 @@ public class SpringKafkaEventListener {
             topics = {KAFKA_DOMAIN_EVENT_TOPIC},
             concurrency = "3")
     public void listenDomainEvent(DomainEvent event) {
-        this.eventConsumer.consume(new ConsumingEvent<>(event.getId(), event));
+        this.eventConsumer.consumeDomainEvent(event);
     }
 
     @KafkaListener(id = "external-event-listener",
@@ -36,6 +35,6 @@ public class SpringKafkaEventListener {
             topics = {KAFKA_EXTERNAL_DEVICE_REGISTRATION_TOPIC},
             concurrency = "3")
     public void listenExternalEvent(ExternalEvent event) {
-        this.eventConsumer.consume(new ConsumingEvent<>(event.getId(), event));
+        this.eventConsumer.consumeExternalEvent(event);
     }
 }

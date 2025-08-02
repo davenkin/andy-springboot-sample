@@ -2,11 +2,14 @@ package deviceet.device.domain;
 
 import deviceet.common.model.AggregateRoot;
 import deviceet.device.domain.event.DeviceCreatedEvent;
+import deviceet.device.domain.event.DeviceNameConfiguredEvent;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.Objects;
 
 import static deviceet.common.utils.Constants.DEVICE_COLLECTION;
 import static lombok.AccessLevel.PRIVATE;
@@ -33,5 +36,14 @@ public class Device extends AggregateRoot {
         this.cpuArchitecture = cpuArchitecture;
         this.osType = osType;
         raiseEvent(new DeviceCreatedEvent(this));
+    }
+
+    public void configureName(String name) {
+        if (Objects.equals(this.configuredName, name)) {
+            return;
+        }
+        String oldName = this.configuredName;
+        this.configuredName = name;
+        raiseEvent(new DeviceNameConfiguredEvent(oldName, this.configuredName, this));
     }
 }

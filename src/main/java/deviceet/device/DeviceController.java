@@ -2,6 +2,7 @@ package deviceet.device;
 
 import deviceet.common.security.Principal;
 import deviceet.device.command.ConfigureDeviceNameCommand;
+import deviceet.device.command.DeviceCommandService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
@@ -18,10 +19,12 @@ import static deviceet.common.utils.Constants.TEST_USER_ID;
 @RequestMapping(value = "/devices")
 public class DeviceController {
     public static final Principal TEST_PRINCIPAL = new Principal(TEST_USER_ID, "testAdminUser", ORG_ADMIN, TEST_ORG_ID);
+    private final DeviceCommandService deviceCommandService;
 
     @PutMapping(value = "/{deviceId}/name")
     public void configureDeviceName(@PathVariable("deviceId") @NotBlank String deviceId,
                                     @RequestBody @Valid ConfigureDeviceNameCommand configureDeviceNameCommand) {
+        this.deviceCommandService.configureDeviceName(deviceId, configureDeviceNameCommand, TEST_PRINCIPAL);
     }
 
 }
