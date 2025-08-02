@@ -1,6 +1,6 @@
 package deviceet.about;
 
-import deviceet.BaseTest;
+import deviceet.IntegrationTest;
 import deviceet.user.command.UserCommandService;
 import deviceet.user.domain.CachedOrgUser;
 import deviceet.user.domain.User;
@@ -16,7 +16,7 @@ import java.util.List;
 import static deviceet.common.utils.Constants.PLATFORM_ORG_ID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class AboutControllerTest extends BaseTest {
+public class AboutControllerTest extends IntegrationTest {
     @Autowired
     private UserRepository userRepository;
 

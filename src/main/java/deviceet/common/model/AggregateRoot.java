@@ -1,6 +1,7 @@
 package deviceet.common.model;
 
 import deviceet.common.event.DomainEvent;
+import deviceet.common.security.Principal;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
@@ -29,8 +30,8 @@ public abstract class AggregateRoot {
     // @Transient is very important for not persisting events with the aggregate root, otherwise we need to do this manually by ourselves
     @Transient
     private List<DomainEvent> events;
-
     private Instant createdAt;
+    private String createdBy;
 
     @Version
     @Getter(PRIVATE)
@@ -43,6 +44,16 @@ public abstract class AggregateRoot {
         this.id = id;
         this.orgId = orgId;
         this.createdAt = Instant.now();
+    }
+
+    protected AggregateRoot(String id, Principal principal) {
+        requireNonBlank(id, "id must not be blank.");
+        requireNonNull(principal, "principal must not be null.");
+
+        this.id = id;
+        this.orgId = principal.getOrgId();
+        this.createdAt = Instant.now();
+        this.createdBy = principal.getUserId();
     }
 
     // raiseEvent() only stores events in aggregate root temporarily, the events will then be persisted into DB by Repository within the same transaction of saving entities
