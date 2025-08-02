@@ -1,9 +1,10 @@
 package deviceet.device;
 
 import deviceet.IntegrationTest;
-import deviceet.common.event.DomainEvent;
-import deviceet.common.event.consume.EventConsumer;
 import deviceet.device.command.DeviceCommandService;
+import deviceet.device.eventhandler.ExternalDeviceRegisteredEventHandler;
+import deviceet.external.ExternalDeviceCreatedEvent;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class DeviceIntegrationTest extends IntegrationTest {
@@ -11,6 +12,13 @@ public class DeviceIntegrationTest extends IntegrationTest {
     private DeviceCommandService deviceCommandService;
 
     @Autowired
-    private EventConsumer<DomainEvent> eventConsumer;
+    private ExternalDeviceRegisteredEventHandler externalDeviceRegisteredEventHandler;
+
+    @Test
+    public void aa() {
+        ExternalDeviceCreatedEvent event = ExternalDeviceCreatedEvent.builder()
+                .build();
+        externalDeviceRegisteredEventHandler.handle(event);
+    }
 
 }
