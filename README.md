@@ -17,23 +17,24 @@
     - `Kafka UI`: [http://localhost:8123](http://localhost:8123)
     - `Keycloak`: [http://localhost:7123](http://localhost:7123)
     - `Redis`: localhost:6123
-
-- Then to run the application locally, run `./mvnw spring-boot:run`,or run `main()` in `SpringBootWebApplication` in IDE
-  directly, after that open
-  `http://localhost:5123/about` to check if the application runs successfully.
-- To stop local docker compose without deleting data, run `./stop-docker-compose.sh`.
-- To stop local docker compose and delete data, run `./clear-docker-compose.sh`.
+- Run the application in one of the following ways:
+    - Run `./run-local.sh`: this opens debug port on 5005, assuming that docker-compose is already up running.
+    - Run `./clear-and-run-local.sh`: this opens debug port on 5005 and starts a fresh new docker compose set up.
+    - Run `main` in  `SpringBootWebApplication`.
+- After that open `http://localhost:5123/about` to check if the application runs successfully.
+- To stop local docker compose and delete data, run `./stop-docker-compose.sh`.
 
 ### How to run tests
 
 - To run tests, locate them inside IDE and run them directly from there
 - We don't do unit testing, instead we only write integration tests
-- Tests uses `test` profile(`application-test.yaml`) and does not use local docker-compose infrastructures. We are doing
-  this because we don't want to rely on docker for running tests, we want developers to clone the code and the tests
+- Tests uses `it` profile(`application-it.yaml`), which stands for `Integration Test`. Integrate tests do not use local
+  docker-compose infrastructures as we don't want to rely on docker for running tests. Instead we want developers to
+  clone the code and the tests
   just work without any extra setup. In order to achieve this, we have the following setup:
     - `MongoDB`: uses in memory Mongo provided by `de.flapdoodle.embed`.
     - `Kafka`: disabled as we don't cover event publishing nor event consumer in our tests.
-    - `Redis`: disabled as we cannot find a decent embedded redis server, instead we use in-memory cache
+    - `Redis`: uses an embedded redis server
     - `Keycloak`: disabled as we don't cover authentication and authorization in our tests.
     - All consumed external HTTP services are mocked.
 
@@ -47,4 +48,4 @@ decisions. Each ADR is stored in the `ADRs` directory and follows a specific for
 | Term         | Chinese | Abbreviation | Description                                                                                                     |
 |--------------|---------|--------------|-----------------------------------------------------------------------------------------------------------------|
 | User         | 用户      |              | Represents a user under an organization.                                                                        |
-| Organization | 组织（租户）  |     Org         | An organization is a client containing it's own data resources, including a set of users, a set of devices etc. |
+| Organization | 组织（租户）  | Org          | An organization is a client containing it's own data resources, including a set of users, a set of devices etc. |
