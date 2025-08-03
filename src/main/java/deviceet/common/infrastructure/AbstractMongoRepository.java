@@ -30,8 +30,8 @@ import static org.springframework.data.mongodb.core.query.Query.query;
 
 // Base class for all repositories
 
+@SuppressWarnings("unchecked")
 @Slf4j
-@SuppressWarnings({"unchecked"})
 public abstract class AbstractMongoRepository<AR extends AggregateRoot> {
     @Autowired
     protected MongoTemplate mongoTemplate;
@@ -109,20 +109,20 @@ public abstract class AbstractMongoRepository<AR extends AggregateRoot> {
     public AR byId(String id) {
         requireNonBlank(id, arType() + " ID must not be blank.");
 
-        Object it = mongoTemplate.findById(id, arClass);
-        if (it == null) {
+        Object ar = mongoTemplate.findById(id, arClass);
+        if (ar == null) {
             throw new ServiceException(AR_NOT_FOUND, arType() + " not found.",
                     mapOf("type", arType(), "id", id));
         }
 
-        return (AR) it;
+        return (AR) ar;
     }
 
     public Optional<AR> byIdOptional(String id) {
         requireNonBlank(id, arType() + " ID must not be blank.");
 
-        Object it = mongoTemplate.findById(id, arClass);
-        return it == null ? empty() : Optional.of((AR) it);
+        Object ar = mongoTemplate.findById(id, arClass);
+        return ar == null ? empty() : Optional.of((AR) ar);
     }
 
     public AR byId(String id, String orgId) {
