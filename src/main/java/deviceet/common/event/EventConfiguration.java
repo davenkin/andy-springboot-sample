@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.client.model.changestream.ChangeStreamDocument;
 import com.mongodb.client.model.changestream.OperationType;
 import deviceet.common.configuration.profile.DisableForIT;
-import deviceet.common.event.publish.DomainEventPublisher;
+import deviceet.common.event.publish.DomainEventPublishJob;
 import deviceet.common.event.publish.PublishingDomainEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.TopicPartition;
@@ -38,13 +38,13 @@ public class EventConfiguration {
     @Bean(destroyMethod = "stop")
     MessageListenerContainer mongoDomainEventChangeStreamListenerContainer(MongoTemplate mongoTemplate,
                                                                            TaskExecutor taskExecutor,
-                                                                           DomainEventPublisher domainEventPublisher) {
+                                                                           DomainEventPublishJob domainEventPublishJob) {
         MessageListenerContainer container = new DefaultMessageListenerContainer(mongoTemplate, taskExecutor);
 
         // Get notification on DomainEvent insertion in MongoDB, then publish staged domain events to messaging middleware such as Kafka
         container.register(ChangeStreamRequest.builder(
                         (MessageListener<ChangeStreamDocument<Document>, PublishingDomainEvent>) message -> {
-                            domainEventPublisher.publishStagedDomainEvents();
+                            domainEventPublishJob.publishStagedDomainEvents(100);
                         })
                 .collection(PUBLISHING_EVENT_COLLECTION)
                 .filter(new Document("$match", new Document("operationType", OperationType.INSERT.getValue())))

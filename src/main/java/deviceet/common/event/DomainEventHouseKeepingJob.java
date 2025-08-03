@@ -18,7 +18,7 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class DomainEventJobs {
+public class DomainEventHouseKeepingJob {
     private final MongoTemplate mongoTemplate;
 
     @Retryable(backoff = @Backoff(delay = 1000, multiplier = 3))

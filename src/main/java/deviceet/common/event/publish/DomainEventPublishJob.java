@@ -24,19 +24,23 @@ import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class DomainEventPublisher {
+public class DomainEventPublishJob {
     private static final String MIN_START_EVENT_ID = "EVT00000000000000001";
-    private static final int BATCH_SIZE = 100;
+    private static final int MAX_BATCH_SIZE = 500;
     private static final int MAX_FETCH_SIZE = 10000;
     private final LockingTaskExecutor lockingTaskExecutor;
     private final PublishingDomainEventDao publishingDomainEventDao;
     private final DomainEventSender domainEventSender;
     private final TaskExecutor taskExecutor;
 
-    public void publishStagedDomainEvents() {
+    public void publishStagedDomainEvents(int batchSize) {
+        if (batchSize > MAX_BATCH_SIZE || batchSize < 1) {
+            throw new IllegalArgumentException("batchSize must be greater than or equal to 1 and less than 500.");
+        }
+
         try {
             // Use a distributed lock to ensure only one node get run as a time, otherwise it may easily result in duplicated events
-            var result = lockingTaskExecutor.executeWithLock(this::doPublishStagedDomainEvents,
+            var result = lockingTaskExecutor.executeWithLock(() -> doPublishStagedDomainEvents(batchSize),
                     new LockConfiguration(now(), "publish-domain-events", ofMinutes(1), ofMillis(1)));
             List<String> publishedEventIds = result.getResult();
             if (isNotEmpty(publishedEventIds)) {
@@ -47,13 +51,13 @@ public class DomainEventPublisher {
         }
     }
 
-    private List<String> doPublishStagedDomainEvents() throws ExecutionException, InterruptedException {
+    private List<String> doPublishStagedDomainEvents(int batchSize) throws ExecutionException, InterruptedException {
         int counter = 0;
         String startEventId = MIN_START_EVENT_ID;
         List<CompletableFuture<String>> futures = new ArrayList<>();
 
         while (true) {
-            List<DomainEvent> domainEvents = publishingDomainEventDao.stagedEvents(startEventId, BATCH_SIZE);
+            List<DomainEvent> domainEvents = publishingDomainEventDao.stagedEvents(startEventId, batchSize);
             if (isEmpty(domainEvents)) {
                 break;
             }

@@ -1,8 +1,8 @@
 package deviceet.common.configuration;
 
 import deviceet.common.configuration.profile.DisableForIT;
-import deviceet.common.event.DomainEventJobs;
-import deviceet.common.event.publish.DomainEventPublisher;
+import deviceet.common.event.DomainEventHouseKeepingJob;
+import deviceet.common.event.publish.DomainEventPublishJob;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.javacrumbs.shedlock.spring.annotation.EnableSchedulerLock;
@@ -18,27 +18,27 @@ import org.springframework.scheduling.annotation.Scheduled;
 @Configuration(proxyBeanMethods = false)
 @EnableSchedulerLock(defaultLockAtMostFor = "60m", defaultLockAtLeastFor = "10s")
 public class SchedulingConfiguration {
-    private final DomainEventPublisher domainEventPublisher;
-    private final DomainEventJobs domainEventJobs;
+    private final DomainEventPublishJob domainEventPublishJob;
+    private final DomainEventHouseKeepingJob domainEventHouseKeepingJob;
 
     //This job should not use @SchedulerLock as DomainEventPublisher.publishStagedDomainEvents() already uses an internal distributed lock
     @Scheduled(cron = "0 */1 * * * ?")
     public void houseKeepPublishStagedDomainEvents() {
         log.debug("Start house keep publish domain events.");
-        domainEventPublisher.publishStagedDomainEvents();
+        domainEventPublishJob.publishStagedDomainEvents(100);
     }
 
     @Scheduled(cron = "0 10 2 1 * ?")
     @SchedulerLock(name = "removeOldDomainEvents", lockAtMostFor = "60m", lockAtLeastFor = "1m")
     public void removeOldDomainEvents() {
         try {
-            domainEventJobs.removeOldPublishingDomainEventsFromMongo(100);
+            domainEventHouseKeepingJob.removeOldPublishingDomainEventsFromMongo(100);
         } catch (Throwable t) {
             log.error("Failed remove old publishing domain events from mongo.", t);
         }
 
         try {
-            domainEventJobs.removeOldConsumingDomainEventsFromMongo(100);
+            domainEventHouseKeepingJob.removeOldConsumingDomainEventsFromMongo(100);
         } catch (Throwable t) {
             log.error("Failed remove old consuming domain events from mongo.", t);
         }
