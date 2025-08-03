@@ -31,3 +31,5 @@
 - 全局尽量使用同一个ObjectMapper实例
 - 我们不使用spring security进行角色验证，而是在command service中通过Principal.checkHasRole()等方法验证权限，让权限管控离业务逻辑更近，更具内聚性，另外也方便以后扩展成ARBC。
 - 如何使用pagination和sorting，可以使用spring的Pageable和Page<>
+- 算了，不要typealias了，
+- 测试mongock是否有效
