@@ -11,10 +11,17 @@ import deviceet.device.domain.DeviceRepository;
 import deviceet.device.domain.OsType;
 import deviceet.device.domain.event.DeviceCreatedEvent;
 import deviceet.device.domain.event.DeviceNameConfiguredEvent;
+import deviceet.device.query.DeviceQueryService;
+import deviceet.device.query.ListDeviceQuery;
+import deviceet.device.query.QListedDevice;
 import deviceet.external.ExternalDeviceCreatedEvent;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
+
+import java.util.stream.IntStream;
 
 import static deviceet.common.event.DomainEventType.DEVICE_CREATED_EVENT;
 import static deviceet.common.event.DomainEventType.DEVICE_NAME_CONFIGURED_EVENT;
@@ -31,6 +38,9 @@ import static org.mockito.Mockito.verify;
 public class DeviceIntegrationTest extends IntegrationTest {
     @Autowired
     private DeviceCommandService deviceCommandService;
+
+    @Autowired
+    private DeviceQueryService deviceQueryService;
 
     @Autowired
     private DeviceRepository deviceRepository;
@@ -94,6 +104,15 @@ public class DeviceIntegrationTest extends IntegrationTest {
         assertFalse(stringRedisTemplate.hasKey(key));
     }
 
+    @Test
+    public void should_list_devices() {
+        String orgId = "ORG" + newSnowflakeId();
+        IntStream.range(0, 14).forEach(i -> eventConsumer.consumeExternalEvent(buildExternalDeviceCreateEvent(orgId)));
+        Page<QListedDevice> devices = deviceQueryService.listDevices(new ListDeviceQuery(null, null), PageRequest.of(0, 10), createPrincipal(orgId));
+        assertEquals(14, devices.getTotalElements());
+        assertEquals(10, devices.getContent().size());
+    }
+
     private static Principal createPrincipal(String orgId) {
         return new Principal(TEST_USER_ID, "testUserName", ORG_ADMIN, orgId);
     }
@@ -107,6 +126,18 @@ public class DeviceIntegrationTest extends IntegrationTest {
                 .osType(randomEnum(OsType.class))
                 .cpuArchitecture(randomEnum(CpuArchitecture.class))
                 .orgId("ORG" + newSnowflakeId())
+                .build();
+    }
+
+    private static ExternalDeviceCreatedEvent buildExternalDeviceCreateEvent(String orgId) {
+        return ExternalDeviceCreatedEvent.builder()
+                .type("device_registered")
+                .id(valueOf(newSnowflakeId()))
+                .deviceId("DVC" + newSnowflakeId())
+                .deviceName(secure().nextAlphabetic(8))
+                .osType(randomEnum(OsType.class))
+                .cpuArchitecture(randomEnum(CpuArchitecture.class))
+                .orgId(orgId)
                 .build();
     }
 

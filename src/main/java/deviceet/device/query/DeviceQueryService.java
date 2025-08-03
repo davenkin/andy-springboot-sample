@@ -5,11 +5,11 @@ import deviceet.common.security.Principal;
 import deviceet.device.domain.Device;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -40,7 +40,12 @@ public class DeviceQueryService {
                 Device.Fields.cpuArchitecture,
                 Device.Fields.osType);
 
+        long count = mongoTemplate.count(query, Device.class);
+        if (count == 0) {
+            return Page.empty(pageable);
+        }
+
         List<QListedDevice> devices = mongoTemplate.find(query.with(pageable), QListedDevice.class, DEVICE_COLLECTION);
-        return PageableExecutionUtils.getPage(devices, pageable, () -> mongoTemplate.count(query, Device.class));
+        return new PageImpl<>(devices, pageable, count);
     }
 }

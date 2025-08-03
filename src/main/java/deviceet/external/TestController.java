@@ -1,5 +1,6 @@
 package deviceet.external;
 
+import deviceet.common.configuration.profile.DisableForIT;
 import deviceet.common.utils.ResponseId;
 import deviceet.device.domain.CpuArchitecture;
 import deviceet.device.domain.OsType;
@@ -18,6 +19,7 @@ import static java.lang.String.valueOf;
 import static org.apache.commons.lang3.RandomStringUtils.secure;
 
 @Validated
+@DisableForIT
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/testing")
