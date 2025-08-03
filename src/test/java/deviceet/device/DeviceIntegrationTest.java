@@ -1,14 +1,13 @@
 package deviceet.device;
 
 import deviceet.IntegrationTest;
+import deviceet.TestRandomEventGenerator;
 import deviceet.common.notification.NotificationService;
 import deviceet.common.security.Principal;
 import deviceet.device.command.ConfigureDeviceNameCommand;
 import deviceet.device.command.DeviceCommandService;
-import deviceet.device.domain.CpuArchitecture;
 import deviceet.device.domain.Device;
 import deviceet.device.domain.DeviceRepository;
-import deviceet.device.domain.OsType;
 import deviceet.device.domain.event.DeviceCreatedEvent;
 import deviceet.device.domain.event.DeviceNameConfiguredEvent;
 import deviceet.device.query.DeviceQueryService;
@@ -25,12 +24,7 @@ import java.util.stream.IntStream;
 
 import static deviceet.common.event.DomainEventType.DEVICE_CREATED_EVENT;
 import static deviceet.common.event.DomainEventType.DEVICE_NAME_CONFIGURED_EVENT;
-import static deviceet.common.security.Role.ORG_ADMIN;
-import static deviceet.common.utils.Constants.TEST_USER_ID;
-import static deviceet.common.utils.RandomEnumUtils.randomEnum;
 import static deviceet.common.utils.SnowflakeIdGenerator.newSnowflakeId;
-import static java.lang.String.valueOf;
-import static org.apache.commons.lang3.RandomStringUtils.secure;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -50,7 +44,7 @@ public class DeviceIntegrationTest extends IntegrationTest {
 
     @Test
     public void should_create_device_upon_external_device_created_event() {
-        ExternalDeviceCreatedEvent externalDeviceCreatedEvent = buildExternalDeviceCreateEvent();
+        ExternalDeviceCreatedEvent externalDeviceCreatedEvent = TestRandomEventGenerator.buildExternalDeviceCreateEvent();
         eventConsumer.consumeExternalEvent(externalDeviceCreatedEvent);
 
         Device device = deviceRepository.byId(externalDeviceCreatedEvent.getDeviceId(), externalDeviceCreatedEvent.getOrgId());
@@ -66,7 +60,7 @@ public class DeviceIntegrationTest extends IntegrationTest {
 
     @Test
     public void should_send_email_upon_device_created_event() {
-        ExternalDeviceCreatedEvent externalDeviceCreatedEvent = buildExternalDeviceCreateEvent();
+        ExternalDeviceCreatedEvent externalDeviceCreatedEvent = TestRandomEventGenerator.buildExternalDeviceCreateEvent();
         eventConsumer.consumeExternalEvent(externalDeviceCreatedEvent);
 
         DeviceCreatedEvent internalDeviceCreatedEvent = latestEventFor(externalDeviceCreatedEvent.getDeviceId(), DEVICE_CREATED_EVENT, DeviceCreatedEvent.class);
@@ -76,7 +70,7 @@ public class DeviceIntegrationTest extends IntegrationTest {
 
     @Test
     public void should_configure_device_name() {
-        ExternalDeviceCreatedEvent externalDeviceCreatedEvent = buildExternalDeviceCreateEvent();
+        ExternalDeviceCreatedEvent externalDeviceCreatedEvent = TestRandomEventGenerator.buildExternalDeviceCreateEvent();
         eventConsumer.consumeExternalEvent(externalDeviceCreatedEvent);
         Principal principal = createPrincipal(externalDeviceCreatedEvent.getOrgId());
         ConfigureDeviceNameCommand configureDeviceNameCommand = ConfigureDeviceNameCommand.builder().name("newName").build();
@@ -91,7 +85,7 @@ public class DeviceIntegrationTest extends IntegrationTest {
 
     @Test
     public void should_cache_org_devices() {
-        ExternalDeviceCreatedEvent externalDeviceCreatedEvent = buildExternalDeviceCreateEvent();
+        ExternalDeviceCreatedEvent externalDeviceCreatedEvent = TestRandomEventGenerator.buildExternalDeviceCreateEvent();
         eventConsumer.consumeExternalEvent(externalDeviceCreatedEvent);
         String key = "Cache:ORG_DEVICES::" + externalDeviceCreatedEvent.getOrgId();
 
@@ -107,38 +101,10 @@ public class DeviceIntegrationTest extends IntegrationTest {
     @Test
     public void should_list_devices() {
         String orgId = "ORG" + newSnowflakeId();
-        IntStream.range(0, 14).forEach(i -> eventConsumer.consumeExternalEvent(buildExternalDeviceCreateEvent(orgId)));
+        IntStream.range(0, 14).forEach(i -> eventConsumer.consumeExternalEvent(TestRandomEventGenerator.buildExternalDeviceCreateEvent(orgId)));
         Page<QListedDevice> devices = deviceQueryService.listDevices(new ListDeviceQuery(null, null), PageRequest.of(0, 10), createPrincipal(orgId));
         assertEquals(14, devices.getTotalElements());
         assertEquals(10, devices.getContent().size());
-    }
-
-    private static Principal createPrincipal(String orgId) {
-        return new Principal(TEST_USER_ID, "testUserName", ORG_ADMIN, orgId);
-    }
-
-    private static ExternalDeviceCreatedEvent buildExternalDeviceCreateEvent() {
-        return ExternalDeviceCreatedEvent.builder()
-                .type("device_registered")
-                .id(valueOf(newSnowflakeId()))
-                .deviceId("DVC" + newSnowflakeId())
-                .deviceName(secure().nextAlphabetic(8))
-                .osType(randomEnum(OsType.class))
-                .cpuArchitecture(randomEnum(CpuArchitecture.class))
-                .orgId("ORG" + newSnowflakeId())
-                .build();
-    }
-
-    private static ExternalDeviceCreatedEvent buildExternalDeviceCreateEvent(String orgId) {
-        return ExternalDeviceCreatedEvent.builder()
-                .type("device_registered")
-                .id(valueOf(newSnowflakeId()))
-                .deviceId("DVC" + newSnowflakeId())
-                .deviceName(secure().nextAlphabetic(8))
-                .osType(randomEnum(OsType.class))
-                .cpuArchitecture(randomEnum(CpuArchitecture.class))
-                .orgId(orgId)
-                .build();
     }
 
 }

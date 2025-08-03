@@ -14,7 +14,7 @@ import java.util.Set;
 import static java.util.Comparator.comparingInt;
 import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 
-// todo: added test, e.g. multiple handlers can handle the same events independently
+@SuppressWarnings("unchecked")
 @Slf4j
 @Component
 public class EventConsumer<T> {

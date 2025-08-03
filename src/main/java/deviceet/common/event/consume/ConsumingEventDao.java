@@ -34,4 +34,14 @@ public class ConsumingEventDao<T> {
 
         return result.getMatchedCount() == 0;
     }
+
+    public boolean exists(String eventId) {
+        Query query = query(where(ConsumingEvent.Fields.eventId).is(eventId));
+        return this.mongoTemplate.exists(query, ConsumingEvent.class);
+    }
+
+    public boolean exists(String eventId, AbstractEventHandler handler) {
+        Query query = query(where(ConsumingEvent.Fields.eventId).is(eventId).and(ConsumingEvent.Fields.handler).is(handler.getName()));
+        return this.mongoTemplate.exists(query, ConsumingEvent.class);
+    }
 }

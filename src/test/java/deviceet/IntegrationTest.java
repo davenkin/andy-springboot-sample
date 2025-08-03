@@ -4,6 +4,7 @@ import deviceet.common.event.DomainEvent;
 import deviceet.common.event.DomainEventType;
 import deviceet.common.event.consume.EventConsumer;
 import deviceet.common.event.publish.PublishingDomainEvent;
+import deviceet.common.security.Principal;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -17,9 +18,11 @@ import redis.embedded.RedisServer;
 
 import java.io.IOException;
 
+import static deviceet.common.security.Role.ORG_ADMIN;
 import static deviceet.common.utils.CommonUtils.mongoConcatFields;
 import static deviceet.common.utils.CommonUtils.requireNonBlank;
 import static deviceet.common.utils.Constants.IT_PROFILE;
+import static deviceet.common.utils.Constants.TEST_USER_ID;
 import static java.util.Objects.requireNonNull;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.data.domain.Sort.Direction.DESC;
@@ -48,7 +51,7 @@ public abstract class IntegrationTest {
             redisServer = new RedisServer(6124);
             redisServer.start();
         } catch (IOException e) {
-            log.error("Failed to start RedisServer.", e);
+            log.error("Failed to start embedded Redis server.", e);
         }
     }
 
@@ -67,5 +70,9 @@ public abstract class IntegrationTest {
                 .with(by(DESC, PublishingDomainEvent.Fields.raisedAt));
         PublishingDomainEvent domainEvent = mongoTemplate.findOne(query, PublishingDomainEvent.class);
         return domainEvent == null ? null : (T) domainEvent.getEvent();
+    }
+
+    protected static Principal createPrincipal(String orgId) {
+        return new Principal(TEST_USER_ID, "testUserName", ORG_ADMIN, orgId);
     }
 }
