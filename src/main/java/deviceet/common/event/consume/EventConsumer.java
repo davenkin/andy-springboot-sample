@@ -38,7 +38,7 @@ public class EventConsumer<T> {
         this.consume(new ConsumingEvent(event.getId(), event));
     }
 
-    public void consume(ConsumingEvent<T> event) {
+    private void consume(ConsumingEvent<T> event) {
         if (event == null) {
             return;
         }
