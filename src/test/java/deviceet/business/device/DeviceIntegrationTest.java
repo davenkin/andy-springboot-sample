@@ -90,7 +90,7 @@ public class DeviceIntegrationTest extends IntegrationTest {
         String key = "Cache:ORG_DEVICES::" + externalDeviceCreatedEvent.getOrgId();
 
         assertFalse(stringRedisTemplate.hasKey(key));
-        deviceRepository.cachedOrgDevices(externalDeviceCreatedEvent.getOrgId());
+        deviceRepository.cachedDeviceReferences(externalDeviceCreatedEvent.getOrgId());
         assertTrue(stringRedisTemplate.hasKey(key));
 
         Device device = deviceRepository.byId(externalDeviceCreatedEvent.getDeviceId(), externalDeviceCreatedEvent.getOrgId());

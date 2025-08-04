@@ -2,7 +2,7 @@ package deviceet.business.device.infrastructure;
 
 import deviceet.business.device.domain.Device;
 import deviceet.business.device.domain.DeviceRepository;
-import deviceet.business.device.domain.cache.CachedOrgDevice;
+import deviceet.business.device.domain.cache.CachedDeviceReference;
 import deviceet.common.infrastructure.AbstractMongoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -20,7 +20,7 @@ public class MongoDeviceRepository extends AbstractMongoRepository<Device> imple
     @Override
     public void save(Device device) {
         super.save(device);
-        this.cachedMongoDeviceRepository.evictCachedOrgDevices(device.getOrgId());
+        this.cachedMongoDeviceRepository.evictCachedDeviceReferences(device.getOrgId());
     }
 
     @Override
@@ -30,13 +30,13 @@ public class MongoDeviceRepository extends AbstractMongoRepository<Device> imple
         }
 
         super.save(devices);
-        this.cachedMongoDeviceRepository.evictCachedOrgDevices(devices.get(0).getOrgId());
+        this.cachedMongoDeviceRepository.evictCachedDeviceReferences(devices.get(0).getOrgId());
     }
 
     @Override
     public void delete(Device device) {
         super.delete(device);
-        this.cachedMongoDeviceRepository.evictCachedOrgDevices(device.getOrgId());
+        this.cachedMongoDeviceRepository.evictCachedDeviceReferences(device.getOrgId());
     }
 
     @Override
@@ -46,13 +46,13 @@ public class MongoDeviceRepository extends AbstractMongoRepository<Device> imple
         }
 
         super.delete(devices);
-        this.cachedMongoDeviceRepository.evictCachedOrgDevices(devices.get(0).getOrgId());
+        this.cachedMongoDeviceRepository.evictCachedDeviceReferences(devices.get(0).getOrgId());
     }
 
     @Override
-    public List<CachedOrgDevice> cachedOrgDevices(String orgId) {
+    public List<CachedDeviceReference> cachedDeviceReferences(String orgId) {
         requireNonBlank(orgId, "orgId must not be blank.");
 
-        return cachedMongoDeviceRepository.cachedOrgDevices(orgId);
+        return cachedMongoDeviceRepository.cachedDeviceReferences(orgId);
     }
 }

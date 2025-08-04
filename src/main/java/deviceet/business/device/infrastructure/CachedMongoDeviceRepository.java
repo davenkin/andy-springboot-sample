@@ -1,7 +1,7 @@
 package deviceet.business.device.infrastructure;
 
 import deviceet.business.device.domain.Device;
-import deviceet.business.device.domain.cache.CachedOrgDevice;
+import deviceet.business.device.domain.cache.CachedDeviceReference;
 import deviceet.common.infrastructure.AbstractMongoRepository;
 import deviceet.common.model.AggregateRoot;
 import lombok.RequiredArgsConstructor;
@@ -30,16 +30,16 @@ import static org.springframework.data.mongodb.core.query.Query.query;
 public class CachedMongoDeviceRepository extends AbstractMongoRepository<Device> {
 
     @Cacheable(value = ORG_DEVICES_CACHE, key = "#orgId")
-    public List<CachedOrgDevice> cachedOrgDevices(String orgId) {
+    public List<CachedDeviceReference> cachedDeviceReferences(String orgId) {
         requireNonBlank(orgId, "orgId must not be blank.");
 
         Query query = query(where(AggregateRoot.Fields.orgId).is(orgId)).with(by(ASC, createdAt));
         query.fields().include(AggregateRoot.Fields.orgId, configuredName, cpuArchitecture, osType);
-        return mongoTemplate.find(query, CachedOrgDevice.class, DEVICE_COLLECTION);
+        return mongoTemplate.find(query, CachedDeviceReference.class, DEVICE_COLLECTION);
     }
 
     @Caching(evict = {@CacheEvict(value = ORG_DEVICES_CACHE, key = "#orgId")})
-    public void evictCachedOrgDevices(String orgId) {
+    public void evictCachedDeviceReferences(String orgId) {
         requireNonBlank(orgId, "orgId must not be blank.");
 
         log.debug("Evicted cached devices for org[{}].", orgId);
