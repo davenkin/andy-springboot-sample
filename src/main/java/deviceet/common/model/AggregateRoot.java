@@ -76,4 +76,7 @@ public abstract class AggregateRoot {
     public void clearEvents() {
         this.events = null;
     }
+
+    public void onDelete() {
+    }
 }

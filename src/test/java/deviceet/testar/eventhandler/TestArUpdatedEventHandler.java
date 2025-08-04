@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class TestArUpdatedEventHandler extends AbstractEventHandler<TestArUpdatedEvent> {
-    private String testArId;
 
     @Override
     public void handle(TestArUpdatedEvent event) {

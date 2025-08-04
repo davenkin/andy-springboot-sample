@@ -3,6 +3,7 @@ package deviceet.testar.domain;
 import deviceet.common.model.AggregateRoot;
 import deviceet.common.security.Principal;
 import deviceet.testar.domain.event.TestArCreatedEvent;
+import deviceet.testar.domain.event.TestArDeletedEvent;
 import deviceet.testar.domain.event.TestArNameUpdatedEvent;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,5 +39,10 @@ public class TestAr extends AggregateRoot {
     public void updateName(String newName) {
         this.name = newName;
         raiseEvent(new TestArNameUpdatedEvent(name, this));
+    }
+
+    @Override
+    public void onDelete() {
+        raiseEvent(new TestArDeletedEvent(this));
     }
 }

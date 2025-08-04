@@ -81,6 +81,7 @@ public abstract class AbstractMongoRepository<AR extends AggregateRoot> {
         requireNonNull(ar, arType() + " must not be null.");
         requireNonBlank(ar.getId(), arType() + " ID must not be blank.");
 
+        ar.onDelete();
         mongoTemplate.remove(ar);
         stageEvents(ar.getEvents());
         ar.clearEvents();
@@ -95,6 +96,7 @@ public abstract class AbstractMongoRepository<AR extends AggregateRoot> {
         List<DomainEvent> events = new ArrayList<>();
         Set<String> ids = new HashSet<>();
         ars.forEach(ar -> {
+            ar.onDelete();
             if (isNotEmpty(ar.getEvents())) {
                 events.addAll(ar.getEvents());
             }
