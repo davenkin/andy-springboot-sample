@@ -1,9 +1,9 @@
 package deviceet.external;
 
+import deviceet.business.device.domain.CpuArchitecture;
+import deviceet.business.device.domain.OsType;
 import deviceet.common.configuration.profile.DisableForIT;
 import deviceet.common.utils.ResponseId;
-import deviceet.device.domain.CpuArchitecture;
-import deviceet.device.domain.OsType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.validation.annotation.Validated;

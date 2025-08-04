@@ -1,7 +1,7 @@
 package deviceet;
 
-import deviceet.device.domain.CpuArchitecture;
-import deviceet.device.domain.OsType;
+import deviceet.business.device.domain.CpuArchitecture;
+import deviceet.business.device.domain.OsType;
 import deviceet.external.ExternalDeviceCreatedEvent;
 
 import static deviceet.common.utils.RandomEnumUtils.randomEnum;

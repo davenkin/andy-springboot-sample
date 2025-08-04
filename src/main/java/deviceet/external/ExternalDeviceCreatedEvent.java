@@ -1,7 +1,7 @@
 package deviceet.external;
 
-import deviceet.device.domain.CpuArchitecture;
-import deviceet.device.domain.OsType;
+import deviceet.business.device.domain.CpuArchitecture;
+import deviceet.business.device.domain.OsType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
