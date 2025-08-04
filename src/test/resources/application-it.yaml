@@ -8,7 +8,7 @@ spring:
     exclude: org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration # Disable Kafka
   data:
     redis:
-      port: 6124 # Use embedded Redis
+      port: 6124 # Use embedded Redis, can be accessed via 127.0.0.1:6124
   mongodb:
     uri: mongodb://localhost:27123/deviceet-local
   cache:

@@ -14,16 +14,15 @@ import java.util.Set;
 import static java.util.Comparator.comparingInt;
 import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 
-@SuppressWarnings("unchecked")
 @Slf4j
 @Component
-public class EventConsumer<T> {
-    private final List<AbstractEventHandler<T>> handlers;
-    private final ConsumingEventDao<T> consumingEventDao;
+public class EventConsumer {
+    private final List<AbstractEventHandler<?>> handlers;
+    private final ConsumingEventDao consumingEventDao;
     private final TransactionTemplate transactionTemplate;
 
-    public EventConsumer(List<AbstractEventHandler<T>> handlers,
-                         ConsumingEventDao<T> consumingEventDao,
+    public EventConsumer(List<AbstractEventHandler<?>> handlers,
+                         ConsumingEventDao consumingEventDao,
                          PlatformTransactionManager transactionManager) {
         this.handlers = handlers;
         this.consumingEventDao = consumingEventDao;
@@ -38,7 +37,7 @@ public class EventConsumer<T> {
         this.consume(new ConsumingEvent(event.getId(), event));
     }
 
-    private void consume(ConsumingEvent<T> event) {
+    private void consume(ConsumingEvent event) {
         if (event == null) {
             return;
         }
@@ -51,10 +50,7 @@ public class EventConsumer<T> {
                 .forEach(handler -> {
                     try {
                         if (handler.isTransactional()) {
-                            this.transactionTemplate.execute(status -> {
-                                handleIdempotently(handler, event);
-                                return null;
-                            });
+                            this.transactionTemplate.executeWithoutResult(status -> handleIdempotently(handler, event));
                         } else {
                             handleIdempotently(handler, event);
                         }
@@ -70,9 +66,9 @@ public class EventConsumer<T> {
         }
     }
 
-    private void handleIdempotently(AbstractEventHandler<T> handler, ConsumingEvent<T> consumingEvent) {
+    private void handleIdempotently(AbstractEventHandler<?> handler, ConsumingEvent consumingEvent) {
         if (handler.isIdempotent() || this.consumingEventDao.markEventAsConsumedByHandler(consumingEvent, handler)) {
-            handler.handle(consumingEvent.getEvent());
+            ((AbstractEventHandler<Object>) handler).handle(consumingEvent.getEvent());
         } else {
             log.warn("Event[{}:{}] has already been consumed by handler[{}], skip handling.",
                     consumingEvent.getEventId(), consumingEvent.getType(), handler.getName());

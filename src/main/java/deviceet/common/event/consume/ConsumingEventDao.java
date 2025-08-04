@@ -16,11 +16,11 @@ import static org.springframework.data.mongodb.core.query.Query.query;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class ConsumingEventDao<T> {
+public class ConsumingEventDao {
     private final MongoTemplate mongoTemplate;
 
     // return true means this event has never been consumed before
-    public boolean markEventAsConsumedByHandler(ConsumingEvent<T> consumingEvent, AbstractEventHandler<T> handler) {
+    public boolean markEventAsConsumedByHandler(ConsumingEvent consumingEvent, AbstractEventHandler<?> handler) {
         Query query = query(where(eventId).is(consumingEvent.getEventId()).and(ConsumingEvent.Fields.handler).is(handler.getName()));
 
         Update update = new Update()
@@ -40,7 +40,7 @@ public class ConsumingEventDao<T> {
         return this.mongoTemplate.exists(query, ConsumingEvent.class);
     }
 
-    public boolean exists(String eventId, AbstractEventHandler handler) {
+    public boolean exists(String eventId, AbstractEventHandler<?> handler) {
         Query query = query(where(ConsumingEvent.Fields.eventId).is(eventId).and(ConsumingEvent.Fields.handler).is(handler.getName()));
         return this.mongoTemplate.exists(query, ConsumingEvent.class);
     }

@@ -20,14 +20,14 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 @Document(CONSUMING_EVENT_COLLECTION)
 @TypeAlias("CONSUMING_EVENT")
-public class ConsumingEvent<T> {
+public class ConsumingEvent {
     private String eventId;
     private String type;
     private String handler;
     private Instant consumedAt;
-    private T event;
+    private Object event;
 
-    public ConsumingEvent(String eventId, T event) {
+    public ConsumingEvent(String eventId, Object event) {
         requireNonBlank(eventId, "Event ID must not be blank.");
         requireNonNull(event, "Event must not be null.");
 
