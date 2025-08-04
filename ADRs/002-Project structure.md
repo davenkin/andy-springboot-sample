@@ -14,12 +14,12 @@ We choose "**business first, technical layers second**" approach as the project 
 
 This approach is more intuitive and easier to understand, as it allows developers to focus on the business first(Quotes has it that "
 Software exists for solving problems for a specific business domain."). Developers can easily get an overall idea of what this application
-do
-by a simple glimpse at the top level packages.
+does
+by a simple glimpse at the business packages.
 
 ## Implementation
 
-When implementing, keep the folder structure as flat as possible. The aggregate root is at the highest level, then followed by other
+When implementing, keep the folder structure as flat as possible. The aggregate root is at the highest level under `business` package, then followed by other
 technical layers, use the following structure:
 
 The `1` in `(class:1)` indicates there can be only one class under a top level package, `(class:N)` for multiple.
