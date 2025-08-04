@@ -25,6 +25,7 @@ public class ConsumingEventDao {
 
         Update update = new Update()
                 .setOnInsert(type, consumingEvent.getType())
+                .setOnInsert(event, consumingEvent.getEvent())
                 .setOnInsert(consumedAt, consumingEvent.getConsumedAt());
 
         UpdateResult result = this.mongoTemplate.update(ConsumingEvent.class)

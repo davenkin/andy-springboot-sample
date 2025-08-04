@@ -8,6 +8,7 @@ import deviceet.testar.command.UpdateTestArNameCommand;
 import deviceet.testar.domain.event.TestArCreatedEvent;
 import deviceet.testar.domain.event.TestArNameUpdatedEvent;
 import deviceet.testar.eventhandler.TestArCreatedEventHandler;
+import deviceet.testar.eventhandler.TestArCreatedEventHandler2;
 import deviceet.testar.eventhandler.TestArNameUpdatedEventHandler;
 import deviceet.testar.eventhandler.TestArUpdatedEventHandler;
 import org.junit.jupiter.api.Test;
@@ -33,6 +34,9 @@ class EventConsumerIntegrationTest extends IntegrationTest {
     private TestArCreatedEventHandler createdEventHandler;
 
     @MockitoSpyBean
+    private TestArCreatedEventHandler2 createdEventHandler2;
+
+    @MockitoSpyBean
     private TestArUpdatedEventHandler updatedEventHandler;
 
     @MockitoSpyBean
@@ -56,43 +60,56 @@ class EventConsumerIntegrationTest extends IntegrationTest {
     }
 
     @Test
-    public void should_call_handler_based_on_priority() {
+    public void should_call_handler_for_event_hierarchy() {
         Principal principal = randomPrincipal();
         String testArId = testArCommandService.createTestAr(randomCreateTestArCommand(), principal);
         testArCommandService.updateTestArName(testArId, randomUpdateTestArNameCommand(), principal);
         TestArNameUpdatedEvent testArNameUpdatedEvent = latestEventFor(testArId, TEST_AR_NAME_UPDATED_EVENT, TestArNameUpdatedEvent.class);
-        when(nameUpdatedEventHandler.priority()).thenReturn(0);
-        when(updatedEventHandler.priority()).thenReturn(1);
 
         eventConsumer.consumeDomainEvent(testArNameUpdatedEvent);
 
-        InOrder inOrder = Mockito.inOrder(nameUpdatedEventHandler, updatedEventHandler);
-        inOrder.verify(nameUpdatedEventHandler).handle(any(TestArNameUpdatedEvent.class));
-        inOrder.verify(updatedEventHandler).handle(any(TestArNameUpdatedEvent.class));
+        verify(nameUpdatedEventHandler).handle(any(TestArNameUpdatedEvent.class));
+        verify(updatedEventHandler).handle(any(TestArNameUpdatedEvent.class));
         assertTrue(consumingEventDao.exists(testArNameUpdatedEvent.getId(), nameUpdatedEventHandler));
         assertTrue(consumingEventDao.exists(testArNameUpdatedEvent.getId(), updatedEventHandler));
     }
 
     @Test
-    public void should_call_handler_based_on_priority_reversely() {
+    public void multiple_handlers_should_run_in_order_of_priority() {
         Principal principal = randomPrincipal();
         String testArId = testArCommandService.createTestAr(randomCreateTestArCommand(), principal);
-        testArCommandService.updateTestArName(testArId, randomUpdateTestArNameCommand(), principal);
-        TestArNameUpdatedEvent testArNameUpdatedEvent = latestEventFor(testArId, TEST_AR_NAME_UPDATED_EVENT, TestArNameUpdatedEvent.class);
-        when(nameUpdatedEventHandler.priority()).thenReturn(1);
-        when(updatedEventHandler.priority()).thenReturn(0);
+        TestArCreatedEvent testArCreatedEvent = latestEventFor(testArId, TEST_AR_CREATED_EVENT, TestArCreatedEvent.class);
+        when(createdEventHandler.priority()).thenReturn(0);
+        when(createdEventHandler2.priority()).thenReturn(1);
 
-        eventConsumer.consumeDomainEvent(testArNameUpdatedEvent);
+        eventConsumer.consumeDomainEvent(testArCreatedEvent);
 
-        InOrder inOrder = Mockito.inOrder(nameUpdatedEventHandler, updatedEventHandler);
-        inOrder.verify(updatedEventHandler).handle(any(TestArNameUpdatedEvent.class));
-        inOrder.verify(nameUpdatedEventHandler).handle(any(TestArNameUpdatedEvent.class));
-        assertTrue(consumingEventDao.exists(testArNameUpdatedEvent.getId(), nameUpdatedEventHandler));
-        assertTrue(consumingEventDao.exists(testArNameUpdatedEvent.getId(), updatedEventHandler));
+        InOrder inOrder = Mockito.inOrder(createdEventHandler, createdEventHandler2);
+        inOrder.verify(createdEventHandler).handle(any(TestArCreatedEvent.class));
+        inOrder.verify(createdEventHandler2).handle(any(TestArCreatedEvent.class));
+        assertTrue(consumingEventDao.exists(testArCreatedEvent.getId(), createdEventHandler));
+        assertTrue(consumingEventDao.exists(testArCreatedEvent.getId(), createdEventHandler2));
     }
 
     @Test
-    public void should_not_mark_as_consumed_if_transactional_handler_throws_exception() {
+    public void multiple_handlers_should_run_in_order_of_priority_reversely() {
+        Principal principal = randomPrincipal();
+        String testArId = testArCommandService.createTestAr(randomCreateTestArCommand(), principal);
+        TestArCreatedEvent testArCreatedEvent = latestEventFor(testArId, TEST_AR_CREATED_EVENT, TestArCreatedEvent.class);
+        when(createdEventHandler.priority()).thenReturn(1);
+        when(createdEventHandler2.priority()).thenReturn(0);
+
+        eventConsumer.consumeDomainEvent(testArCreatedEvent);
+
+        InOrder inOrder = Mockito.inOrder(createdEventHandler, createdEventHandler2);
+        inOrder.verify(createdEventHandler2).handle(any(TestArCreatedEvent.class));
+        inOrder.verify(createdEventHandler).handle(any(TestArCreatedEvent.class));
+        assertTrue(consumingEventDao.exists(testArCreatedEvent.getId(), createdEventHandler));
+        assertTrue(consumingEventDao.exists(testArCreatedEvent.getId(), createdEventHandler2));
+    }
+
+    @Test
+    public void should_mark_as_consumed_if_non_transactional_handler_throws_exception() {
         Principal principal = randomPrincipal();
         String testArId = testArCommandService.createTestAr(randomCreateTestArCommand(), principal);
         TestArCreatedEvent testArCreatedEvent = latestEventFor(testArId, TEST_AR_CREATED_EVENT, TestArCreatedEvent.class);
@@ -107,7 +124,7 @@ class EventConsumerIntegrationTest extends IntegrationTest {
     }
 
     @Test
-    public void should_mark_as_consumed_if_non_transactional_handler_throws_exception() {
+    public void should_not_mark_as_consumed_if_transactional_handler_throws_exception() {
         Principal principal = randomPrincipal();
         String testArId = testArCommandService.createTestAr(randomCreateTestArCommand(), principal);
         TestArCreatedEvent testArCreatedEvent = latestEventFor(testArId, TEST_AR_CREATED_EVENT, TestArCreatedEvent.class);
@@ -117,7 +134,7 @@ class EventConsumerIntegrationTest extends IntegrationTest {
 
         assertTrue(exception.getMessage().startsWith("Error while consuming event"));
         verify(consumingEventDao).markEventAsConsumedByHandler(any(ConsumingEvent.class), any(TestArCreatedEventHandler.class));
-        assertFalse(consumingEventDao.exists(testArCreatedEvent.getId()));
+        assertFalse(consumingEventDao.exists(testArCreatedEvent.getId(), createdEventHandler));
     }
 
     @Test
@@ -129,13 +146,14 @@ class EventConsumerIntegrationTest extends IntegrationTest {
 
         eventConsumer.consumeDomainEvent(testArCreatedEvent);
 
-        verify(consumingEventDao, times(0)).markEventAsConsumedByHandler(any(), any());
-        assertFalse(consumingEventDao.exists(testArCreatedEvent.getId()));
+        verify(consumingEventDao, times(0)).markEventAsConsumedByHandler(any(), any(TestArCreatedEventHandler.class));
+        verify(consumingEventDao, times(1)).markEventAsConsumedByHandler(any(), any(TestArCreatedEventHandler2.class));
+        assertFalse(consumingEventDao.exists(testArCreatedEvent.getId(), createdEventHandler));
         verify(createdEventHandler, times(1)).handle(any(TestArCreatedEvent.class));
     }
 
     @Test
-    public void multiple_handler_should_run_independently() {
+    public void multiple_handlers_should_run_independently() {
         Principal principal = randomPrincipal();
         String testArId = testArCommandService.createTestAr(randomCreateTestArCommand(), principal);
         testArCommandService.updateTestArName(testArId, randomUpdateTestArNameCommand(), principal);
@@ -150,6 +168,34 @@ class EventConsumerIntegrationTest extends IntegrationTest {
         verify(nameUpdatedEventHandler).handle(any(TestArNameUpdatedEvent.class));
         verify(updatedEventHandler).handle(any(TestArNameUpdatedEvent.class));
     }
+
+    @Test
+    public void should_run_again_for_idempotent_handler() {
+        Principal principal = randomPrincipal();
+        String testArId = testArCommandService.createTestAr(randomCreateTestArCommand(), principal);
+        TestArCreatedEvent testArCreatedEvent = latestEventFor(testArId, TEST_AR_CREATED_EVENT, TestArCreatedEvent.class);
+        when(createdEventHandler.isIdempotent()).thenReturn(true);
+
+        eventConsumer.consumeDomainEvent(testArCreatedEvent);
+        eventConsumer.consumeDomainEvent(testArCreatedEvent);
+
+        verify(createdEventHandler, times(2)).handle(any(TestArCreatedEvent.class));
+    }
+
+
+    @Test
+    public void should_not_run_again_for_non_idempotent_handler() {
+        Principal principal = randomPrincipal();
+        String testArId = testArCommandService.createTestAr(randomCreateTestArCommand(), principal);
+        TestArCreatedEvent testArCreatedEvent = latestEventFor(testArId, TEST_AR_CREATED_EVENT, TestArCreatedEvent.class);
+
+        eventConsumer.consumeDomainEvent(testArCreatedEvent);
+        eventConsumer.consumeDomainEvent(testArCreatedEvent);
+
+        verify(consumingEventDao, times(2)).markEventAsConsumedByHandler(any(), any(TestArCreatedEventHandler.class));
+        verify(createdEventHandler, times(1)).handle(any(TestArCreatedEvent.class));
+    }
+
 
     private static UpdateTestArNameCommand randomUpdateTestArNameCommand() {
         return new UpdateTestArNameCommand(randomTestArName());
