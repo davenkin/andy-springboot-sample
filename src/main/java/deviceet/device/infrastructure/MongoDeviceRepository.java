@@ -53,6 +53,6 @@ public class MongoDeviceRepository extends AbstractMongoRepository<Device> imple
     public List<CachedOrgDevice> cachedOrgDevices(String orgId) {
         requireNonBlank(orgId, "orgId must not be blank.");
 
-        return cachedMongoDeviceRepository.cachedOrgDevices(orgId).devices();
+        return cachedMongoDeviceRepository.cachedOrgDevices(orgId);
     }
 }
