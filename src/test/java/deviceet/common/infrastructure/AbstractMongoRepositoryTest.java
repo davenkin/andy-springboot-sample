@@ -78,6 +78,7 @@ class AbstractMongoRepositoryTest extends IntegrationTest {
         assertTrue(testArRepository.byIdOptional(testAr.getId()).isPresent());
 
         testArRepository.delete(testAr);
+        assertNull(testAr.getEvents());
         assertFalse(testArRepository.byIdOptional(testAr.getId()).isPresent());
         TestArDeletedEvent deletedEvent = latestEventFor(testAr.getId(), TEST_AR_DELETED_EVENT, TestArDeletedEvent.class);
         assertEquals(testAr.getId(), deletedEvent.getTestArId());
@@ -95,7 +96,8 @@ class AbstractMongoRepositoryTest extends IntegrationTest {
         assertTrue(testArRepository.byIdOptional(testAr2.getId()).isPresent());
 
         testArRepository.delete(List.of(testAr1, testAr2));
-
+        assertNull(testAr1.getEvents());
+        assertNull(testAr2.getEvents());
         assertFalse(testArRepository.byIdOptional(testAr1.getId()).isPresent());
         assertFalse(testArRepository.byIdOptional(testAr2.getId()).isPresent());
 
