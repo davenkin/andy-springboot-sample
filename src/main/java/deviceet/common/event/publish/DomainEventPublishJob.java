@@ -68,7 +68,7 @@ public class DomainEventPublishJob {
                             if (ex == null) {
                                 this.publishingDomainEventDao.successPublish(eventId);
                             } else {
-                                this.publishingDomainEventDao.failPublish(eventId);
+                                this.publishingDomainEventDao.failPublish(event.getId());
                                 log.error("Error publishing domain event [{}]:", eventId, ex);
                             }
                         }, taskExecutor);

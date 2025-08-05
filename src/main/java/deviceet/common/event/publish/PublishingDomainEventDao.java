@@ -62,4 +62,10 @@ public class PublishingDomainEventDao {
         mongoTemplate.updateFirst(query, update, PublishingDomainEvent.class);
     }
 
+    public PublishingDomainEvent byId(String eventId) {
+        requireNonBlank(eventId, "Event ID must not be blank.");
+        Query query = Query.query(where(MONGO_ID).is(eventId));
+        return mongoTemplate.findOne(query, PublishingDomainEvent.class);
+    }
+
 }

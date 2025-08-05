@@ -5,7 +5,7 @@ import deviceet.common.security.Role;
 import deviceet.common.utils.RandomEnumUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 
-public class TestRandomUtil {
+public class TestRandomUtils {
     public static String randomTestArName() {
         return RandomStringUtils.secure().nextAlphanumeric(6);
     }

@@ -17,8 +17,8 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
-import static deviceet.TestRandomUtil.randomPrincipal;
-import static deviceet.TestRandomUtil.randomTestArName;
+import static deviceet.TestRandomUtils.randomPrincipal;
+import static deviceet.TestRandomUtils.randomTestArName;
 import static deviceet.common.event.DomainEventType.TEST_AR_CREATED_EVENT;
 import static deviceet.common.event.DomainEventType.TEST_AR_NAME_UPDATED_EVENT;
 import static org.junit.jupiter.api.Assertions.*;
