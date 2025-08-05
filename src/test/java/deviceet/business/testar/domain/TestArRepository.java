@@ -12,6 +12,8 @@ public interface TestArRepository {
 
     void delete(List<TestAr> ars);
 
+    TestAr byId(String id);
+
     TestAr byId(String id, String orgId);
 
     Optional<TestAr> byIdOptional(String id);

@@ -5,9 +5,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 @DisableForIT
-public class DefaultCurrentOperatorProvider implements CurrentOperatorProvider {
+public class DefaultCurrentPrincipalProvider implements CurrentPrincipalProvider {
     @Override
-    public String currentOperator() {
+    public String currentPrincipalUserId() {
         return null;//todo: get operator from JWT of the current thread, or return null
     }
 }

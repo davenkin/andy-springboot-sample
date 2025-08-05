@@ -32,22 +32,27 @@ public abstract class AggregateRoot {
     private List<DomainEvent> events;
     private Instant createdAt;
     private String createdBy;
+    private Instant modifiedAt;
+    private String modifiedBy;
 
     @Version
     @Getter(PRIVATE)
     private Long _version;
 
-    protected AggregateRoot(String id, String orgId) {
+    protected AggregateRoot(String id, String orgId, Principal principal) {
         requireNonBlank(id, "id must not be blank.");
         requireNonBlank(orgId, "orgId must not be blank.");
+        requireNonNull(principal, "principal must not be null.");
 
         this.id = id;
         this.orgId = orgId;
         this.createdAt = Instant.now();
+        this.createdBy = principal.getUserId();
     }
 
     protected AggregateRoot(String id, Principal principal) {
         requireNonBlank(id, "id must not be blank.");
+        requireNonNull(principal, "principal must not be null.");
         requireNonNull(principal, "principal must not be null.");
 
         this.id = id;
@@ -58,7 +63,7 @@ public abstract class AggregateRoot {
 
     // raiseEvent() only stores events in aggregate root temporarily, the events will then be persisted into DB by Repository within the same transaction of saving entities
     // The actual sending of events to messaging middleware is handled by DomainEventPublisher
-    protected void raiseEvent(DomainEvent event) {
+    protected final void raiseEvent(DomainEvent event) {
         requireNonNull(event.getType(), "Domain event's type must not be null.");
         requireNonBlank(event.getArId(), "Domain event's arId must not be null.");
 
@@ -73,10 +78,15 @@ public abstract class AggregateRoot {
         return events;
     }
 
-    public void clearEvents() {
+    public final void clearEvents() {
         this.events = null;
     }
 
     public void onDelete() {
+    }
+
+    public void onModify(String modifiedBy) {
+        this.modifiedBy = modifiedBy;
+        this.modifiedAt = Instant.now();
     }
 }

@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import static deviceet.common.security.Principal.ROBOT;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -18,7 +20,7 @@ public class ExternalDeviceRegisteredEventHandler extends AbstractEventHandler<E
 
     @Override
     public void handle(ExternalDeviceCreatedEvent event) {
-        Device device = deviceFactory.createDevice(event);
+        Device device = deviceFactory.createDevice(event, ROBOT);
         deviceRepository.save(device);
         log.info("Device {} created.", device.getId());
     }

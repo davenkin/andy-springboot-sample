@@ -3,6 +3,7 @@ package deviceet.business.device.domain;
 import deviceet.business.device.domain.event.DeviceCreatedEvent;
 import deviceet.business.device.domain.event.DeviceNameConfiguredEvent;
 import deviceet.common.model.AggregateRoot;
+import deviceet.common.security.Principal;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
@@ -29,8 +30,9 @@ public class Device extends AggregateRoot {
                   String orgId,
                   String reportedName,
                   CpuArchitecture cpuArchitecture,
-                  OsType osType) {
-        super(id, orgId);
+                  OsType osType,
+                  Principal principal) {
+        super(id, orgId, principal);
         this.reportedName = reportedName;
         this.configuredName = reportedName;
         this.cpuArchitecture = cpuArchitecture;

@@ -17,7 +17,9 @@ import static deviceet.TestRandomUtil.randomPrincipal;
 import static deviceet.TestRandomUtil.randomTestArName;
 import static deviceet.common.event.DomainEventType.TEST_AR_CREATED_EVENT;
 import static deviceet.common.event.DomainEventType.TEST_AR_DELETED_EVENT;
+import static deviceet.common.exception.ErrorCode.AR_NOT_FOUND;
 import static deviceet.common.exception.ErrorCode.NOT_SAME_ORG;
+import static org.apache.commons.lang3.RandomStringUtils.secure;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AbstractMongoRepositoryIntegrationTest extends IntegrationTest {
@@ -124,16 +126,17 @@ class AbstractMongoRepositoryIntegrationTest extends IntegrationTest {
 
         testArRepository.save(testAr);
 
-        TestAr dbAr = testArRepository.byId(testAr.getId(), principal.getOrgId());
-        assertEquals(testAr.getId(), dbAr.getId());
-
-        TestAr dbAr2 = testArRepository.byIdOptional(testAr.getId(), principal.getOrgId()).get();
-        assertEquals(testAr.getId(), dbAr2.getId());
-
-        TestAr dbAr3 = testArRepository.byIdOptional(testAr.getId()).get();
-        assertEquals(testAr.getId(), dbAr3.getId());
-
+        assertEquals(testAr.getId(), testArRepository.byId(testAr.getId()).getId());
+        assertEquals(testAr.getId(), testArRepository.byId(testAr.getId(), principal.getOrgId()).getId());
+        assertEquals(testAr.getId(), testArRepository.byIdOptional(testAr.getId(), principal.getOrgId()).get().getId());
+        assertEquals(testAr.getId(), testArRepository.byIdOptional(testAr.getId()).get().getId());
         assertTrue(testArRepository.exists(testAr.getId(), principal.getOrgId()));
+
+        assertEquals(AR_NOT_FOUND, assertThrows(ServiceException.class, () -> testArRepository.byId(secure().nextAlphanumeric(5), secure().nextAlphanumeric(5))).getCode());
+        assertEquals(AR_NOT_FOUND, assertThrows(ServiceException.class, () -> testArRepository.byId(secure().nextAlphanumeric(5))).getCode());
+
+        assertFalse(testArRepository.byIdOptional(secure().nextAlphanumeric(5)).isPresent());
+        assertFalse(testArRepository.byIdOptional(secure().nextAlphanumeric(5), secure().nextAlphanumeric(5)).isPresent());
     }
 
 }
