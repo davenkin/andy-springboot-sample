@@ -37,4 +37,19 @@ public class ArchUnitUtils {
             }
         };
     }
+
+    public static ArchCondition<JavaClass> haveNoSetterMethod() {
+        return new ArchCondition<>("have no setter methods") {
+            @Override
+            public void check(JavaClass clazz, ConditionEvents events) {
+                boolean hasNoSetterMethods = clazz.getMethods()
+                        .stream().noneMatch(it -> it.getName().startsWith("set"));
+                String message = hasNoSetterMethods
+                        ? String.format("Class %s does not have setter methods.", clazz.getName())
+                        : String.format("Class %s containers setter methods.", clazz.getName());
+
+                events.add(new SimpleConditionEvent(clazz, hasNoSetterMethods, message));
+            }
+        };
+    }
 }
