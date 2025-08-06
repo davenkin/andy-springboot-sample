@@ -35,7 +35,7 @@ public class DomainEventArchTest {
             .that()
             .areAssignableTo(DomainEvent.class)
             .should(havePrivateNoArgConstructor())
-            .because("Private no arg constructors(you can use @NoArgsConstructor(access = PRIVATE)) of domain events are only used for Jackson/Mongo deserialization, it should not be used to create domain event objects because otherwise we might end up with invalid domain events.");
+            .because("Private no-arg constructors(you can use @NoArgsConstructor(access = PRIVATE)) of domain events are only used for Jackson/Mongo deserialization, it should not be used to create domain event objects because otherwise we might end up with invalid domain events.");
 
     @ArchTest
     public static final ArchRule domainEventHandlerLocation = classes()

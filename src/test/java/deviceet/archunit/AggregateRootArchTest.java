@@ -35,7 +35,7 @@ public class AggregateRootArchTest {
             .that()
             .areAssignableTo(AggregateRoot.class)
             .should(havePrivateNoArgConstructor())
-            .because("Private no arg constructors(you can use @NoArgsConstructor(access = PRIVATE)) of aggregate roots are only used for Jackson/Mongo deserialization, it should not be used to create objects because otherwise we might end up with invalid aggregate roots which are the most important types of objects in software.");
+            .because("Private no-arg constructors(you can use @NoArgsConstructor(access = PRIVATE)) of aggregate roots are only used for Jackson/Mongo deserialization, it should not be used to create objects because otherwise we might end up with invalid aggregate roots which are the most important types of objects in software.");
 
     @ArchTest
     public static final ArchRule aggregateRootShouldNotHaveBuilder = classes()
