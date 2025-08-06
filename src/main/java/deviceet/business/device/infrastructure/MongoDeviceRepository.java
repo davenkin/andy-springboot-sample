@@ -1,8 +1,8 @@
 package deviceet.business.device.infrastructure;
 
 import deviceet.business.device.domain.Device;
+import deviceet.business.device.domain.DeviceReference;
 import deviceet.business.device.domain.DeviceRepository;
-import deviceet.business.device.domain.cache.CachedDeviceReference;
 import deviceet.common.infrastructure.AbstractMongoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -50,7 +50,7 @@ public class MongoDeviceRepository extends AbstractMongoRepository<Device> imple
     }
 
     @Override
-    public List<CachedDeviceReference> cachedDeviceReferences(String orgId) {
+    public List<DeviceReference> cachedDeviceReferences(String orgId) {
         requireNonBlank(orgId, "orgId must not be blank.");
 
         return cachedMongoDeviceRepository.cachedDeviceReferences(orgId);

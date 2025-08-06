@@ -1,7 +1,5 @@
 package deviceet.business.device.domain;
 
-import deviceet.business.device.domain.cache.CachedDeviceReference;
-
 import java.util.List;
 
 public interface DeviceRepository {
@@ -10,5 +8,5 @@ public interface DeviceRepository {
 
     Device byId(String id, String orgId);
 
-    List<CachedDeviceReference> cachedDeviceReferences(String orgId);
+    List<DeviceReference> cachedDeviceReferences(String orgId);
 }

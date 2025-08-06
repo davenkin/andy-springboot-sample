@@ -5,6 +5,7 @@ import deviceet.TestRandomEventGenerator;
 import deviceet.business.device.command.ConfigureDeviceNameCommand;
 import deviceet.business.device.command.DeviceCommandService;
 import deviceet.business.device.domain.Device;
+import deviceet.business.device.domain.DeviceReference;
 import deviceet.business.device.domain.DeviceRepository;
 import deviceet.business.device.domain.event.DeviceCreatedEvent;
 import deviceet.business.device.domain.event.DeviceNameConfiguredEvent;
@@ -20,6 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
+import java.util.List;
 import java.util.stream.IntStream;
 
 import static deviceet.common.event.DomainEventType.DEVICE_CREATED_EVENT;
@@ -90,7 +92,8 @@ public class DeviceIntegrationTest extends IntegrationTest {
         String key = "Cache:ORG_DEVICES::" + externalDeviceCreatedEvent.getOrgId();
 
         assertFalse(stringRedisTemplate.hasKey(key));
-        deviceRepository.cachedDeviceReferences(externalDeviceCreatedEvent.getOrgId());
+        List<DeviceReference> cachedDeviceReferences = deviceRepository.cachedDeviceReferences(externalDeviceCreatedEvent.getOrgId());
+        assertFalse(cachedDeviceReferences.isEmpty());
         assertTrue(stringRedisTemplate.hasKey(key));
 
         Device device = deviceRepository.byId(externalDeviceCreatedEvent.getDeviceId(), externalDeviceCreatedEvent.getOrgId());
