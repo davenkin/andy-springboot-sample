@@ -28,7 +28,7 @@ public class DomainEventArchTest {
             .areAssignableTo(DomainEvent.class)
             .should()
             .beAnnotatedWith(TypeAlias.class)
-            .because("In Mongo, @TypeAlias sets the type of DomainEvent to some fixed names, rather than using class FQCN which does not survive repackaging.");
+            .because("Domain events should be annotated with @TypeAlias as otherwise class FQCN will be used as type information and stored in MongoDB, which does not survive repackaging.");
 
     @ArchTest
     public static final ArchRule domainEventShouldHaveNoArgConstructor = classes()

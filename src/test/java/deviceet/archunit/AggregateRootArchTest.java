@@ -28,7 +28,7 @@ public class AggregateRootArchTest {
             .areAssignableTo(AggregateRoot.class)
             .should()
             .beAnnotatedWith(TypeAlias.class)
-            .because("In Mongo, @TypeAlias sets the type of aggregate root to some fixed names, rather than using class FQCN which does not survive repackaging.");
+            .because("Aggregate roots should be annotated with @TypeAlias as otherwise class FQCN will be used as type information and stored in MongoDB, which does not survive repackaging.");
 
     @ArchTest
     public static final ArchRule aggregateRootShouldHaveNoArgConstructor = classes()
