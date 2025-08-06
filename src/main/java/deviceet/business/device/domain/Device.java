@@ -3,7 +3,7 @@ package deviceet.business.device.domain;
 import deviceet.business.device.domain.event.DeviceCreatedEvent;
 import deviceet.business.device.domain.event.DeviceNameConfiguredEvent;
 import deviceet.common.model.AggregateRoot;
-import deviceet.common.security.Principal;
+import deviceet.common.model.Principal;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;

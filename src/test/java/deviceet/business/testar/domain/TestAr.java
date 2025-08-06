@@ -4,7 +4,7 @@ import deviceet.business.testar.domain.event.TestArCreatedEvent;
 import deviceet.business.testar.domain.event.TestArDeletedEvent;
 import deviceet.business.testar.domain.event.TestArNameUpdatedEvent;
 import deviceet.common.model.AggregateRoot;
-import deviceet.common.security.Principal;
+import deviceet.common.model.Principal;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;

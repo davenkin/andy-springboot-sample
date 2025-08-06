@@ -5,7 +5,7 @@ import deviceet.business.testar.command.CreateTestArCommand;
 import deviceet.business.testar.command.TestArCommandService;
 import deviceet.business.testar.domain.event.TestArCreatedEvent;
 import deviceet.common.event.publish.infrastructure.FakeDomainEventSender;
-import deviceet.common.security.Principal;
+import deviceet.common.model.Principal;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;

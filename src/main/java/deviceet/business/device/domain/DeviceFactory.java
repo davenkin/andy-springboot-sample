@@ -1,6 +1,6 @@
 package deviceet.business.device.domain;
 
-import deviceet.common.security.Principal;
+import deviceet.common.model.Principal;
 import deviceet.external.ExternalDeviceCreatedEvent;
 import org.springframework.stereotype.Component;
 

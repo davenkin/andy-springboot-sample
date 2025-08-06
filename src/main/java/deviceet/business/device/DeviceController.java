@@ -5,7 +5,7 @@ import deviceet.business.device.command.DeviceCommandService;
 import deviceet.business.device.query.DeviceQueryService;
 import deviceet.business.device.query.ListDeviceQuery;
 import deviceet.business.device.query.QListedDevice;
-import deviceet.common.security.Principal;
+import deviceet.common.model.Principal;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import static deviceet.common.security.Role.ORG_ADMIN;
+import static deviceet.common.model.Role.ORG_ADMIN;
 import static deviceet.common.utils.Constants.TEST_ORG_ID;
 import static deviceet.common.utils.Constants.TEST_USER_ID;
 

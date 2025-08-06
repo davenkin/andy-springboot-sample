@@ -6,7 +6,7 @@ import deviceet.business.testar.command.UpdateTestArNameCommand;
 import deviceet.business.testar.query.ListTestArQuery;
 import deviceet.business.testar.query.QListedTestAr;
 import deviceet.business.testar.query.TestArQueryService;
-import deviceet.common.security.Principal;
+import deviceet.common.model.Principal;
 import deviceet.common.utils.ResponseId;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -17,7 +17,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import static deviceet.common.security.Role.ORG_ADMIN;
+import static deviceet.common.model.Role.ORG_ADMIN;
 import static deviceet.common.utils.Constants.TEST_ORG_ID;
 import static deviceet.common.utils.Constants.TEST_USER_ID;
 

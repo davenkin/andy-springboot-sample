@@ -2,7 +2,7 @@ package deviceet.business.device.query;
 
 import deviceet.business.device.domain.Device;
 import deviceet.common.model.AggregateRoot;
-import deviceet.common.security.Principal;
+import deviceet.common.model.Principal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-import static deviceet.common.security.Role.ORG_IT_ADMIN;
+import static deviceet.common.model.Role.ORG_IT_ADMIN;
 import static deviceet.common.utils.Constants.DEVICE_COLLECTION;
 
 @Component

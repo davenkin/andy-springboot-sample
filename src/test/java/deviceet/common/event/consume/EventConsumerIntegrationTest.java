@@ -10,7 +10,7 @@ import deviceet.business.testar.eventhandler.TestArCreatedEventHandler;
 import deviceet.business.testar.eventhandler.TestArCreatedEventHandler2;
 import deviceet.business.testar.eventhandler.TestArNameUpdatedEventHandler;
 import deviceet.business.testar.eventhandler.TestArUpdatedEventHandler;
-import deviceet.common.security.Principal;
+import deviceet.common.model.Principal;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 import org.mockito.Mockito;

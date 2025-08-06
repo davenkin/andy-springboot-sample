@@ -1,7 +1,6 @@
 package deviceet.common.model;
 
 import deviceet.common.event.DomainEvent;
-import deviceet.common.security.Principal;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
@@ -53,7 +52,6 @@ public abstract class AggregateRoot {
     protected AggregateRoot(String id, Principal principal) {
         requireNonBlank(id, "id must not be blank.");
         requireNonNull(principal, "principal must not be null.");
-        requireNonNull(principal, "principal must not be null.");
 
         this.id = id;
         this.orgId = principal.getOrgId();
@@ -64,8 +62,9 @@ public abstract class AggregateRoot {
     // raiseEvent() only stores events in aggregate root temporarily, the events will then be persisted into DB by Repository within the same transaction of saving entities
     // The actual sending of events to messaging middleware is handled by DomainEventPublisher
     protected final void raiseEvent(DomainEvent event) {
-        requireNonNull(event.getType(), "Domain event's type must not be null.");
-        requireNonBlank(event.getArId(), "Domain event's arId must not be null.");
+        requireNonNull(event, "event must not be null.");
+        requireNonNull(event.getType(), "event's type must not be null.");
+        requireNonBlank(event.getArId(), "event's arId must not be null.");
 
         events().add(event);
     }

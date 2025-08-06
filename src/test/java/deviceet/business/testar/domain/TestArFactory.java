@@ -1,6 +1,6 @@
 package deviceet.business.testar.domain;
 
-import deviceet.common.security.Principal;
+import deviceet.common.model.Principal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

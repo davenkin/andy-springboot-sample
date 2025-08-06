@@ -87,7 +87,7 @@ public class SnowflakeIdGenerator {
         try {
             String[] ips = InetAddress.getLocalHost().getHostAddress().split("\\.");
             if (ips.length <= 1) {
-                return RandomUtils.nextLong(1, 1000);//没有联网时无法获取ip,返回1-1000之间的随机数
+                return RandomUtils.secure().randomLong(1, 1000);//Return random numbers from 1-1000 if cannot get IP address
             }
 
             // third fragment (8 bits, from 17 to 24 bit of ip)

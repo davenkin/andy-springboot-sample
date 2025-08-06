@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import static deviceet.common.security.Principal.ROBOT;
+import static deviceet.common.model.Principal.ROBOT;
 
 @Slf4j
 @Component

@@ -2,13 +2,13 @@ package deviceet.business.device.command;
 
 import deviceet.business.device.domain.Device;
 import deviceet.business.device.domain.DeviceRepository;
-import deviceet.common.security.Principal;
+import deviceet.common.model.Principal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import static deviceet.common.security.Role.ORG_IT_ADMIN;
+import static deviceet.common.model.Role.ORG_IT_ADMIN;
 
 @Slf4j
 @Component

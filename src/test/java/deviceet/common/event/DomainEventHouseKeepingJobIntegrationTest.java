@@ -7,7 +7,7 @@ import deviceet.business.testar.eventhandler.TestArCreatedEventHandler;
 import deviceet.common.event.consume.ConsumingEvent;
 import deviceet.common.event.consume.ConsumingEventDao;
 import deviceet.common.event.publish.PublishingDomainEventDao;
-import deviceet.common.security.Principal;
+import deviceet.common.model.Principal;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.util.ReflectionTestUtils;

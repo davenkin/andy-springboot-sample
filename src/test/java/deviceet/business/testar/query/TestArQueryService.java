@@ -2,7 +2,7 @@ package deviceet.business.testar.query;
 
 import deviceet.business.testar.domain.TestAr;
 import deviceet.common.model.AggregateRoot;
-import deviceet.common.security.Principal;
+import deviceet.common.model.Principal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 import static deviceet.business.testar.domain.TestAr.TEST_AR_COLLECTION;
-import static deviceet.common.security.Role.ORG_IT_ADMIN;
+import static deviceet.common.model.Role.ORG_IT_ADMIN;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 

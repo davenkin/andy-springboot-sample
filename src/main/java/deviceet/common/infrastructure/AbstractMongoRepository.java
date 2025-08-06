@@ -19,7 +19,7 @@ import static deviceet.common.exception.ErrorCode.NOT_SAME_ORG;
 import static deviceet.common.utils.CommonUtils.requireNonBlank;
 import static deviceet.common.utils.CommonUtils.singleParameterizedArgumentClassOf;
 import static deviceet.common.utils.Constants.MONGO_ID;
-import static deviceet.common.utils.MapUtils.mapOf;
+import static deviceet.common.utils.NullableMapUtils.mapOf;
 import static java.util.Comparator.comparing;
 import static java.util.Objects.requireNonNull;
 import static java.util.Optional.empty;

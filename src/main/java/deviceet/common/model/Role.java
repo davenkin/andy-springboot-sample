@@ -1,4 +1,4 @@
-package deviceet.common.security;
+package deviceet.common.model;
 
 import java.util.Set;
 import java.util.stream.Stream;

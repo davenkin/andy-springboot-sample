@@ -1,4 +1,4 @@
-package deviceet.business.testar.test;
+package deviceet.business.animaltest;
 
 import deviceet.IntegrationTest;
 

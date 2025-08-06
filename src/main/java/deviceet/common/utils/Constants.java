@@ -21,8 +21,10 @@ public class Constants {
     //Cache
     public static final String ORG_DEVICES_CACHE = "ORG_DEVICES";
 
-    //for testing
+    //todo: remove
     public static final String KAFKA_EXTERNAL_DEVICE_REGISTRATION_TOPIC = "test-device-registration-topic";
+
+    //todo: move to test folder
     public static final String TEST_ORG_ID = "testOrgId";
     public static final String TEST_USER_ID = "testUserId";
 

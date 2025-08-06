@@ -17,7 +17,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 @RequiredArgsConstructor
 @Configuration(proxyBeanMethods = false)
 @EnableSchedulerLock(defaultLockAtMostFor = "60m", defaultLockAtLeastFor = "10s")
-public class TestSchedulingConfiguration {
+public class TestSampleSchedulingConfiguration {
     private final TestArJob testArJob;
 
     @Scheduled(cron = "0 10 2 1 * ?")

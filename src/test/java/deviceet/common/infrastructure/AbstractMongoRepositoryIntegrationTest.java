@@ -7,7 +7,7 @@ import deviceet.business.testar.domain.TestArRepository;
 import deviceet.business.testar.domain.event.TestArCreatedEvent;
 import deviceet.business.testar.domain.event.TestArDeletedEvent;
 import deviceet.common.exception.ServiceException;
-import deviceet.common.security.Principal;
+import deviceet.common.model.Principal;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

@@ -1,13 +1,13 @@
 package deviceet;
 
-import deviceet.common.security.Principal;
-import deviceet.common.security.Role;
-import deviceet.common.utils.RandomEnumUtils;
+import deviceet.common.model.Principal;
+import deviceet.common.model.Role;
 import org.apache.commons.lang3.RandomStringUtils;
 
-import static deviceet.common.security.Role.ROOT;
+import static org.apache.commons.lang3.RandomUtils.secure;
 
 public class TestRandomUtils {
+
     public static String randomTestArName() {
         return RandomStringUtils.secure().nextAlphanumeric(6);
     }
@@ -25,10 +25,15 @@ public class TestRandomUtils {
     }
 
     public static Role randomRole() {
-        return RandomEnumUtils.randomEnum(Role.class);
+        return randomEnum(Role.class);
     }
 
     public static Principal randomPrincipal() {
-        return new Principal(randomUserId(), randomUserName(), ROOT, randomOrgId());
+        return new Principal(randomUserId(), randomUserName(), randomRole(), randomOrgId());
+    }
+
+    public static <T extends Enum<T>> T randomEnum(Class<T> enumClass) {
+        T[] constants = enumClass.getEnumConstants();
+        return constants[secure().randomInt(0, constants.length)];
     }
 }
