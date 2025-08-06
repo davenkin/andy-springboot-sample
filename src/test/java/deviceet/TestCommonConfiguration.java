@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration(proxyBeanMethods = false)
-public class CommonTestConfiguration {
+public class TestCommonConfiguration {
     @Bean
     MongodArguments mongodArguments() {
         return MongodArguments.builder()

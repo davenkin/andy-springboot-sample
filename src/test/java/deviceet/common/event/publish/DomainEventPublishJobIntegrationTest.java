@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-class DomainEventPublishJobTest extends IntegrationTest {
+class DomainEventPublishJobIntegrationTest extends IntegrationTest {
 
     @Autowired
     private DomainEventPublishJob domainEventPublishJob;

@@ -9,8 +9,8 @@ import static deviceet.common.utils.SnowflakeIdGenerator.newSnowflakeId;
 import static java.lang.String.valueOf;
 import static org.apache.commons.lang3.RandomStringUtils.secure;
 
-public class TestRandomEventGenerator {
-    public static ExternalDeviceCreatedEvent buildExternalDeviceCreateEvent() {
+public class TestRandomExternalEventGenerator {
+    public static ExternalDeviceCreatedEvent createExternalDeviceCreatedEvent() {
         return ExternalDeviceCreatedEvent.builder()
                 .type("device_registered")
                 .id(valueOf(newSnowflakeId()))
@@ -22,7 +22,7 @@ public class TestRandomEventGenerator {
                 .build();
     }
 
-    public static ExternalDeviceCreatedEvent buildExternalDeviceCreateEvent(String orgId) {
+    public static ExternalDeviceCreatedEvent createExternalDeviceCreatedEvent(String orgId) {
         return ExternalDeviceCreatedEvent.builder()
                 .type("device_registered")
                 .id(valueOf(newSnowflakeId()))

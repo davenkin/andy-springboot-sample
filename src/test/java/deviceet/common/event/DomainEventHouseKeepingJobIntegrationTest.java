@@ -20,7 +20,7 @@ import static java.time.Instant.now;
 import static java.time.temporal.ChronoUnit.DAYS;
 import static org.junit.jupiter.api.Assertions.*;
 
-class DomainEventHouseKeepingJobTest extends IntegrationTest {
+class DomainEventHouseKeepingJobIntegrationTest extends IntegrationTest {
     @Autowired
     private ConsumingEventDao consumingEventDao;
 
