@@ -33,3 +33,7 @@
 - 如何使用pagination和sorting，可以使用spring的Pageable和Page<>
 - 算了，不要typealias了，
 - 测试mongock是否有效
+
+- 改名为animal，然后删除device
+- animal引入缓存
+- animal的repository自定义一个查询方法
