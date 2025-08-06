@@ -15,7 +15,7 @@ import static deviceet.archunit.ArchUnitUtils.*;
 public class DomainEventArchTest {
 
     @ArchTest
-    public static final ArchRule domainEventLocation = classes()
+    public static final ArchRule domainEventShouldResideInDomainEventPackage = classes()
             .that()
             .areAssignableTo(DomainEvent.class)
             .should()
@@ -31,14 +31,14 @@ public class DomainEventArchTest {
             .because("Domain events should be annotated with @TypeAlias as otherwise class FQCN will be used as type information and stored in MongoDB, which does not survive repackaging.");
 
     @ArchTest
-    public static final ArchRule domainEventShouldHaveNoArgConstructor = classes()
+    public static final ArchRule domainEventShouldHavePrivateNoArgConstructor = classes()
             .that()
             .areAssignableTo(DomainEvent.class)
             .should(havePrivateNoArgConstructor())
             .because("Private no-arg constructors(you can use @NoArgsConstructor(access = PRIVATE)) of domain events are only used for Jackson/Mongo deserialization, it should not be used to create domain event objects because otherwise we might end up with invalid domain events.");
 
     @ArchTest
-    public static final ArchRule domainEventHandlerLocation = classes()
+    public static final ArchRule domainEventHandlerShouldResideInEventHandlerPackage = classes()
             .that()
             .areAssignableTo(AbstractEventHandler.class)
             .should()
@@ -56,6 +56,6 @@ public class DomainEventArchTest {
     public static final ArchRule domainEventShouldNotHaveSetters = classes()
             .that()
             .areAssignableTo(DomainEvent.class)
-            .should(haveNoSetterMethod())
+            .should(haveNoSetterMethods())
             .because("Domain event should be immutable, hence it should not have setter methods");
 }

@@ -38,7 +38,7 @@ public class ArchUnitUtils {
         };
     }
 
-    public static ArchCondition<JavaClass> haveNoSetterMethod() {
+    public static ArchCondition<JavaClass> haveNoSetterMethods() {
         return new ArchCondition<>("have no setter methods") {
             @Override
             public void check(JavaClass clazz, ConditionEvents events) {

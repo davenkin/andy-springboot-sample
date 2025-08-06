@@ -15,7 +15,7 @@ import static deviceet.archunit.ArchUnitUtils.havePrivateNoArgConstructor;
 public class AggregateRootArchTest {
 
     @ArchTest
-    public static final ArchRule aggregateRootLocation = classes()
+    public static final ArchRule aggregateRootShouldResideInDomainPackage = classes()
             .that()
             .areAssignableTo(AggregateRoot.class)
             .should()
@@ -31,7 +31,7 @@ public class AggregateRootArchTest {
             .because("Aggregate roots should be annotated with @TypeAlias as otherwise class FQCN will be used as type information and stored in MongoDB, which does not survive repackaging.");
 
     @ArchTest
-    public static final ArchRule aggregateRootShouldHaveNoArgConstructor = classes()
+    public static final ArchRule aggregateRootShouldHavePrivateNoArgConstructor = classes()
             .that()
             .areAssignableTo(AggregateRoot.class)
             .should(havePrivateNoArgConstructor())

@@ -9,6 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import static deviceet.common.security.Role.ORG_ADMIN;
+import static deviceet.common.security.Role.ORG_IT_ADMIN;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -18,6 +21,8 @@ public class TestArCommandService {
 
     @Transactional
     public String createTestAr(CreateTestArCommand command, Principal principal) {
+        principal.checkRole(ORG_ADMIN);
+
         TestAr testAr = testArFactory.create(command.name(), principal);
         testArRepository.save(testAr);
         log.info("Created TestAr[{}].", testAr.getId());
@@ -26,6 +31,8 @@ public class TestArCommandService {
 
     @Transactional
     public void updateTestArName(String id, UpdateTestArNameCommand command, Principal principal) {
+        principal.checkRole(ORG_IT_ADMIN);
+
         TestAr testAr = testArRepository.byId(id, principal.getOrgId());
         testAr.updateName(command.name());
         testArRepository.save(testAr);

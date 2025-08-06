@@ -24,7 +24,9 @@ import static deviceet.common.utils.Constants.TEST_USER_ID;
 @RequiredArgsConstructor
 @RequestMapping(value = "/devices")
 public class DeviceController {
+    //In real case, the Principal is usually build from some security context such as Spring Security's SecurityContextHolder
     public static final Principal TEST_PRINCIPAL = new Principal(TEST_USER_ID, "testAdminUser", ORG_ADMIN, TEST_ORG_ID);
+
     private final DeviceCommandService deviceCommandService;
     private final DeviceQueryService deviceQueryService;
 

@@ -12,18 +12,18 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import static deviceet.business.testar.domain.TestAr.TEST_COLLECTION;
+import static deviceet.business.testar.domain.TestAr.TEST_AR_COLLECTION;
 import static deviceet.common.utils.SnowflakeIdGenerator.newSnowflakeId;
 import static lombok.AccessLevel.PRIVATE;
 
 @Slf4j
 @Getter
 @FieldNameConstants
-@TypeAlias(TEST_COLLECTION)
-@Document(TEST_COLLECTION)
+@TypeAlias(TEST_AR_COLLECTION)
+@Document(TEST_AR_COLLECTION)
 @NoArgsConstructor(access = PRIVATE)
 public class TestAr extends AggregateRoot {
-    public final static String TEST_COLLECTION = "TEST_COLLECTION";
+    public final static String TEST_AR_COLLECTION = "TEST_AR_COLLECTION";
     private String name;
 
     public TestAr(String name, Principal principal) {

@@ -5,6 +5,8 @@ import deviceet.common.security.Role;
 import deviceet.common.utils.RandomEnumUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 
+import static deviceet.common.security.Role.ROOT;
+
 public class TestRandomUtils {
     public static String randomTestArName() {
         return RandomStringUtils.secure().nextAlphanumeric(6);
@@ -27,6 +29,6 @@ public class TestRandomUtils {
     }
 
     public static Principal randomPrincipal() {
-        return new Principal(randomUserId(), randomUserName(), randomRole(), randomOrgId());
+        return new Principal(randomUserId(), randomUserName(), ROOT, randomOrgId());
     }
 }
