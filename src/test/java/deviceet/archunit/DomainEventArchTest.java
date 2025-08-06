@@ -9,6 +9,7 @@ import deviceet.common.event.consume.AbstractEventHandler;
 import org.springframework.data.annotation.TypeAlias;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
+import static deviceet.archunit.ArchUnitUtils.haveNoBuilderMethod;
 import static deviceet.archunit.ArchUnitUtils.havePrivateNoArgConstructor;
 
 @AnalyzeClasses(packages = "deviceet.business", importOptions = DoNotIncludeTests.class)
@@ -20,7 +21,7 @@ public class DomainEventArchTest {
             .areAssignableTo(DomainEvent.class)
             .should()
             .resideInAnyPackage("deviceet.business..domain.event..")
-            .because("Domain events belongs domain model, and should have a specific package for it.");
+            .because("Domain events belongs domain model, and should have a specific package for it under domain package.");
 
     @ArchTest
     public static final ArchRule domainEventShouldAnnotatedWithTypeAlias = classes()
@@ -28,14 +29,14 @@ public class DomainEventArchTest {
             .areAssignableTo(DomainEvent.class)
             .should()
             .beAnnotatedWith(TypeAlias.class)
-            .because("In Mongo, @TypeAlias set the type of DomainEvent to some fixed names, rather than using class FQCN which does not survive repackaging.");
+            .because("In Mongo, @TypeAlias sets the type of DomainEvent to some fixed names, rather than using class FQCN which does not survive repackaging.");
 
     @ArchTest
     public static final ArchRule domainEventShouldHaveNoConstructor = classes()
             .that()
             .areAssignableTo(DomainEvent.class)
             .should(havePrivateNoArgConstructor())
-            .because("Private no arg constructors(you can use @NoArgsConstructor(access = PRIVATE)) of domain events are used for Jackson deserialization, but it should not be used to create domain event object because it can easily result in invalid object.");
+            .because("Private no arg constructors(you can use @NoArgsConstructor(access = PRIVATE)) of domain events are used for Jackson deserialization, it should not be used to create domain event objects because otherwise we might end up with invalid domain events.");
 
     @ArchTest
     public static final ArchRule domainEventHandlerLocation = classes()
@@ -44,5 +45,12 @@ public class DomainEventArchTest {
             .should()
             .resideInAnyPackage("deviceet.business..eventhandler..")
             .because("We should gather event handlers together.");
+
+    @ArchTest
+    public static final ArchRule domainEventShouldNotHaveBuilder = classes()
+            .that()
+            .areAssignableTo(DomainEvent.class)
+            .should(haveNoBuilderMethod())
+            .because("Domain event should be created using explict constructors but not builders, otherwise we might end up with invalid domain events.");
 
 }

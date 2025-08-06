@@ -167,6 +167,12 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <!--Newer version of 3.5.3 does not work for ArchUnit -->
+                <version>3.5.2</version>
+            </plugin>
         </plugins>
     </build>
 </project>

@@ -22,4 +22,19 @@ public class ArchUnitUtils {
             }
         };
     }
+
+    public static ArchCondition<JavaClass> haveNoBuilderMethod() {
+        return new ArchCondition<>("have no builder method") {
+            @Override
+            public void check(JavaClass clazz, ConditionEvents events) {
+                boolean hasNoBuilderMethod = clazz.getMethods()
+                        .stream().noneMatch(it -> it.getName().equalsIgnoreCase("builder"));
+                String message = hasNoBuilderMethod
+                        ? String.format("Class %s does not have a builder method.", clazz.getName())
+                        : String.format("Class %s containers a builder method.", clazz.getName());
+
+                events.add(new SimpleConditionEvent(clazz, hasNoBuilderMethod, message));
+            }
+        };
+    }
 }
