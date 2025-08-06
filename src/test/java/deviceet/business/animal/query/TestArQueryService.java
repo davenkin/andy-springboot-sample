@@ -1,6 +1,6 @@
-package deviceet.business.testar.query;
+package deviceet.business.animal.query;
 
-import deviceet.business.testar.domain.TestAr;
+import deviceet.business.animal.domain.TestAr;
 import deviceet.common.model.AggregateRoot;
 import deviceet.common.model.Principal;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-import static deviceet.business.testar.domain.TestAr.TEST_AR_COLLECTION;
+import static deviceet.business.animal.domain.TestAr.TEST_AR_COLLECTION;
 import static deviceet.common.model.Role.ORG_IT_ADMIN;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.springframework.data.mongodb.core.query.Criteria.where;

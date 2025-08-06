@@ -1,6 +1,6 @@
-package deviceet.business.testar.domain.event;
+package deviceet.business.animal.domain.event;
 
-import deviceet.business.testar.domain.TestAr;
+import deviceet.business.animal.domain.TestAr;
 import deviceet.common.event.DomainEvent;
 import deviceet.common.event.DomainEventType;
 import lombok.Getter;

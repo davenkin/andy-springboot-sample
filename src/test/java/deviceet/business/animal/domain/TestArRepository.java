@@ -1,4 +1,4 @@
-package deviceet.business.testar.domain;
+package deviceet.business.animal.domain;
 
 import java.util.List;
 import java.util.Optional;

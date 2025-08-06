@@ -1,9 +1,9 @@
 package deviceet.common.event.publish;
 
 import deviceet.IntegrationTest;
-import deviceet.business.testar.command.CreateTestArCommand;
-import deviceet.business.testar.command.TestArCommandService;
-import deviceet.business.testar.domain.event.TestArCreatedEvent;
+import deviceet.business.animal.command.CreateTestArCommand;
+import deviceet.business.animal.command.TestArCommandService;
+import deviceet.business.animal.domain.event.TestArCreatedEvent;
 import deviceet.common.event.publish.infrastructure.FakeDomainEventSender;
 import deviceet.common.model.Principal;
 import org.junit.jupiter.api.Test;
@@ -37,7 +37,7 @@ class DomainEventPublishJobIntegrationTest extends IntegrationTest {
     private FakeDomainEventSender domainEventSender;
 
     @Test
-    public void should_publish_domain_events() {
+    void should_publish_domain_events() {
         Principal principal = randomPrincipal();
         String arId1 = testArCommandService.createTestAr(CreateTestArCommand.builder().name(randomTestArName()).build(), principal);
         String arId2 = testArCommandService.createTestAr(CreateTestArCommand.builder().name(randomTestArName()).build(), principal);
@@ -68,7 +68,7 @@ class DomainEventPublishJobIntegrationTest extends IntegrationTest {
     }
 
     @Test
-    public void should_fail_publish_domain_events_with_max_of_3_attempts() {
+    void should_fail_publish_domain_events_with_max_of_3_attempts() {
         Principal principal = randomPrincipal();
         String arId = testArCommandService.createTestAr(CreateTestArCommand.builder().name(randomTestArName()).build(), principal);
         TestArCreatedEvent event = latestEventFor(arId, TEST_AR_CREATED_EVENT, TestArCreatedEvent.class);
@@ -97,7 +97,7 @@ class DomainEventPublishJobIntegrationTest extends IntegrationTest {
     }
 
     @Test
-    public void should_publish_successfully_if_sender_recovered() {
+    void should_publish_successfully_if_sender_recovered() {
         Principal principal = randomPrincipal();
         String arId = testArCommandService.createTestAr(CreateTestArCommand.builder().name(randomTestArName()).build(), principal);
         TestArCreatedEvent event = latestEventFor(arId, TEST_AR_CREATED_EVENT, TestArCreatedEvent.class);

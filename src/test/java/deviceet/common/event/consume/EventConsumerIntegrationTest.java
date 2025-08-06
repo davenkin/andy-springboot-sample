@@ -1,15 +1,15 @@
 package deviceet.common.event.consume;
 
 import deviceet.IntegrationTest;
-import deviceet.business.testar.command.CreateTestArCommand;
-import deviceet.business.testar.command.TestArCommandService;
-import deviceet.business.testar.command.UpdateTestArNameCommand;
-import deviceet.business.testar.domain.event.TestArCreatedEvent;
-import deviceet.business.testar.domain.event.TestArNameUpdatedEvent;
-import deviceet.business.testar.eventhandler.TestArCreatedEventHandler;
-import deviceet.business.testar.eventhandler.TestArCreatedEventHandler2;
-import deviceet.business.testar.eventhandler.TestArNameUpdatedEventHandler;
-import deviceet.business.testar.eventhandler.TestArUpdatedEventHandler;
+import deviceet.business.animal.command.CreateTestArCommand;
+import deviceet.business.animal.command.TestArCommandService;
+import deviceet.business.animal.command.UpdateTestArNameCommand;
+import deviceet.business.animal.domain.event.TestArCreatedEvent;
+import deviceet.business.animal.domain.event.TestArNameUpdatedEvent;
+import deviceet.business.animal.eventhandler.TestArCreatedEventHandler;
+import deviceet.business.animal.eventhandler.TestArCreatedEventHandler2;
+import deviceet.business.animal.eventhandler.TestArNameUpdatedEventHandler;
+import deviceet.business.animal.eventhandler.TestArUpdatedEventHandler;
 import deviceet.common.model.Principal;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
@@ -46,7 +46,7 @@ class EventConsumerIntegrationTest extends IntegrationTest {
     private ConsumingEventDao consumingEventDao;
 
     @Test
-    public void should_only_handle_events_that_can_be_handled() {
+    void should_only_handle_events_that_can_be_handled() {
         Principal principal = randomPrincipal();
         String arId = testArCommandService.createTestAr(randomCreateTestArCommand(), principal);
         TestArCreatedEvent createdEvent = latestEventFor(arId, TEST_AR_CREATED_EVENT, TestArCreatedEvent.class);
@@ -60,7 +60,7 @@ class EventConsumerIntegrationTest extends IntegrationTest {
     }
 
     @Test
-    public void should_call_handler_for_event_hierarchy() {
+    void should_call_handler_for_event_hierarchy() {
         Principal principal = randomPrincipal();
         String arId = testArCommandService.createTestAr(randomCreateTestArCommand(), principal);
         testArCommandService.updateTestArName(arId, randomUpdateTestArNameCommand(), principal);
@@ -75,7 +75,7 @@ class EventConsumerIntegrationTest extends IntegrationTest {
     }
 
     @Test
-    public void multiple_handlers_should_run_in_order_of_priority() {
+    void multiple_handlers_should_run_in_order_of_priority() {
         Principal principal = randomPrincipal();
         String arId = testArCommandService.createTestAr(randomCreateTestArCommand(), principal);
         TestArCreatedEvent createdEvent = latestEventFor(arId, TEST_AR_CREATED_EVENT, TestArCreatedEvent.class);
@@ -92,7 +92,7 @@ class EventConsumerIntegrationTest extends IntegrationTest {
     }
 
     @Test
-    public void multiple_handlers_should_run_in_order_of_priority_reversely() {
+    void multiple_handlers_should_run_in_order_of_priority_reversely() {
         Principal principal = randomPrincipal();
         String arId = testArCommandService.createTestAr(randomCreateTestArCommand(), principal);
         TestArCreatedEvent createdEvent = latestEventFor(arId, TEST_AR_CREATED_EVENT, TestArCreatedEvent.class);
@@ -109,7 +109,7 @@ class EventConsumerIntegrationTest extends IntegrationTest {
     }
 
     @Test
-    public void should_mark_as_consumed_if_non_transactional_handler_throws_exception() {
+    void should_mark_as_consumed_if_non_transactional_handler_throws_exception() {
         Principal principal = randomPrincipal();
         String arId = testArCommandService.createTestAr(randomCreateTestArCommand(), principal);
         TestArCreatedEvent createdEvent = latestEventFor(arId, TEST_AR_CREATED_EVENT, TestArCreatedEvent.class);
@@ -124,7 +124,7 @@ class EventConsumerIntegrationTest extends IntegrationTest {
     }
 
     @Test
-    public void should_not_mark_as_consumed_if_transactional_handler_throws_exception() {
+    void should_not_mark_as_consumed_if_transactional_handler_throws_exception() {
         Principal principal = randomPrincipal();
         String arId = testArCommandService.createTestAr(randomCreateTestArCommand(), principal);
         TestArCreatedEvent createdEvent = latestEventFor(arId, TEST_AR_CREATED_EVENT, TestArCreatedEvent.class);
@@ -138,7 +138,7 @@ class EventConsumerIntegrationTest extends IntegrationTest {
     }
 
     @Test
-    public void should_not_mark_as_consumed_for_idempotent_handler() {
+    void should_not_mark_as_consumed_for_idempotent_handler() {
         Principal principal = randomPrincipal();
         String arId = testArCommandService.createTestAr(randomCreateTestArCommand(), principal);
         TestArCreatedEvent createdEvent = latestEventFor(arId, TEST_AR_CREATED_EVENT, TestArCreatedEvent.class);
@@ -153,7 +153,7 @@ class EventConsumerIntegrationTest extends IntegrationTest {
     }
 
     @Test
-    public void multiple_handlers_should_run_independently() {
+    void multiple_handlers_should_run_independently() {
         Principal principal = randomPrincipal();
         String arId = testArCommandService.createTestAr(randomCreateTestArCommand(), principal);
         testArCommandService.updateTestArName(arId, randomUpdateTestArNameCommand(), principal);
@@ -170,7 +170,7 @@ class EventConsumerIntegrationTest extends IntegrationTest {
     }
 
     @Test
-    public void should_run_again_for_idempotent_handler() {
+    void should_run_again_for_idempotent_handler() {
         Principal principal = randomPrincipal();
         String arId = testArCommandService.createTestAr(randomCreateTestArCommand(), principal);
         TestArCreatedEvent createdEvent = latestEventFor(arId, TEST_AR_CREATED_EVENT, TestArCreatedEvent.class);
@@ -183,7 +183,7 @@ class EventConsumerIntegrationTest extends IntegrationTest {
     }
 
     @Test
-    public void should_not_handle_again_for_non_idempotent_handler() {
+    void should_not_handle_again_for_non_idempotent_handler() {
         Principal principal = randomPrincipal();
         String arId = testArCommandService.createTestAr(randomCreateTestArCommand(), principal);
         TestArCreatedEvent createdEvent = latestEventFor(arId, TEST_AR_CREATED_EVENT, TestArCreatedEvent.class);

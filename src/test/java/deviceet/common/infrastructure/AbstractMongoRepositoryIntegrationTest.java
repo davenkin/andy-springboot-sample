@@ -1,11 +1,11 @@
 package deviceet.common.infrastructure;
 
 import deviceet.IntegrationTest;
-import deviceet.business.testar.domain.TestAr;
-import deviceet.business.testar.domain.TestArFactory;
-import deviceet.business.testar.domain.TestArRepository;
-import deviceet.business.testar.domain.event.TestArCreatedEvent;
-import deviceet.business.testar.domain.event.TestArDeletedEvent;
+import deviceet.business.animal.domain.TestAr;
+import deviceet.business.animal.domain.TestArFactory;
+import deviceet.business.animal.domain.TestArRepository;
+import deviceet.business.animal.domain.event.TestArCreatedEvent;
+import deviceet.business.animal.domain.event.TestArDeletedEvent;
 import deviceet.common.exception.ServiceException;
 import deviceet.common.model.Principal;
 import org.junit.jupiter.api.Test;
@@ -31,7 +31,7 @@ class AbstractMongoRepositoryIntegrationTest extends IntegrationTest {
     private TestArRepository testArRepository;
 
     @Test
-    public void should_save_ar() {
+    void should_save_ar() {
         Principal principal = randomPrincipal();
         TestAr testAr = testArFactory.create(randomTestArName(), principal);
         assertEquals(1, testAr.getEvents().size());
@@ -47,7 +47,7 @@ class AbstractMongoRepositoryIntegrationTest extends IntegrationTest {
     }
 
     @Test
-    public void should_save_ars() {
+    void should_save_ars() {
         Principal principal = randomPrincipal();
         TestAr testAr1 = testArFactory.create(randomTestArName(), principal);
         TestAr testAr2 = testArFactory.create(randomTestArName(), principal);
@@ -63,7 +63,7 @@ class AbstractMongoRepositoryIntegrationTest extends IntegrationTest {
     }
 
     @Test
-    public void should_throw_exception_if_not_the_same_org() {
+    void should_throw_exception_if_not_the_same_org() {
         TestAr testAr1 = testArFactory.create(randomTestArName(), randomPrincipal());
         TestAr testAr2 = testArFactory.create(randomTestArName(), randomPrincipal());
 
@@ -72,7 +72,7 @@ class AbstractMongoRepositoryIntegrationTest extends IntegrationTest {
     }
 
     @Test
-    public void should_delete_ar() {
+    void should_delete_ar() {
         Principal principal = randomPrincipal();
         TestAr testAr = testArFactory.create(randomTestArName(), principal);
 
@@ -87,7 +87,7 @@ class AbstractMongoRepositoryIntegrationTest extends IntegrationTest {
     }
 
     @Test
-    public void should_delete_ars() {
+    void should_delete_ars() {
         Principal principal = randomPrincipal();
         TestAr testAr1 = testArFactory.create(randomTestArName(), principal);
         TestAr testAr2 = testArFactory.create(randomTestArName(), principal);
@@ -110,7 +110,7 @@ class AbstractMongoRepositoryIntegrationTest extends IntegrationTest {
     }
 
     @Test
-    public void should_throw_exception_if_not_the_same_org_for_delete() {
+    void should_throw_exception_if_not_the_same_org_for_delete() {
         TestAr testAr1 = testArFactory.create(randomTestArName(), randomPrincipal());
         TestAr testAr2 = testArFactory.create(randomTestArName(), randomPrincipal());
 
@@ -119,7 +119,7 @@ class AbstractMongoRepositoryIntegrationTest extends IntegrationTest {
     }
 
     @Test
-    public void should_fetch_ar_by_id() {
+    void should_fetch_ar_by_id() {
         Principal principal = randomPrincipal();
         TestAr testAr = testArFactory.create(randomTestArName(), principal);
         assertFalse(testArRepository.exists(testAr.getId(), principal.getOrgId()));

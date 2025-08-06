@@ -1,9 +1,9 @@
 package deviceet.common.event;
 
 import deviceet.IntegrationTest;
-import deviceet.business.testar.domain.TestAr;
-import deviceet.business.testar.domain.event.TestArCreatedEvent;
-import deviceet.business.testar.eventhandler.TestArCreatedEventHandler;
+import deviceet.business.animal.domain.TestAr;
+import deviceet.business.animal.domain.event.TestArCreatedEvent;
+import deviceet.business.animal.eventhandler.TestArCreatedEventHandler;
 import deviceet.common.event.consume.ConsumingEvent;
 import deviceet.common.event.consume.ConsumingEventDao;
 import deviceet.common.event.publish.PublishingDomainEventDao;
@@ -34,7 +34,7 @@ class DomainEventHouseKeepingJobIntegrationTest extends IntegrationTest {
     private TestArCreatedEventHandler testArCreatedEventHandler;
 
     @Test
-    public void should_remove_old_publishing_domain_events_from_mongo() {
+    void should_remove_old_publishing_domain_events_from_mongo() {
         Principal principal = randomPrincipal();
         TestArCreatedEvent event1 = new TestArCreatedEvent(new TestAr(randomTestArName(), principal));
         TestArCreatedEvent event2 = new TestArCreatedEvent(new TestAr(randomTestArName(), principal));
@@ -51,7 +51,7 @@ class DomainEventHouseKeepingJobIntegrationTest extends IntegrationTest {
     }
 
     @Test
-    public void should_remove_old_consuming_domain_events_from_mongo() {
+    void should_remove_old_consuming_domain_events_from_mongo() {
         Principal principal = randomPrincipal();
         TestArCreatedEvent event1 = new TestArCreatedEvent(new TestAr(randomTestArName(), principal));
         TestArCreatedEvent event2 = new TestArCreatedEvent(new TestAr(randomTestArName(), principal));

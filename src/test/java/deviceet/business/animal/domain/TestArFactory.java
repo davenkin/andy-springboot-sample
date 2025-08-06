@@ -1,4 +1,4 @@
-package deviceet.business.testar.domain;
+package deviceet.business.animal.domain;
 
 import deviceet.common.model.Principal;
 import lombok.RequiredArgsConstructor;

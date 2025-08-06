@@ -1,6 +1,5 @@
-package deviceet;
+package deviceet.business.animal.job;
 
-import deviceet.business.testar.job.TestArJob;
 import deviceet.common.configuration.profile.DisableForIT;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,12 +16,12 @@ import org.springframework.scheduling.annotation.Scheduled;
 @RequiredArgsConstructor
 @Configuration(proxyBeanMethods = false)
 @EnableSchedulerLock(defaultLockAtMostFor = "60m", defaultLockAtLeastFor = "10s")
-public class TestSampleSchedulingConfiguration {
-    private final TestArJob testArJob;
+public class AnimalSchedulingConfiguration {
+    private final DeleteAnimalJob deleteAnimalJob;
 
     @Scheduled(cron = "0 10 2 1 * ?")
-    @SchedulerLock(name = "removeAllTestArs", lockAtMostFor = "60m", lockAtLeastFor = "1m")
-    public void deleteAllTestArs() {
-        this.testArJob.deleteAllTestArs();
+    @SchedulerLock(name = "deleteAllAnimals", lockAtMostFor = "60m", lockAtLeastFor = "1m")
+    public void deleteAllAnimals() {
+        this.deleteAnimalJob.deleteAllAnimals();
     }
 }

@@ -1,4 +1,4 @@
-package deviceet.business.testar.command;
+package deviceet.business.animal.command;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
