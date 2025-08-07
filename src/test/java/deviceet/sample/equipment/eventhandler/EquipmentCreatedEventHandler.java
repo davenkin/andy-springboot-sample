@@ -13,5 +13,6 @@ public class EquipmentCreatedEventHandler extends AbstractEventHandler<Equipment
     @Override
     public void handle(EquipmentCreatedEvent event) {
         log.info("{} called for Equipment[{}].", this.getClass().getSimpleName(), event.getArId());
+        // todo: evict all equipment cache
     }
 }

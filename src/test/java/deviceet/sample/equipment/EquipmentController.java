@@ -1,5 +1,6 @@
 package deviceet.sample.equipment;
 
+import deviceet.common.model.Principal;
 import deviceet.common.utils.ResponseId;
 import deviceet.sample.equipment.command.CreateEquipmentCommand;
 import deviceet.sample.equipment.command.EquipmentCommandService;
@@ -28,19 +29,25 @@ public class EquipmentController {
 
     @PostMapping
     public ResponseId createEquipment(@RequestBody @Valid CreateEquipmentCommand command) {
-        return new ResponseId(this.equipmentCommandService.createEquipment(command, TEST_PRINCIPAL));
+        // In real situations, principal is normally created from the current user in context, such as Spring Security's SecurityContextHolder
+        Principal principal = TEST_PRINCIPAL;
+        return new ResponseId(this.equipmentCommandService.createEquipment(command, principal));
     }
 
     @PutMapping(value = "/{equipmentId}/name")
     public void updateEquipmentName(@PathVariable("equipmentId") @NotBlank String equipmentId,
                                     @RequestBody @Valid UpdateEquipmentNameCommand updateEquipmentNameCommand) {
-        this.equipmentCommandService.updateEquipmentName(equipmentId, updateEquipmentNameCommand, TEST_PRINCIPAL);
+        // In real situations, principal is normally created from the current user in context, such as Spring Security's SecurityContextHolder
+        Principal principal = TEST_PRINCIPAL;
+        this.equipmentCommandService.updateEquipmentName(equipmentId, updateEquipmentNameCommand, principal);
     }
 
     @PostMapping("/list")
     public Page<QListedEquipment> listEquipments(@RequestBody @Valid ListEquipmentQuery query,
                                                  @PageableDefault Pageable pageable) {
-        return this.equipmentQueryService.listEquipments(query, pageable, TEST_PRINCIPAL);
+        // In real situations, principal is normally created from the current user in context, such as Spring Security's SecurityContextHolder
+        Principal principal = TEST_PRINCIPAL;
+        return this.equipmentQueryService.listEquipments(query, pageable, principal);
     }
 
 }

@@ -26,12 +26,15 @@ public class EquipmentQueryService {
     public Page<QListedEquipment> listEquipments(ListEquipmentQuery listEquipmentQuery, Pageable pageable, Principal principal) {
 
         Criteria criteria = where(AggregateRoot.Fields.orgId).is(principal.getOrgId());
+
         if (isNotBlank(listEquipmentQuery.search())) {
             criteria.and(Equipment.Fields.name).regex(listEquipmentQuery.search());
         }
+
         Query query = Query.query(criteria);
         query.fields().include(AggregateRoot.Fields.orgId,
                 Equipment.Fields.name,
+                Equipment.Fields.maintenanceStatus,
                 AggregateRoot.Fields.createdAt,
                 AggregateRoot.Fields.createdBy);
 

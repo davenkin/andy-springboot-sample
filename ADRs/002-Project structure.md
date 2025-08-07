@@ -67,7 +67,10 @@ The `1` in `(class:1)` indicates there can be only one class under a top level p
         - `XxxMongoRepository`(class:N): The repository implementations, should end with "MongoRepository" for MongoDB.
     - `job`(folder:1):Contains background jobs that are related to the aggregate root.
         - XxxScheduler(class:N): Scheduling configuration, should end with "Scheduler"
-        - XxxJob(class:N): Represents a background job, should end with "Job".
+        - XxxJob(class:N): Represents a background job, should end with "Job". A job might run multiple tasks.
+        - `task`(folder:1): Contains tasks.
+            - `XxxTask`(class:N): A task represents a standalone single operation, should end with "Task". Tasks are
+              usually called from jobs and event handlers.
     - `query`(folder:1): For querying data, "query" represents the "Q"
       in [CQRS](https://microservices.io/patterns/data/cqrs.html).
         - `XxxQueryService`(class:N): The

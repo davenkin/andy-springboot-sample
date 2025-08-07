@@ -5,6 +5,7 @@ import deviceet.common.model.Principal;
 import deviceet.sample.equipment.domain.event.EquipmentCreatedEvent;
 import deviceet.sample.equipment.domain.event.EquipmentDeletedEvent;
 import deviceet.sample.equipment.domain.event.EquipmentNameUpdatedEvent;
+import deviceet.sample.maintenance.MaintenanceStatus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
@@ -25,6 +26,7 @@ import static lombok.AccessLevel.PRIVATE;
 public class Equipment extends AggregateRoot {
     public final static String EQUIPMENT_COLLECTION = "equipment";
     private String name;
+    private MaintenanceStatus maintenanceStatus;
 
     public Equipment(String name, Principal principal) {
         super(newEquipmentId(), principal);
