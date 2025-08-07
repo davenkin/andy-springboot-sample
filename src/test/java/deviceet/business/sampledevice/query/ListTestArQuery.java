@@ -1,4 +1,4 @@
-package deviceet.business.animal.query;
+package deviceet.business.sampledevice.query;
 
 import lombok.Builder;
 

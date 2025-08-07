@@ -1,8 +1,8 @@
-package deviceet.business.animal.domain;
+package deviceet.business.sampledevice.domain;
 
-import deviceet.business.animal.domain.event.TestArCreatedEvent;
-import deviceet.business.animal.domain.event.TestArDeletedEvent;
-import deviceet.business.animal.domain.event.TestArNameUpdatedEvent;
+import deviceet.business.sampledevice.domain.event.TestArCreatedEvent;
+import deviceet.business.sampledevice.domain.event.TestArDeletedEvent;
+import deviceet.business.sampledevice.domain.event.TestArNameUpdatedEvent;
 import deviceet.common.model.AggregateRoot;
 import deviceet.common.model.Principal;
 import lombok.Getter;
@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import static deviceet.business.animal.domain.TestAr.TEST_AR_COLLECTION;
+import static deviceet.business.sampledevice.domain.TestAr.TEST_AR_COLLECTION;
 import static deviceet.common.utils.SnowflakeIdGenerator.newSnowflakeId;
 import static lombok.AccessLevel.PRIVATE;
 

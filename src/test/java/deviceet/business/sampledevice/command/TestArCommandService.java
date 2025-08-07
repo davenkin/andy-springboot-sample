@@ -1,8 +1,8 @@
-package deviceet.business.animal.command;
+package deviceet.business.sampledevice.command;
 
-import deviceet.business.animal.domain.TestAr;
-import deviceet.business.animal.domain.TestArFactory;
-import deviceet.business.animal.domain.TestArRepository;
+import deviceet.business.sampledevice.domain.TestAr;
+import deviceet.business.sampledevice.domain.TestArFactory;
+import deviceet.business.sampledevice.domain.TestArRepository;
 import deviceet.common.model.Principal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,8 +30,6 @@ public class TestArCommandService {
 
     @Transactional
     public void updateTestArName(String id, UpdateTestArNameCommand command, Principal principal) {
-        principal.checkRole(ORG_IT_ADMIN);
-
         TestAr testAr = testArRepository.byId(id, principal.getOrgId());
         testAr.updateName(command.name());
         testArRepository.save(testAr);

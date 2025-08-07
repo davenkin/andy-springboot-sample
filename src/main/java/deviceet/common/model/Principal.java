@@ -34,11 +34,7 @@ public class Principal {
         this.orgId = orgId;
         this.userId = userId;
         this.userName = userName;
-        this.roles = role.effectiveRoles();
-    }
-
-    public boolean isRoot() {
-        return this.roles.contains(ROOT);
+        this.roles = Set.of(role);
     }
 
     public boolean hasRole(Role role) {

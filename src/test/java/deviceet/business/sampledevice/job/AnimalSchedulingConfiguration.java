@@ -1,4 +1,4 @@
-package deviceet.business.animal.job;
+package deviceet.business.sampledevice.job;
 
 import deviceet.common.configuration.profile.DisableForIT;
 import lombok.RequiredArgsConstructor;

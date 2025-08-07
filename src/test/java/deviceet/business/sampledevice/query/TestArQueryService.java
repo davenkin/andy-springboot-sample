@@ -1,6 +1,6 @@
-package deviceet.business.animal.query;
+package deviceet.business.sampledevice.query;
 
-import deviceet.business.animal.domain.TestAr;
+import deviceet.business.sampledevice.domain.TestAr;
 import deviceet.common.model.AggregateRoot;
 import deviceet.common.model.Principal;
 import lombok.RequiredArgsConstructor;
@@ -14,8 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-import static deviceet.business.animal.domain.TestAr.TEST_AR_COLLECTION;
-import static deviceet.common.model.Role.ORG_IT_ADMIN;
+import static deviceet.business.sampledevice.domain.TestAr.TEST_AR_COLLECTION;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
@@ -25,7 +24,6 @@ public class TestArQueryService {
     private final MongoTemplate mongoTemplate;
 
     public Page<QListedTestAr> listTestArs(ListTestArQuery listTestArQuery, Pageable pageable, Principal principal) {
-        principal.checkRole(ORG_IT_ADMIN);
 
         Criteria criteria = where(AggregateRoot.Fields.orgId).is(principal.getOrgId());
         if (isNotBlank(listTestArQuery.search())) {

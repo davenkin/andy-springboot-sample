@@ -1,6 +1,6 @@
-package deviceet.business.animal.job.task;
+package deviceet.business.sampledevice.job.task;
 
-import deviceet.business.animal.domain.TestAr;
+import deviceet.business.sampledevice.domain.TestAr;
 import lombok.AllArgsConstructor;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;

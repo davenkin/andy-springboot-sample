@@ -1,6 +1,6 @@
-package deviceet.business.animal.eventhandler;
+package deviceet.business.sampledevice.eventhandler;
 
-import deviceet.business.animal.domain.event.TestArCreatedEvent;
+import deviceet.business.sampledevice.domain.event.TestArCreatedEvent;
 import deviceet.common.event.consume.AbstractEventHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,6 +1,6 @@
-package deviceet.business.animal.job;
+package deviceet.business.sampledevice.job;
 
-import deviceet.business.animal.job.task.DeleteAllAnimalsTask;
+import deviceet.business.sampledevice.job.task.DeleteAllAnimalsTask;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

@@ -1,7 +1,7 @@
-package deviceet.business.animal.infrastructure;
+package deviceet.business.sampledevice.infrastructure;
 
-import deviceet.business.animal.domain.TestAr;
-import deviceet.business.animal.domain.TestArRepository;
+import deviceet.business.sampledevice.domain.TestAr;
+import deviceet.business.sampledevice.domain.TestArRepository;
 import deviceet.common.infrastructure.AbstractMongoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

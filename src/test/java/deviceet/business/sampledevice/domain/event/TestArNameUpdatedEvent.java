@@ -1,6 +1,6 @@
-package deviceet.business.animal.domain.event;
+package deviceet.business.sampledevice.domain.event;
 
-import deviceet.business.animal.domain.TestAr;
+import deviceet.business.sampledevice.domain.TestAr;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.TypeAlias;

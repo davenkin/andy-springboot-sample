@@ -1,11 +1,11 @@
 package deviceet.common.infrastructure;
 
 import deviceet.IntegrationTest;
-import deviceet.business.animal.domain.TestAr;
-import deviceet.business.animal.domain.TestArFactory;
-import deviceet.business.animal.domain.TestArRepository;
-import deviceet.business.animal.domain.event.TestArCreatedEvent;
-import deviceet.business.animal.domain.event.TestArDeletedEvent;
+import deviceet.business.sampledevice.domain.TestAr;
+import deviceet.business.sampledevice.domain.TestArFactory;
+import deviceet.business.sampledevice.domain.TestArRepository;
+import deviceet.business.sampledevice.domain.event.TestArCreatedEvent;
+import deviceet.business.sampledevice.domain.event.TestArDeletedEvent;
 import deviceet.common.exception.ServiceException;
 import deviceet.common.model.Principal;
 import org.junit.jupiter.api.Test;

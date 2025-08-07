@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-import static deviceet.common.model.Role.ORG_IT_ADMIN;
 import static deviceet.common.utils.Constants.DEVICE_COLLECTION;
 
 @Component
@@ -23,8 +22,6 @@ public class DeviceQueryService {
     private final MongoTemplate mongoTemplate;
 
     public Page<QListedDevice> listDevices(ListDeviceQuery listDeviceQuery, Pageable pageable, Principal principal) {
-        principal.checkRole(ORG_IT_ADMIN);
-
         Criteria criteria = Criteria.where(AggregateRoot.Fields.orgId).is(principal.getOrgId());
         if (listDeviceQuery.cpuArchitecture() != null) {
             criteria.and(Device.Fields.cpuArchitecture).is(listDeviceQuery.cpuArchitecture());

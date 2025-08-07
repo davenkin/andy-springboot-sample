@@ -1,9 +1,9 @@
 package deviceet.common.event.publish;
 
 import deviceet.IntegrationTest;
-import deviceet.business.animal.command.CreateTestArCommand;
-import deviceet.business.animal.command.TestArCommandService;
-import deviceet.business.animal.domain.event.TestArCreatedEvent;
+import deviceet.business.sampledevice.command.CreateTestArCommand;
+import deviceet.business.sampledevice.command.TestArCommandService;
+import deviceet.business.sampledevice.domain.event.TestArCreatedEvent;
 import deviceet.common.event.publish.infrastructure.FakeDomainEventSender;
 import deviceet.common.model.Principal;
 import org.junit.jupiter.api.Test;

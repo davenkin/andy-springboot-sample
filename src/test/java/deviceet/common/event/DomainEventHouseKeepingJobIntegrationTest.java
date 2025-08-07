@@ -1,9 +1,9 @@
 package deviceet.common.event;
 
 import deviceet.IntegrationTest;
-import deviceet.business.animal.domain.TestAr;
-import deviceet.business.animal.domain.event.TestArCreatedEvent;
-import deviceet.business.animal.eventhandler.TestArCreatedEventHandler;
+import deviceet.business.sampledevice.domain.TestAr;
+import deviceet.business.sampledevice.domain.event.TestArCreatedEvent;
+import deviceet.business.sampledevice.eventhandler.TestArCreatedEventHandler;
 import deviceet.common.event.consume.ConsumingEvent;
 import deviceet.common.event.consume.ConsumingEventDao;
 import deviceet.common.event.publish.PublishingDomainEventDao;

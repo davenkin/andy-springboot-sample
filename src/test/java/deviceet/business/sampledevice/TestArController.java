@@ -1,11 +1,11 @@
-package deviceet.business.animal;
+package deviceet.business.sampledevice;
 
-import deviceet.business.animal.command.CreateTestArCommand;
-import deviceet.business.animal.command.TestArCommandService;
-import deviceet.business.animal.command.UpdateTestArNameCommand;
-import deviceet.business.animal.query.ListTestArQuery;
-import deviceet.business.animal.query.QListedTestAr;
-import deviceet.business.animal.query.TestArQueryService;
+import deviceet.business.sampledevice.command.CreateTestArCommand;
+import deviceet.business.sampledevice.command.TestArCommandService;
+import deviceet.business.sampledevice.command.UpdateTestArNameCommand;
+import deviceet.business.sampledevice.query.ListTestArQuery;
+import deviceet.business.sampledevice.query.QListedTestAr;
+import deviceet.business.sampledevice.query.TestArQueryService;
 import deviceet.common.model.Principal;
 import deviceet.common.utils.ResponseId;
 import jakarta.validation.Valid;

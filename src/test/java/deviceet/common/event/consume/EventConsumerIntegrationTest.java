@@ -1,15 +1,15 @@
 package deviceet.common.event.consume;
 
 import deviceet.IntegrationTest;
-import deviceet.business.animal.command.CreateTestArCommand;
-import deviceet.business.animal.command.TestArCommandService;
-import deviceet.business.animal.command.UpdateTestArNameCommand;
-import deviceet.business.animal.domain.event.TestArCreatedEvent;
-import deviceet.business.animal.domain.event.TestArNameUpdatedEvent;
-import deviceet.business.animal.eventhandler.TestArCreatedEventHandler;
-import deviceet.business.animal.eventhandler.TestArCreatedEventHandler2;
-import deviceet.business.animal.eventhandler.TestArNameUpdatedEventHandler;
-import deviceet.business.animal.eventhandler.TestArUpdatedEventHandler;
+import deviceet.business.sampledevice.command.CreateTestArCommand;
+import deviceet.business.sampledevice.command.TestArCommandService;
+import deviceet.business.sampledevice.command.UpdateTestArNameCommand;
+import deviceet.business.sampledevice.domain.event.TestArCreatedEvent;
+import deviceet.business.sampledevice.domain.event.TestArNameUpdatedEvent;
+import deviceet.business.sampledevice.eventhandler.TestArCreatedEventHandler;
+import deviceet.business.sampledevice.eventhandler.TestArCreatedEventHandler2;
+import deviceet.business.sampledevice.eventhandler.TestArNameUpdatedEventHandler;
+import deviceet.business.sampledevice.eventhandler.TestArUpdatedEventHandler;
 import deviceet.common.model.Principal;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
