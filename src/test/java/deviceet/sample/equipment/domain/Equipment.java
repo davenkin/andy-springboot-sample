@@ -13,20 +13,20 @@ import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import static deviceet.common.utils.SnowflakeIdGenerator.newSnowflakeId;
-import static deviceet.sample.equipment.domain.TestAr.TEST_AR_COLLECTION;
+import static deviceet.sample.equipment.domain.Equipment.EQUIPMENT_COLLECTION;
 import static lombok.AccessLevel.PRIVATE;
 
 @Slf4j
 @Getter
 @FieldNameConstants
-@TypeAlias(TEST_AR_COLLECTION)
-@Document(TEST_AR_COLLECTION)
+@TypeAlias(EQUIPMENT_COLLECTION)
+@Document(EQUIPMENT_COLLECTION)
 @NoArgsConstructor(access = PRIVATE)
-public class TestAr extends AggregateRoot {
-    public final static String TEST_AR_COLLECTION = "TEST_AR_COLLECTION";
+public class Equipment extends AggregateRoot {
+    public final static String EQUIPMENT_COLLECTION = "equipment";
     private String name;
 
-    public TestAr(String name, Principal principal) {
+    public Equipment(String name, Principal principal) {
         super(newTestArId(), principal);
         this.name = name;
         raiseEvent(new TestArCreatedEvent(this));

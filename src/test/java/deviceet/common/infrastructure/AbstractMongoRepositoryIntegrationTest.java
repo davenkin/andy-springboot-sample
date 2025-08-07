@@ -3,9 +3,9 @@ package deviceet.common.infrastructure;
 import deviceet.IntegrationTest;
 import deviceet.common.exception.ServiceException;
 import deviceet.common.model.Principal;
-import deviceet.sample.equipment.domain.TestAr;
-import deviceet.sample.equipment.domain.TestArFactory;
-import deviceet.sample.equipment.domain.TestArRepository;
+import deviceet.sample.equipment.domain.Equipment;
+import deviceet.sample.equipment.domain.EquipmentFactory;
+import deviceet.sample.equipment.domain.EquipmentRepository;
 import deviceet.sample.equipment.domain.event.TestArCreatedEvent;
 import deviceet.sample.equipment.domain.event.TestArDeletedEvent;
 import org.junit.jupiter.api.Test;
@@ -25,118 +25,118 @@ import static org.junit.jupiter.api.Assertions.*;
 class AbstractMongoRepositoryIntegrationTest extends IntegrationTest {
 
     @Autowired
-    private TestArFactory testArFactory;
+    private EquipmentFactory equipmentFactory;
 
     @Autowired
-    private TestArRepository testArRepository;
+    private EquipmentRepository equipmentRepository;
 
     @Test
     void should_save_ar() {
         Principal principal = randomPrincipal();
-        TestAr testAr = testArFactory.create(randomEquipmentName(), principal);
-        assertEquals(1, testAr.getEvents().size());
-        assertInstanceOf(TestArCreatedEvent.class, testAr.getEvents().get(0));
-        testArRepository.save(testAr);
+        Equipment equipment = equipmentFactory.create(randomEquipmentName(), principal);
+        assertEquals(1, equipment.getEvents().size());
+        assertInstanceOf(TestArCreatedEvent.class, equipment.getEvents().get(0));
+        equipmentRepository.save(equipment);
 
-        assertNull(testAr.getEvents());
+        assertNull(equipment.getEvents());
 
-        TestArCreatedEvent createdEvent = latestEventFor(testAr.getId(), TEST_AR_CREATED_EVENT, TestArCreatedEvent.class);
-        assertEquals(testAr.getId(), createdEvent.getTestArId());
-        TestAr dbAr = testArRepository.byIdOptional(testAr.getId()).get();
+        TestArCreatedEvent createdEvent = latestEventFor(equipment.getId(), TEST_AR_CREATED_EVENT, TestArCreatedEvent.class);
+        assertEquals(equipment.getId(), createdEvent.getTestArId());
+        Equipment dbAr = equipmentRepository.byIdOptional(equipment.getId()).get();
         assertNull(dbAr.getEvents());
     }
 
     @Test
     void should_save_ars() {
         Principal principal = randomPrincipal();
-        TestAr testAr1 = testArFactory.create(randomEquipmentName(), principal);
-        TestAr testAr2 = testArFactory.create(randomEquipmentName(), principal);
+        Equipment equipment1 = equipmentFactory.create(randomEquipmentName(), principal);
+        Equipment equipment2 = equipmentFactory.create(randomEquipmentName(), principal);
 
-        testArRepository.save(List.of(testAr1, testAr2));
+        equipmentRepository.save(List.of(equipment1, equipment2));
 
-        assertTrue(testArRepository.byIdOptional(testAr1.getId()).isPresent());
-        assertTrue(testArRepository.byIdOptional(testAr2.getId()).isPresent());
-        TestArCreatedEvent createdEvent1 = latestEventFor(testAr1.getId(), TEST_AR_CREATED_EVENT, TestArCreatedEvent.class);
-        assertEquals(testAr1.getId(), createdEvent1.getTestArId());
-        TestArCreatedEvent createdEvent2 = latestEventFor(testAr2.getId(), TEST_AR_CREATED_EVENT, TestArCreatedEvent.class);
-        assertEquals(testAr2.getId(), createdEvent2.getTestArId());
+        assertTrue(equipmentRepository.byIdOptional(equipment1.getId()).isPresent());
+        assertTrue(equipmentRepository.byIdOptional(equipment2.getId()).isPresent());
+        TestArCreatedEvent createdEvent1 = latestEventFor(equipment1.getId(), TEST_AR_CREATED_EVENT, TestArCreatedEvent.class);
+        assertEquals(equipment1.getId(), createdEvent1.getTestArId());
+        TestArCreatedEvent createdEvent2 = latestEventFor(equipment2.getId(), TEST_AR_CREATED_EVENT, TestArCreatedEvent.class);
+        assertEquals(equipment2.getId(), createdEvent2.getTestArId());
     }
 
     @Test
     void should_throw_exception_if_not_the_same_org() {
-        TestAr testAr1 = testArFactory.create(randomEquipmentName(), randomPrincipal());
-        TestAr testAr2 = testArFactory.create(randomEquipmentName(), randomPrincipal());
+        Equipment equipment1 = equipmentFactory.create(randomEquipmentName(), randomPrincipal());
+        Equipment equipment2 = equipmentFactory.create(randomEquipmentName(), randomPrincipal());
 
-        ServiceException exception = assertThrows(ServiceException.class, () -> testArRepository.save(List.of(testAr1, testAr2)));
+        ServiceException exception = assertThrows(ServiceException.class, () -> equipmentRepository.save(List.of(equipment1, equipment2)));
         assertEquals(NOT_SAME_ORG, exception.getCode());
     }
 
     @Test
     void should_delete_ar() {
         Principal principal = randomPrincipal();
-        TestAr testAr = testArFactory.create(randomEquipmentName(), principal);
+        Equipment equipment = equipmentFactory.create(randomEquipmentName(), principal);
 
-        testArRepository.save(testAr);
-        assertTrue(testArRepository.byIdOptional(testAr.getId()).isPresent());
+        equipmentRepository.save(equipment);
+        assertTrue(equipmentRepository.byIdOptional(equipment.getId()).isPresent());
 
-        testArRepository.delete(testAr);
-        assertNull(testAr.getEvents());
-        assertFalse(testArRepository.byIdOptional(testAr.getId()).isPresent());
-        TestArDeletedEvent deletedEvent = latestEventFor(testAr.getId(), TEST_AR_DELETED_EVENT, TestArDeletedEvent.class);
-        assertEquals(testAr.getId(), deletedEvent.getTestArId());
+        equipmentRepository.delete(equipment);
+        assertNull(equipment.getEvents());
+        assertFalse(equipmentRepository.byIdOptional(equipment.getId()).isPresent());
+        TestArDeletedEvent deletedEvent = latestEventFor(equipment.getId(), TEST_AR_DELETED_EVENT, TestArDeletedEvent.class);
+        assertEquals(equipment.getId(), deletedEvent.getTestArId());
     }
 
     @Test
     void should_delete_ars() {
         Principal principal = randomPrincipal();
-        TestAr testAr1 = testArFactory.create(randomEquipmentName(), principal);
-        TestAr testAr2 = testArFactory.create(randomEquipmentName(), principal);
+        Equipment equipment1 = equipmentFactory.create(randomEquipmentName(), principal);
+        Equipment equipment2 = equipmentFactory.create(randomEquipmentName(), principal);
 
-        testArRepository.save(List.of(testAr1, testAr2));
+        equipmentRepository.save(List.of(equipment1, equipment2));
 
-        assertTrue(testArRepository.byIdOptional(testAr1.getId()).isPresent());
-        assertTrue(testArRepository.byIdOptional(testAr2.getId()).isPresent());
+        assertTrue(equipmentRepository.byIdOptional(equipment1.getId()).isPresent());
+        assertTrue(equipmentRepository.byIdOptional(equipment2.getId()).isPresent());
 
-        testArRepository.delete(List.of(testAr1, testAr2));
-        assertNull(testAr1.getEvents());
-        assertNull(testAr2.getEvents());
-        assertFalse(testArRepository.byIdOptional(testAr1.getId()).isPresent());
-        assertFalse(testArRepository.byIdOptional(testAr2.getId()).isPresent());
+        equipmentRepository.delete(List.of(equipment1, equipment2));
+        assertNull(equipment1.getEvents());
+        assertNull(equipment2.getEvents());
+        assertFalse(equipmentRepository.byIdOptional(equipment1.getId()).isPresent());
+        assertFalse(equipmentRepository.byIdOptional(equipment2.getId()).isPresent());
 
-        TestArDeletedEvent deletedEvent1 = latestEventFor(testAr1.getId(), TEST_AR_DELETED_EVENT, TestArDeletedEvent.class);
-        assertEquals(testAr1.getId(), deletedEvent1.getTestArId());
-        TestArDeletedEvent deletedEvent2 = latestEventFor(testAr2.getId(), TEST_AR_DELETED_EVENT, TestArDeletedEvent.class);
-        assertEquals(testAr2.getId(), deletedEvent2.getTestArId());
+        TestArDeletedEvent deletedEvent1 = latestEventFor(equipment1.getId(), TEST_AR_DELETED_EVENT, TestArDeletedEvent.class);
+        assertEquals(equipment1.getId(), deletedEvent1.getTestArId());
+        TestArDeletedEvent deletedEvent2 = latestEventFor(equipment2.getId(), TEST_AR_DELETED_EVENT, TestArDeletedEvent.class);
+        assertEquals(equipment2.getId(), deletedEvent2.getTestArId());
     }
 
     @Test
     void should_throw_exception_if_not_the_same_org_for_delete() {
-        TestAr testAr1 = testArFactory.create(randomEquipmentName(), randomPrincipal());
-        TestAr testAr2 = testArFactory.create(randomEquipmentName(), randomPrincipal());
+        Equipment equipment1 = equipmentFactory.create(randomEquipmentName(), randomPrincipal());
+        Equipment equipment2 = equipmentFactory.create(randomEquipmentName(), randomPrincipal());
 
-        ServiceException exception = assertThrows(ServiceException.class, () -> testArRepository.delete(List.of(testAr1, testAr2)));
+        ServiceException exception = assertThrows(ServiceException.class, () -> equipmentRepository.delete(List.of(equipment1, equipment2)));
         assertEquals(NOT_SAME_ORG, exception.getCode());
     }
 
     @Test
     void should_fetch_ar_by_id() {
         Principal principal = randomPrincipal();
-        TestAr testAr = testArFactory.create(randomEquipmentName(), principal);
-        assertFalse(testArRepository.exists(testAr.getId(), principal.getOrgId()));
+        Equipment equipment = equipmentFactory.create(randomEquipmentName(), principal);
+        assertFalse(equipmentRepository.exists(equipment.getId(), principal.getOrgId()));
 
-        testArRepository.save(testAr);
+        equipmentRepository.save(equipment);
 
-        assertEquals(testAr.getId(), testArRepository.byId(testAr.getId()).getId());
-        assertEquals(testAr.getId(), testArRepository.byId(testAr.getId(), principal.getOrgId()).getId());
-        assertEquals(testAr.getId(), testArRepository.byIdOptional(testAr.getId(), principal.getOrgId()).get().getId());
-        assertEquals(testAr.getId(), testArRepository.byIdOptional(testAr.getId()).get().getId());
-        assertTrue(testArRepository.exists(testAr.getId(), principal.getOrgId()));
+        assertEquals(equipment.getId(), equipmentRepository.byId(equipment.getId()).getId());
+        assertEquals(equipment.getId(), equipmentRepository.byId(equipment.getId(), principal.getOrgId()).getId());
+        assertEquals(equipment.getId(), equipmentRepository.byIdOptional(equipment.getId(), principal.getOrgId()).get().getId());
+        assertEquals(equipment.getId(), equipmentRepository.byIdOptional(equipment.getId()).get().getId());
+        assertTrue(equipmentRepository.exists(equipment.getId(), principal.getOrgId()));
 
-        assertEquals(AR_NOT_FOUND, assertThrows(ServiceException.class, () -> testArRepository.byId(secure().nextAlphanumeric(5), secure().nextAlphanumeric(5))).getCode());
-        assertEquals(AR_NOT_FOUND, assertThrows(ServiceException.class, () -> testArRepository.byId(secure().nextAlphanumeric(5))).getCode());
+        assertEquals(AR_NOT_FOUND, assertThrows(ServiceException.class, () -> equipmentRepository.byId(secure().nextAlphanumeric(5), secure().nextAlphanumeric(5))).getCode());
+        assertEquals(AR_NOT_FOUND, assertThrows(ServiceException.class, () -> equipmentRepository.byId(secure().nextAlphanumeric(5))).getCode());
 
-        assertFalse(testArRepository.byIdOptional(secure().nextAlphanumeric(5)).isPresent());
-        assertFalse(testArRepository.byIdOptional(secure().nextAlphanumeric(5), secure().nextAlphanumeric(5)).isPresent());
+        assertFalse(equipmentRepository.byIdOptional(secure().nextAlphanumeric(5)).isPresent());
+        assertFalse(equipmentRepository.byIdOptional(secure().nextAlphanumeric(5), secure().nextAlphanumeric(5)).isPresent());
     }
 
 }

@@ -1,6 +1,6 @@
 package deviceet.sample.equipment.domain.event;
 
-import deviceet.sample.equipment.domain.TestAr;
+import deviceet.sample.equipment.domain.Equipment;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.TypeAlias;
@@ -14,7 +14,7 @@ import static lombok.AccessLevel.PRIVATE;
 public class TestArNameUpdatedEvent extends TestArUpdatedEvent {
     private String updatedName;
 
-    public TestArNameUpdatedEvent(String updatedName, TestAr ar) {
+    public TestArNameUpdatedEvent(String updatedName, Equipment ar) {
         super(TEST_AR_NAME_UPDATED_EVENT, ar);
         this.updatedName = updatedName;
     }

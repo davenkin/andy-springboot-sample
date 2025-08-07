@@ -22,7 +22,7 @@ public class TestUtils {
     }
 
     public static String randomUserName() {
-        return RandomStringUtils.secure().nextAlphanumeric(10);
+        return RandomStringUtils.secure().nextAlphanumeric(5) + ":User";
     }
 
     public static String randomOrgId() {

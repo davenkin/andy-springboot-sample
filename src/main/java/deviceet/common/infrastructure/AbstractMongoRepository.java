@@ -130,25 +130,22 @@ public abstract class AbstractMongoRepository<AR extends AggregateRoot> {
     }
 
     public AR byId(String id, String orgId) {
-        requireNonBlank(orgId, "orgId must not be blank.");
         requireNonBlank(id, arType() + " ID must not be blank.");
-        Query query = query(where(AggregateRoot.Fields.orgId).is(orgId).and(MONGO_ID).is(id));
-
-        Object ar = mongoTemplate.findOne(query, arClass);
-        if (ar == null) {
-            throw new ServiceException(AR_NOT_FOUND, arType() + " not found.",
-                    mapOf("type", arType(), "id", id, "orgId", orgId));
+        requireNonBlank(orgId, "orgId must not be blank.");
+        AR ar = this.byId(id);
+        if (Objects.equals(ar.getOrgId(), orgId)) {
+            return ar;
         }
-        return (AR) ar;
+        throw new ServiceException(AR_NOT_FOUND, arType() + " not found.",
+                mapOf("type", arType(), "id", id, "orgId", orgId));
     }
 
     public Optional<AR> byIdOptional(String id, String orgId) {
         requireNonBlank(orgId, "orgId must not be blank.");
         requireNonBlank(id, arType() + " ID must not be blank.");
-        Query query = query(where(AggregateRoot.Fields.orgId).is(orgId).and(MONGO_ID).is(id));
 
-        Object ar = mongoTemplate.findOne(query, arClass);
-        return ar == null ? empty() : Optional.of((AR) ar);
+        Optional<AR> ar = byIdOptional(id);
+        return ar.isPresent() && Objects.equals(ar.get().getOrgId(), orgId) ? ar : empty();
     }
 
     public boolean exists(String id, String orgId) {

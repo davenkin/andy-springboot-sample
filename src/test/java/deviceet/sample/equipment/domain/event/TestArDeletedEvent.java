@@ -1,7 +1,7 @@
 package deviceet.sample.equipment.domain.event;
 
 import deviceet.common.event.DomainEvent;
-import deviceet.sample.equipment.domain.TestAr;
+import deviceet.sample.equipment.domain.Equipment;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.TypeAlias;
@@ -15,7 +15,7 @@ import static lombok.AccessLevel.PRIVATE;
 public class TestArDeletedEvent extends DomainEvent {
     private String testArId;
 
-    public TestArDeletedEvent(TestAr ar) {
+    public TestArDeletedEvent(Equipment ar) {
         super(TEST_AR_DELETED_EVENT, ar);
         this.testArId = ar.getId();
     }
