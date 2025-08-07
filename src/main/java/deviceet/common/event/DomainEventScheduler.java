@@ -1,0 +1,41 @@
+package deviceet.common.event;
+
+import deviceet.common.event.publish.DomainEventPublishJob;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import net.javacrumbs.shedlock.core.LockAssert;
+import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
+@Slf4j
+@Component
+@RequiredArgsConstructor
+public class DomainEventScheduler {
+    private final DomainEventPublishJob domainEventPublishJob;
+    private final DomainEventHouseKeepingJob domainEventHouseKeepingJob;
+
+    //This job should not use @SchedulerLock as DomainEventPublisher.publishStagedDomainEvents() already uses an internal distributed lock
+    @Scheduled(cron = "0 */5 * * * ?")
+    public void houseKeepPublishStagedDomainEvents() {
+        log.debug("Start house keep publish domain events.");
+        domainEventPublishJob.publishStagedDomainEvents(100);
+    }
+
+    @Scheduled(cron = "0 10 2 1 * ?")
+    @SchedulerLock(name = "removeOldDomainEvents", lockAtMostFor = "60m", lockAtLeastFor = "1m")
+    public void removeOldDomainEvents() {
+        LockAssert.assertLocked();
+        try {
+            domainEventHouseKeepingJob.removeOldPublishingDomainEventsFromMongo(100);
+        } catch (Throwable t) {
+            log.error("Failed remove old publishing domain events from mongo.", t);
+        }
+
+        try {
+            domainEventHouseKeepingJob.removeOldConsumingDomainEventsFromMongo(100);
+        } catch (Throwable t) {
+            log.error("Failed remove old consuming domain events from mongo.", t);
+        }
+    }
+}

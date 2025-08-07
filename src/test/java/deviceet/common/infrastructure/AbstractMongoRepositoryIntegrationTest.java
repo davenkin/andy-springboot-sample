@@ -6,8 +6,8 @@ import deviceet.common.model.Principal;
 import deviceet.sample.equipment.domain.Equipment;
 import deviceet.sample.equipment.domain.EquipmentFactory;
 import deviceet.sample.equipment.domain.EquipmentRepository;
-import deviceet.sample.equipment.domain.event.TestArCreatedEvent;
-import deviceet.sample.equipment.domain.event.TestArDeletedEvent;
+import deviceet.sample.equipment.domain.event.EquipmentCreatedEvent;
+import deviceet.sample.equipment.domain.event.EquipmentDeletedEvent;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -15,8 +15,8 @@ import java.util.List;
 
 import static deviceet.TestUtils.randomEquipmentName;
 import static deviceet.TestUtils.randomPrincipal;
-import static deviceet.common.event.DomainEventType.TEST_AR_CREATED_EVENT;
-import static deviceet.common.event.DomainEventType.TEST_AR_DELETED_EVENT;
+import static deviceet.common.event.DomainEventType.EQUIPMENT_CREATED_EVENT;
+import static deviceet.common.event.DomainEventType.EQUIPMENT_DELETED_EVENT;
 import static deviceet.common.exception.ErrorCode.AR_NOT_FOUND;
 import static deviceet.common.exception.ErrorCode.NOT_SAME_ORG;
 import static org.apache.commons.lang3.RandomStringUtils.secure;
@@ -35,13 +35,13 @@ class AbstractMongoRepositoryIntegrationTest extends IntegrationTest {
         Principal principal = randomPrincipal();
         Equipment equipment = equipmentFactory.create(randomEquipmentName(), principal);
         assertEquals(1, equipment.getEvents().size());
-        assertInstanceOf(TestArCreatedEvent.class, equipment.getEvents().get(0));
+        assertInstanceOf(EquipmentCreatedEvent.class, equipment.getEvents().get(0));
         equipmentRepository.save(equipment);
 
         assertNull(equipment.getEvents());
 
-        TestArCreatedEvent createdEvent = latestEventFor(equipment.getId(), TEST_AR_CREATED_EVENT, TestArCreatedEvent.class);
-        assertEquals(equipment.getId(), createdEvent.getTestArId());
+        EquipmentCreatedEvent createdEvent = latestEventFor(equipment.getId(), EQUIPMENT_CREATED_EVENT, EquipmentCreatedEvent.class);
+        assertEquals(equipment.getId(), createdEvent.getEquipmentId());
         Equipment dbAr = equipmentRepository.byIdOptional(equipment.getId()).get();
         assertNull(dbAr.getEvents());
     }
@@ -56,10 +56,10 @@ class AbstractMongoRepositoryIntegrationTest extends IntegrationTest {
 
         assertTrue(equipmentRepository.byIdOptional(equipment1.getId()).isPresent());
         assertTrue(equipmentRepository.byIdOptional(equipment2.getId()).isPresent());
-        TestArCreatedEvent createdEvent1 = latestEventFor(equipment1.getId(), TEST_AR_CREATED_EVENT, TestArCreatedEvent.class);
-        assertEquals(equipment1.getId(), createdEvent1.getTestArId());
-        TestArCreatedEvent createdEvent2 = latestEventFor(equipment2.getId(), TEST_AR_CREATED_EVENT, TestArCreatedEvent.class);
-        assertEquals(equipment2.getId(), createdEvent2.getTestArId());
+        EquipmentCreatedEvent createdEvent1 = latestEventFor(equipment1.getId(), EQUIPMENT_CREATED_EVENT, EquipmentCreatedEvent.class);
+        assertEquals(equipment1.getId(), createdEvent1.getEquipmentId());
+        EquipmentCreatedEvent createdEvent2 = latestEventFor(equipment2.getId(), EQUIPMENT_CREATED_EVENT, EquipmentCreatedEvent.class);
+        assertEquals(equipment2.getId(), createdEvent2.getEquipmentId());
     }
 
     @Test
@@ -82,8 +82,8 @@ class AbstractMongoRepositoryIntegrationTest extends IntegrationTest {
         equipmentRepository.delete(equipment);
         assertNull(equipment.getEvents());
         assertFalse(equipmentRepository.byIdOptional(equipment.getId()).isPresent());
-        TestArDeletedEvent deletedEvent = latestEventFor(equipment.getId(), TEST_AR_DELETED_EVENT, TestArDeletedEvent.class);
-        assertEquals(equipment.getId(), deletedEvent.getTestArId());
+        EquipmentDeletedEvent deletedEvent = latestEventFor(equipment.getId(), EQUIPMENT_DELETED_EVENT, EquipmentDeletedEvent.class);
+        assertEquals(equipment.getId(), deletedEvent.getEquipmentId());
     }
 
     @Test
@@ -103,10 +103,10 @@ class AbstractMongoRepositoryIntegrationTest extends IntegrationTest {
         assertFalse(equipmentRepository.byIdOptional(equipment1.getId()).isPresent());
         assertFalse(equipmentRepository.byIdOptional(equipment2.getId()).isPresent());
 
-        TestArDeletedEvent deletedEvent1 = latestEventFor(equipment1.getId(), TEST_AR_DELETED_EVENT, TestArDeletedEvent.class);
-        assertEquals(equipment1.getId(), deletedEvent1.getTestArId());
-        TestArDeletedEvent deletedEvent2 = latestEventFor(equipment2.getId(), TEST_AR_DELETED_EVENT, TestArDeletedEvent.class);
-        assertEquals(equipment2.getId(), deletedEvent2.getTestArId());
+        EquipmentDeletedEvent deletedEvent1 = latestEventFor(equipment1.getId(), EQUIPMENT_DELETED_EVENT, EquipmentDeletedEvent.class);
+        assertEquals(equipment1.getId(), deletedEvent1.getEquipmentId());
+        EquipmentDeletedEvent deletedEvent2 = latestEventFor(equipment2.getId(), EQUIPMENT_DELETED_EVENT, EquipmentDeletedEvent.class);
+        assertEquals(equipment2.getId(), deletedEvent2.getEquipmentId());
     }
 
     @Test

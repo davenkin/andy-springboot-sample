@@ -6,8 +6,8 @@ import deviceet.common.event.consume.ConsumingEventDao;
 import deviceet.common.event.publish.PublishingDomainEventDao;
 import deviceet.common.model.Principal;
 import deviceet.sample.equipment.domain.Equipment;
-import deviceet.sample.equipment.domain.event.TestArCreatedEvent;
-import deviceet.sample.equipment.eventhandler.TestArCreatedEventHandler;
+import deviceet.sample.equipment.domain.event.EquipmentCreatedEvent;
+import deviceet.sample.equipment.eventhandler.EquipmentCreatedEventHandler;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -31,13 +31,13 @@ class DomainEventHouseKeepingJobIntegrationTest extends IntegrationTest {
     private DomainEventHouseKeepingJob domainEventHouseKeepingJob;
 
     @Autowired
-    private TestArCreatedEventHandler testArCreatedEventHandler;
+    private EquipmentCreatedEventHandler equipmentCreatedEventHandler;
 
     @Test
     void should_remove_old_publishing_domain_events_from_mongo() {
         Principal principal = randomPrincipal();
-        TestArCreatedEvent event1 = new TestArCreatedEvent(new Equipment(randomEquipmentName(), principal));
-        TestArCreatedEvent event2 = new TestArCreatedEvent(new Equipment(randomEquipmentName(), principal));
+        EquipmentCreatedEvent event1 = new EquipmentCreatedEvent(new Equipment(randomEquipmentName(), principal));
+        EquipmentCreatedEvent event2 = new EquipmentCreatedEvent(new Equipment(randomEquipmentName(), principal));
         ReflectionTestUtils.setField(event1, DomainEvent.Fields.raisedAt, now().minus(110, DAYS));
         ReflectionTestUtils.setField(event2, DomainEvent.Fields.raisedAt, now().minus(90, DAYS));
         publishingDomainEventDao.stage(List.of(event1, event2));
@@ -53,21 +53,21 @@ class DomainEventHouseKeepingJobIntegrationTest extends IntegrationTest {
     @Test
     void should_remove_old_consuming_domain_events_from_mongo() {
         Principal principal = randomPrincipal();
-        TestArCreatedEvent event1 = new TestArCreatedEvent(new Equipment(randomEquipmentName(), principal));
-        TestArCreatedEvent event2 = new TestArCreatedEvent(new Equipment(randomEquipmentName(), principal));
+        EquipmentCreatedEvent event1 = new EquipmentCreatedEvent(new Equipment(randomEquipmentName(), principal));
+        EquipmentCreatedEvent event2 = new EquipmentCreatedEvent(new Equipment(randomEquipmentName(), principal));
         ConsumingEvent consumingEvent1 = new ConsumingEvent(event1.getId(), event1);
         ConsumingEvent consumingEvent2 = new ConsumingEvent(event2.getId(), event1);
         ReflectionTestUtils.setField(consumingEvent1, ConsumingEvent.Fields.consumedAt, now().minus(110, DAYS));
         ReflectionTestUtils.setField(consumingEvent2, ConsumingEvent.Fields.consumedAt, now().minus(90, DAYS));
-        consumingEventDao.markEventAsConsumedByHandler(consumingEvent1, testArCreatedEventHandler);
-        consumingEventDao.markEventAsConsumedByHandler(consumingEvent2, testArCreatedEventHandler);
-        assertTrue(consumingEventDao.exists(event1.getId(), testArCreatedEventHandler));
-        assertTrue(consumingEventDao.exists(event2.getId(), testArCreatedEventHandler));
+        consumingEventDao.markEventAsConsumedByHandler(consumingEvent1, equipmentCreatedEventHandler);
+        consumingEventDao.markEventAsConsumedByHandler(consumingEvent2, equipmentCreatedEventHandler);
+        assertTrue(consumingEventDao.exists(event1.getId(), equipmentCreatedEventHandler));
+        assertTrue(consumingEventDao.exists(event2.getId(), equipmentCreatedEventHandler));
 
         domainEventHouseKeepingJob.removeOldConsumingDomainEventsFromMongo(100);
 
-        assertFalse(consumingEventDao.exists(event1.getId(), testArCreatedEventHandler));
-        assertTrue(consumingEventDao.exists(event2.getId(), testArCreatedEventHandler));
+        assertFalse(consumingEventDao.exists(event1.getId(), equipmentCreatedEventHandler));
+        assertTrue(consumingEventDao.exists(event2.getId(), equipmentCreatedEventHandler));
     }
 
 }

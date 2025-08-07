@@ -5,17 +5,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.TypeAlias;
 
-import static deviceet.common.event.DomainEventType.TEST_AR_NAME_UPDATED_EVENT;
+import static deviceet.common.event.DomainEventType.EQUIPMENT_NAME_UPDATED_EVENT;
 import static lombok.AccessLevel.PRIVATE;
 
 @Getter
-@TypeAlias("TEST_AR_NAME_UPDATED_EVENT")
+@TypeAlias("EQUIPMENT_NAME_UPDATED_EVENT")
 @NoArgsConstructor(access = PRIVATE)
-public class TestArNameUpdatedEvent extends TestArUpdatedEvent {
+public class EquipmentNameUpdatedEvent extends EquipmentUpdatedEvent {
     private String updatedName;
 
-    public TestArNameUpdatedEvent(String updatedName, Equipment ar) {
-        super(TEST_AR_NAME_UPDATED_EVENT, ar);
+    public EquipmentNameUpdatedEvent(String updatedName, Equipment equipment) {
+        super(EQUIPMENT_NAME_UPDATED_EVENT, equipment);
         this.updatedName = updatedName;
     }
 }

@@ -3,6 +3,7 @@ package deviceet.common.event.publish;
 import deviceet.common.event.DomainEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.javacrumbs.shedlock.core.LockAssert;
 import net.javacrumbs.shedlock.core.LockConfiguration;
 import net.javacrumbs.shedlock.core.LockingTaskExecutor;
 import org.springframework.core.task.TaskExecutor;
@@ -52,6 +53,8 @@ public class DomainEventPublishJob {
     }
 
     private List<String> doPublishStagedDomainEvents(int batchSize) throws ExecutionException, InterruptedException {
+        LockAssert.assertLocked();
+
         int counter = 0;
         String startEventId = MIN_START_EVENT_ID;
         List<CompletableFuture<String>> futures = new ArrayList<>();

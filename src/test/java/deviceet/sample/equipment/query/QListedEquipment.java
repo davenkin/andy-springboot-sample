@@ -2,7 +2,7 @@ package deviceet.sample.equipment.query;
 
 import java.time.Instant;
 
-public record QListedTestAr(
+public record QListedEquipment(
         String id,
         String orgId,
         String name,

@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
-public class MongoEquipmentRepository extends AbstractMongoRepository<Equipment> implements EquipmentRepository {
+public class EquipmentMongoRepository extends AbstractMongoRepository<Equipment> implements EquipmentRepository {
 }

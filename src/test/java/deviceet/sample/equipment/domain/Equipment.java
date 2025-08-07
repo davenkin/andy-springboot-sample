@@ -2,9 +2,9 @@ package deviceet.sample.equipment.domain;
 
 import deviceet.common.model.AggregateRoot;
 import deviceet.common.model.Principal;
-import deviceet.sample.equipment.domain.event.TestArCreatedEvent;
-import deviceet.sample.equipment.domain.event.TestArDeletedEvent;
-import deviceet.sample.equipment.domain.event.TestArNameUpdatedEvent;
+import deviceet.sample.equipment.domain.event.EquipmentCreatedEvent;
+import deviceet.sample.equipment.domain.event.EquipmentDeletedEvent;
+import deviceet.sample.equipment.domain.event.EquipmentNameUpdatedEvent;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
@@ -27,22 +27,22 @@ public class Equipment extends AggregateRoot {
     private String name;
 
     public Equipment(String name, Principal principal) {
-        super(newTestArId(), principal);
+        super(newEquipmentId(), principal);
         this.name = name;
-        raiseEvent(new TestArCreatedEvent(this));
+        raiseEvent(new EquipmentCreatedEvent(this));
     }
 
-    public static String newTestArId() {
-        return "TESTAR" + newSnowflakeId();
+    public static String newEquipmentId() {
+        return "EQP" + newSnowflakeId();
     }
 
     public void updateName(String newName) {
         this.name = newName;
-        raiseEvent(new TestArNameUpdatedEvent(name, this));
+        raiseEvent(new EquipmentNameUpdatedEvent(name, this));
     }
 
     @Override
     public void onDelete() {
-        raiseEvent(new TestArDeletedEvent(this));
+        raiseEvent(new EquipmentDeletedEvent(this));
     }
 }

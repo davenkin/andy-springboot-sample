@@ -10,11 +10,11 @@ import static lombok.AccessLevel.PROTECTED;
 
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-public abstract class TestArUpdatedEvent extends DomainEvent {
-    private String testArId;
+public abstract class EquipmentUpdatedEvent extends DomainEvent {
+    private String equipmentId;
 
-    public TestArUpdatedEvent(DomainEventType type, Equipment ar) {
-        super(type, ar);
-        this.testArId = ar.getId();
+    public EquipmentUpdatedEvent(DomainEventType type, Equipment equipment) {
+        super(type, equipment);
+        this.equipmentId = equipment.getId();
     }
 }

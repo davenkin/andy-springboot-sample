@@ -5,5 +5,5 @@ import jakarta.validation.constraints.Size;
 import lombok.Builder;
 
 @Builder
-public record CreateTestArCommand(@NotBlank @Size(max = 100) String name) {
+public record UpdateEquipmentNameCommand(@NotBlank @Size(max = 100) String name) {
 }

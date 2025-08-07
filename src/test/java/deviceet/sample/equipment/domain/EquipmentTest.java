@@ -1,4 +1,10 @@
 package deviceet.sample.equipment.domain;
 
-public class EquipmentTest {
+import org.junit.jupiter.api.Test;
+
+class EquipmentTest {
+    @Test
+    void test() {
+
+    }
 }

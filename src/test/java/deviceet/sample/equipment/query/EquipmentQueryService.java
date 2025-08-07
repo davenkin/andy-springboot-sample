@@ -20,14 +20,14 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 @Component
 @RequiredArgsConstructor
-public class TestArQueryService {
+public class EquipmentQueryService {
     private final MongoTemplate mongoTemplate;
 
-    public Page<QListedTestAr> listTestArs(ListTestArQuery listTestArQuery, Pageable pageable, Principal principal) {
+    public Page<QListedEquipment> listEquipments(ListEquipmentQuery listEquipmentQuery, Pageable pageable, Principal principal) {
 
         Criteria criteria = where(AggregateRoot.Fields.orgId).is(principal.getOrgId());
-        if (isNotBlank(listTestArQuery.search())) {
-            criteria.and(Equipment.Fields.name).regex(listTestArQuery.search());
+        if (isNotBlank(listEquipmentQuery.search())) {
+            criteria.and(Equipment.Fields.name).regex(listEquipmentQuery.search());
         }
         Query query = Query.query(criteria);
         query.fields().include(AggregateRoot.Fields.orgId,
@@ -40,7 +40,7 @@ public class TestArQueryService {
             return Page.empty(pageable);
         }
 
-        List<QListedTestAr> devices = mongoTemplate.find(query.with(pageable), QListedTestAr.class, EQUIPMENT_COLLECTION);
+        List<QListedEquipment> devices = mongoTemplate.find(query.with(pageable), QListedEquipment.class, EQUIPMENT_COLLECTION);
         return new PageImpl<>(devices, pageable, count);
     }
 }

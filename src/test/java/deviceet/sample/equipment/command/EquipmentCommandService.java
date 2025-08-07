@@ -12,23 +12,23 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class TestArCommandService {
+public class EquipmentCommandService {
     private final EquipmentRepository equipmentRepository;
     private final EquipmentFactory equipmentFactory;
 
     @Transactional
-    public String createTestAr(CreateTestArCommand command, Principal principal) {
+    public String createEquipment(CreateEquipmentCommand command, Principal principal) {
         Equipment equipment = equipmentFactory.create(command.name(), principal);
         equipmentRepository.save(equipment);
-        log.info("Created TestAr[{}].", equipment.getId());
+        log.info("Created Equipment[{}].", equipment.getId());
         return equipment.getId();
     }
 
     @Transactional
-    public void updateTestArName(String id, UpdateTestArNameCommand command, Principal principal) {
+    public void updateEquipmentName(String id, UpdateEquipmentNameCommand command, Principal principal) {
         Equipment equipment = equipmentRepository.byId(id, principal.getOrgId());
         equipment.updateName(command.name());
         equipmentRepository.save(equipment);
-        log.info("Updated name for TestAr[{}].", equipment.getId());
+        log.info("Updated name for Equipment[{}].", equipment.getId());
     }
 }
