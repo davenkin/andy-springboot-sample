@@ -16,16 +16,15 @@ public class Constants {
 
     //Database
     public static final String SHEDLOCK_COLLECTION = "shedlock";
+
+    //todo:move to aggregate root
     public static final String DEVICE_COLLECTION = "device";
 
     //Cache
+    //todo: move to cached repository
     public static final String ORG_DEVICES_CACHE = "ORG_DEVICES";
 
     //todo: remove
     public static final String KAFKA_EXTERNAL_DEVICE_REGISTRATION_TOPIC = "test-device-registration-topic";
-
-    //todo: move to test folder
-    public static final String TEST_ORG_ID = "testOrgId";
-    public static final String TEST_USER_ID = "testUserId";
 
 }

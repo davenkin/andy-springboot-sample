@@ -1,4 +1,4 @@
-de.flapdoodle.mongodb.embedded.version: 7.0.12  # Use embedded Mongo
+de.flapdoodle.mongodb.embedded.version: 7.0.12  # Embedded Mongo
 
 mongock:
   enabled: false # Disable Mongock
@@ -8,4 +8,4 @@ spring:
     exclude: org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration # Disable Kafka
   data:
     redis:
-      port: 6124 # Use embedded Redis, can be accessed via 127.0.0.1:6124
+      port: 6124 # embedded Redis, can be accessed via 127.0.0.1:6124

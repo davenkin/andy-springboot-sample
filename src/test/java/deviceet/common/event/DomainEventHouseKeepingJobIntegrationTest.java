@@ -1,21 +1,21 @@
 package deviceet.common.event;
 
 import deviceet.IntegrationTest;
-import deviceet.business.sampledevice.domain.TestAr;
-import deviceet.business.sampledevice.domain.event.TestArCreatedEvent;
-import deviceet.business.sampledevice.eventhandler.TestArCreatedEventHandler;
 import deviceet.common.event.consume.ConsumingEvent;
 import deviceet.common.event.consume.ConsumingEventDao;
 import deviceet.common.event.publish.PublishingDomainEventDao;
 import deviceet.common.model.Principal;
+import deviceet.sample.equipment.domain.TestAr;
+import deviceet.sample.equipment.domain.event.TestArCreatedEvent;
+import deviceet.sample.equipment.eventhandler.TestArCreatedEventHandler;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
 
-import static deviceet.TestRandomUtils.randomPrincipal;
-import static deviceet.TestRandomUtils.randomTestArName;
+import static deviceet.TestUtils.randomEquipmentName;
+import static deviceet.TestUtils.randomPrincipal;
 import static java.time.Instant.now;
 import static java.time.temporal.ChronoUnit.DAYS;
 import static org.junit.jupiter.api.Assertions.*;
@@ -36,8 +36,8 @@ class DomainEventHouseKeepingJobIntegrationTest extends IntegrationTest {
     @Test
     void should_remove_old_publishing_domain_events_from_mongo() {
         Principal principal = randomPrincipal();
-        TestArCreatedEvent event1 = new TestArCreatedEvent(new TestAr(randomTestArName(), principal));
-        TestArCreatedEvent event2 = new TestArCreatedEvent(new TestAr(randomTestArName(), principal));
+        TestArCreatedEvent event1 = new TestArCreatedEvent(new TestAr(randomEquipmentName(), principal));
+        TestArCreatedEvent event2 = new TestArCreatedEvent(new TestAr(randomEquipmentName(), principal));
         ReflectionTestUtils.setField(event1, DomainEvent.Fields.raisedAt, now().minus(110, DAYS));
         ReflectionTestUtils.setField(event2, DomainEvent.Fields.raisedAt, now().minus(90, DAYS));
         publishingDomainEventDao.stage(List.of(event1, event2));
@@ -53,8 +53,8 @@ class DomainEventHouseKeepingJobIntegrationTest extends IntegrationTest {
     @Test
     void should_remove_old_consuming_domain_events_from_mongo() {
         Principal principal = randomPrincipal();
-        TestArCreatedEvent event1 = new TestArCreatedEvent(new TestAr(randomTestArName(), principal));
-        TestArCreatedEvent event2 = new TestArCreatedEvent(new TestAr(randomTestArName(), principal));
+        TestArCreatedEvent event1 = new TestArCreatedEvent(new TestAr(randomEquipmentName(), principal));
+        TestArCreatedEvent event2 = new TestArCreatedEvent(new TestAr(randomEquipmentName(), principal));
         ConsumingEvent consumingEvent1 = new ConsumingEvent(event1.getId(), event1);
         ConsumingEvent consumingEvent2 = new ConsumingEvent(event2.getId(), event1);
         ReflectionTestUtils.setField(consumingEvent1, ConsumingEvent.Fields.consumedAt, now().minus(110, DAYS));

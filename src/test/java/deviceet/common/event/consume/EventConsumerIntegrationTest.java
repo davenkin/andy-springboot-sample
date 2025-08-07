@@ -1,24 +1,24 @@
 package deviceet.common.event.consume;
 
 import deviceet.IntegrationTest;
-import deviceet.business.sampledevice.command.CreateTestArCommand;
-import deviceet.business.sampledevice.command.TestArCommandService;
-import deviceet.business.sampledevice.command.UpdateTestArNameCommand;
-import deviceet.business.sampledevice.domain.event.TestArCreatedEvent;
-import deviceet.business.sampledevice.domain.event.TestArNameUpdatedEvent;
-import deviceet.business.sampledevice.eventhandler.TestArCreatedEventHandler;
-import deviceet.business.sampledevice.eventhandler.TestArCreatedEventHandler2;
-import deviceet.business.sampledevice.eventhandler.TestArNameUpdatedEventHandler;
-import deviceet.business.sampledevice.eventhandler.TestArUpdatedEventHandler;
 import deviceet.common.model.Principal;
+import deviceet.sample.equipment.command.CreateTestArCommand;
+import deviceet.sample.equipment.command.TestArCommandService;
+import deviceet.sample.equipment.command.UpdateTestArNameCommand;
+import deviceet.sample.equipment.domain.event.TestArCreatedEvent;
+import deviceet.sample.equipment.domain.event.TestArNameUpdatedEvent;
+import deviceet.sample.equipment.eventhandler.TestArCreatedEventHandler;
+import deviceet.sample.equipment.eventhandler.TestArCreatedEventHandler2;
+import deviceet.sample.equipment.eventhandler.TestArNameUpdatedEventHandler;
+import deviceet.sample.equipment.eventhandler.TestArUpdatedEventHandler;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
-import static deviceet.TestRandomUtils.randomPrincipal;
-import static deviceet.TestRandomUtils.randomTestArName;
+import static deviceet.TestUtils.randomEquipmentName;
+import static deviceet.TestUtils.randomPrincipal;
 import static deviceet.common.event.DomainEventType.TEST_AR_CREATED_EVENT;
 import static deviceet.common.event.DomainEventType.TEST_AR_NAME_UPDATED_EVENT;
 import static org.junit.jupiter.api.Assertions.*;
@@ -198,11 +198,11 @@ class EventConsumerIntegrationTest extends IntegrationTest {
 
 
     private static UpdateTestArNameCommand randomUpdateTestArNameCommand() {
-        return new UpdateTestArNameCommand(randomTestArName());
+        return new UpdateTestArNameCommand(randomEquipmentName());
     }
 
     private static CreateTestArCommand randomCreateTestArCommand() {
-        return new CreateTestArCommand(randomTestArName());
+        return new CreateTestArCommand(randomEquipmentName());
     }
 
 }

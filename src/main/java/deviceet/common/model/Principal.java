@@ -5,7 +5,6 @@ import lombok.Getter;
 
 import java.util.Set;
 
-import static deviceet.common.exception.ServiceException.accessDeniedException;
 import static deviceet.common.model.Role.ROOT;
 import static deviceet.common.utils.CommonUtils.requireNonBlank;
 import static java.util.Objects.requireNonNull;
@@ -35,16 +34,6 @@ public class Principal {
         this.userId = userId;
         this.userName = userName;
         this.roles = Set.of(role);
-    }
-
-    public boolean hasRole(Role role) {
-        return this.roles.contains(role);
-    }
-
-    public void checkRole(Role role) {
-        if (!this.hasRole(role)) {
-            throw accessDeniedException();
-        }
     }
 
     @Override

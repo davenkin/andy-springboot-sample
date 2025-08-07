@@ -1,19 +1,19 @@
 package deviceet.common.event.publish;
 
 import deviceet.IntegrationTest;
-import deviceet.business.sampledevice.command.CreateTestArCommand;
-import deviceet.business.sampledevice.command.TestArCommandService;
-import deviceet.business.sampledevice.domain.event.TestArCreatedEvent;
 import deviceet.common.event.publish.infrastructure.FakeDomainEventSender;
 import deviceet.common.model.Principal;
+import deviceet.sample.equipment.command.CreateTestArCommand;
+import deviceet.sample.equipment.command.TestArCommandService;
+import deviceet.sample.equipment.domain.event.TestArCreatedEvent;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
 import java.util.concurrent.CompletableFuture;
 
-import static deviceet.TestRandomUtils.randomPrincipal;
-import static deviceet.TestRandomUtils.randomTestArName;
+import static deviceet.TestUtils.randomEquipmentName;
+import static deviceet.TestUtils.randomPrincipal;
 import static deviceet.common.event.DomainEventType.TEST_AR_CREATED_EVENT;
 import static deviceet.common.event.publish.DomainEventPublishStatus.*;
 import static java.util.concurrent.CompletableFuture.failedFuture;
@@ -39,10 +39,10 @@ class DomainEventPublishJobIntegrationTest extends IntegrationTest {
     @Test
     void should_publish_domain_events() {
         Principal principal = randomPrincipal();
-        String arId1 = testArCommandService.createTestAr(CreateTestArCommand.builder().name(randomTestArName()).build(), principal);
-        String arId2 = testArCommandService.createTestAr(CreateTestArCommand.builder().name(randomTestArName()).build(), principal);
-        String arId3 = testArCommandService.createTestAr(CreateTestArCommand.builder().name(randomTestArName()).build(), principal);
-        String arId4 = testArCommandService.createTestAr(CreateTestArCommand.builder().name(randomTestArName()).build(), principal);
+        String arId1 = testArCommandService.createTestAr(CreateTestArCommand.builder().name(randomEquipmentName()).build(), principal);
+        String arId2 = testArCommandService.createTestAr(CreateTestArCommand.builder().name(randomEquipmentName()).build(), principal);
+        String arId3 = testArCommandService.createTestAr(CreateTestArCommand.builder().name(randomEquipmentName()).build(), principal);
+        String arId4 = testArCommandService.createTestAr(CreateTestArCommand.builder().name(randomEquipmentName()).build(), principal);
 
         TestArCreatedEvent event1 = latestEventFor(arId1, TEST_AR_CREATED_EVENT, TestArCreatedEvent.class);
         TestArCreatedEvent event2 = latestEventFor(arId2, TEST_AR_CREATED_EVENT, TestArCreatedEvent.class);
@@ -70,7 +70,7 @@ class DomainEventPublishJobIntegrationTest extends IntegrationTest {
     @Test
     void should_fail_publish_domain_events_with_max_of_3_attempts() {
         Principal principal = randomPrincipal();
-        String arId = testArCommandService.createTestAr(CreateTestArCommand.builder().name(randomTestArName()).build(), principal);
+        String arId = testArCommandService.createTestAr(CreateTestArCommand.builder().name(randomEquipmentName()).build(), principal);
         TestArCreatedEvent event = latestEventFor(arId, TEST_AR_CREATED_EVENT, TestArCreatedEvent.class);
         doReturn(failedFuture(new RuntimeException("stub exception"))).when(domainEventSender).send(any());
         domainEventPublishJob.publishStagedDomainEvents(2);
@@ -99,7 +99,7 @@ class DomainEventPublishJobIntegrationTest extends IntegrationTest {
     @Test
     void should_publish_successfully_if_sender_recovered() {
         Principal principal = randomPrincipal();
-        String arId = testArCommandService.createTestAr(CreateTestArCommand.builder().name(randomTestArName()).build(), principal);
+        String arId = testArCommandService.createTestAr(CreateTestArCommand.builder().name(randomEquipmentName()).build(), principal);
         TestArCreatedEvent event = latestEventFor(arId, TEST_AR_CREATED_EVENT, TestArCreatedEvent.class);
         doReturn(failedFuture(new RuntimeException("stub exception")))
                 .doReturn(CompletableFuture.completedFuture(event.getId()))

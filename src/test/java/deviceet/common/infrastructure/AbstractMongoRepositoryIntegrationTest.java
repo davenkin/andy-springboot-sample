@@ -1,20 +1,20 @@
 package deviceet.common.infrastructure;
 
 import deviceet.IntegrationTest;
-import deviceet.business.sampledevice.domain.TestAr;
-import deviceet.business.sampledevice.domain.TestArFactory;
-import deviceet.business.sampledevice.domain.TestArRepository;
-import deviceet.business.sampledevice.domain.event.TestArCreatedEvent;
-import deviceet.business.sampledevice.domain.event.TestArDeletedEvent;
 import deviceet.common.exception.ServiceException;
 import deviceet.common.model.Principal;
+import deviceet.sample.equipment.domain.TestAr;
+import deviceet.sample.equipment.domain.TestArFactory;
+import deviceet.sample.equipment.domain.TestArRepository;
+import deviceet.sample.equipment.domain.event.TestArCreatedEvent;
+import deviceet.sample.equipment.domain.event.TestArDeletedEvent;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-import static deviceet.TestRandomUtils.randomPrincipal;
-import static deviceet.TestRandomUtils.randomTestArName;
+import static deviceet.TestUtils.randomEquipmentName;
+import static deviceet.TestUtils.randomPrincipal;
 import static deviceet.common.event.DomainEventType.TEST_AR_CREATED_EVENT;
 import static deviceet.common.event.DomainEventType.TEST_AR_DELETED_EVENT;
 import static deviceet.common.exception.ErrorCode.AR_NOT_FOUND;
@@ -33,7 +33,7 @@ class AbstractMongoRepositoryIntegrationTest extends IntegrationTest {
     @Test
     void should_save_ar() {
         Principal principal = randomPrincipal();
-        TestAr testAr = testArFactory.create(randomTestArName(), principal);
+        TestAr testAr = testArFactory.create(randomEquipmentName(), principal);
         assertEquals(1, testAr.getEvents().size());
         assertInstanceOf(TestArCreatedEvent.class, testAr.getEvents().get(0));
         testArRepository.save(testAr);
@@ -49,8 +49,8 @@ class AbstractMongoRepositoryIntegrationTest extends IntegrationTest {
     @Test
     void should_save_ars() {
         Principal principal = randomPrincipal();
-        TestAr testAr1 = testArFactory.create(randomTestArName(), principal);
-        TestAr testAr2 = testArFactory.create(randomTestArName(), principal);
+        TestAr testAr1 = testArFactory.create(randomEquipmentName(), principal);
+        TestAr testAr2 = testArFactory.create(randomEquipmentName(), principal);
 
         testArRepository.save(List.of(testAr1, testAr2));
 
@@ -64,8 +64,8 @@ class AbstractMongoRepositoryIntegrationTest extends IntegrationTest {
 
     @Test
     void should_throw_exception_if_not_the_same_org() {
-        TestAr testAr1 = testArFactory.create(randomTestArName(), randomPrincipal());
-        TestAr testAr2 = testArFactory.create(randomTestArName(), randomPrincipal());
+        TestAr testAr1 = testArFactory.create(randomEquipmentName(), randomPrincipal());
+        TestAr testAr2 = testArFactory.create(randomEquipmentName(), randomPrincipal());
 
         ServiceException exception = assertThrows(ServiceException.class, () -> testArRepository.save(List.of(testAr1, testAr2)));
         assertEquals(NOT_SAME_ORG, exception.getCode());
@@ -74,7 +74,7 @@ class AbstractMongoRepositoryIntegrationTest extends IntegrationTest {
     @Test
     void should_delete_ar() {
         Principal principal = randomPrincipal();
-        TestAr testAr = testArFactory.create(randomTestArName(), principal);
+        TestAr testAr = testArFactory.create(randomEquipmentName(), principal);
 
         testArRepository.save(testAr);
         assertTrue(testArRepository.byIdOptional(testAr.getId()).isPresent());
@@ -89,8 +89,8 @@ class AbstractMongoRepositoryIntegrationTest extends IntegrationTest {
     @Test
     void should_delete_ars() {
         Principal principal = randomPrincipal();
-        TestAr testAr1 = testArFactory.create(randomTestArName(), principal);
-        TestAr testAr2 = testArFactory.create(randomTestArName(), principal);
+        TestAr testAr1 = testArFactory.create(randomEquipmentName(), principal);
+        TestAr testAr2 = testArFactory.create(randomEquipmentName(), principal);
 
         testArRepository.save(List.of(testAr1, testAr2));
 
@@ -111,8 +111,8 @@ class AbstractMongoRepositoryIntegrationTest extends IntegrationTest {
 
     @Test
     void should_throw_exception_if_not_the_same_org_for_delete() {
-        TestAr testAr1 = testArFactory.create(randomTestArName(), randomPrincipal());
-        TestAr testAr2 = testArFactory.create(randomTestArName(), randomPrincipal());
+        TestAr testAr1 = testArFactory.create(randomEquipmentName(), randomPrincipal());
+        TestAr testAr2 = testArFactory.create(randomEquipmentName(), randomPrincipal());
 
         ServiceException exception = assertThrows(ServiceException.class, () -> testArRepository.delete(List.of(testAr1, testAr2)));
         assertEquals(NOT_SAME_ORG, exception.getCode());
@@ -121,7 +121,7 @@ class AbstractMongoRepositoryIntegrationTest extends IntegrationTest {
     @Test
     void should_fetch_ar_by_id() {
         Principal principal = randomPrincipal();
-        TestAr testAr = testArFactory.create(randomTestArName(), principal);
+        TestAr testAr = testArFactory.create(randomEquipmentName(), principal);
         assertFalse(testArRepository.exists(testAr.getId(), principal.getOrgId()));
 
         testArRepository.save(testAr);
