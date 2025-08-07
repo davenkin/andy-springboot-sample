@@ -57,13 +57,13 @@ class DomainEventArchTest {
     static final ArchRule domainEventShouldNotHaveBuilder = classes()
             .that()
             .areAssignableTo(DomainEvent.class)
-            .should(haveNoBuilderMethod())
+            .should(notHaveBuilderMethod())
             .because("Domain events should be created using explict constructors but not builders, otherwise we might end up with invalid domain events.");
 
     @ArchTest
     static final ArchRule domainEventShouldNotHaveSetters = classes()
             .that()
             .areAssignableTo(DomainEvent.class)
-            .should(haveNoSetterMethods())
+            .should(notHaveSetterMethods())
             .because("Domain events should be immutable, hence it should not have setter methods");
 }

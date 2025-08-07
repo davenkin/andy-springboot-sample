@@ -40,7 +40,7 @@ public class ArchUnitUtils {
         };
     }
 
-    public static ArchCondition<JavaClass> haveNoBuilderMethod() {
+    public static ArchCondition<JavaClass> notHaveBuilderMethod() {
         return new ArchCondition<>("have no builder method") {
             @Override
             public void check(JavaClass clazz, ConditionEvents events) {
@@ -55,7 +55,7 @@ public class ArchUnitUtils {
         };
     }
 
-    public static ArchCondition<JavaClass> haveNoSetterMethods() {
+    public static ArchCondition<JavaClass> notHaveSetterMethods() {
         return new ArchCondition<>("have no setter methods") {
             @Override
             public void check(JavaClass clazz, ConditionEvents events) {

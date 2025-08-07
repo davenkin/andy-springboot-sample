@@ -48,7 +48,7 @@ class AggregateRootArchTest {
     static final ArchRule aggregateRootShouldNotHaveBuilder = classes()
             .that()
             .areAssignableTo(AggregateRoot.class)
-            .should(haveNoBuilderMethod())
+            .should(notHaveBuilderMethod())
             .because("Aggregate roots should be created using explict constructors but not builders, otherwise we might end up with invalid objects.");
 
 }

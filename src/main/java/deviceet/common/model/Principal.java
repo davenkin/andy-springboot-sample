@@ -15,7 +15,7 @@ import static java.util.Objects.requireNonNull;
 @Getter
 @EqualsAndHashCode
 public class Principal {
-    public static final String NO_USER_ID = "Robot0";
+    public static final String NO_USER_ID = "Robot001";
     public static final String NO_USER_NAME = "Mr.Robot";
     public static final String NO_ORG_ID = "Robots";
     public static final Principal ROBOT = new Principal(NO_USER_ID, NO_USER_NAME, ROOT, NO_ORG_ID);
