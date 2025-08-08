@@ -11,16 +11,16 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
-public class EquipmentMongoRepository extends AbstractMongoRepository<Equipment> implements EquipmentRepository {
-    private final CachedEquipmentMongoRepository cachedEquipmentMongoRepository;
+public class MongoEquipmentRepository extends AbstractMongoRepository<Equipment> implements EquipmentRepository {
+    private final CachedMongoEquipmentRepository cachedMongoEquipmentRepository;
 
     @Override
     public List<EquipmentSummary> cachedEquipmentSummaries(String orgId) {
-        return cachedEquipmentMongoRepository.cachedEquipmentSummaries(orgId);
+        return cachedMongoEquipmentRepository.cachedEquipmentSummaries(orgId);
     }
 
     @Override
     public void evictCachedEquipmentSummaries(String orgId) {
-        cachedEquipmentMongoRepository.evictCachedEquipmentSummaries(orgId);
+        cachedMongoEquipmentRepository.evictCachedEquipmentSummaries(orgId);
     }
 }

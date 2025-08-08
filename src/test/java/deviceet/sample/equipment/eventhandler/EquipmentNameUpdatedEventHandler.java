@@ -17,5 +17,7 @@ public class EquipmentNameUpdatedEventHandler extends AbstractEventHandler<Equip
     public void handle(EquipmentNameUpdatedEvent event) {
         equipmentRepository.evictCachedEquipmentSummaries(event.getArOrgId());
         log.debug("Evicted equipment summaries cache for org[{}].", event.getArOrgId());
+
+        //todo: 同步record的equipmentname
     }
 }

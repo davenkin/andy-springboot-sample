@@ -26,7 +26,7 @@ import static org.springframework.data.mongodb.core.query.Query.query;
 @Slf4j
 @Repository
 @RequiredArgsConstructor
-public class CachedEquipmentMongoRepository extends AbstractMongoRepository<Device> {
+public class CachedMongoEquipmentRepository extends AbstractMongoRepository<Device> {
     private static final String ORG_EQUIPMENT_CACHE = "ORG_EQUIPMENTS";
 
     @Cacheable(value = ORG_EQUIPMENT_CACHE, key = "#orgId")

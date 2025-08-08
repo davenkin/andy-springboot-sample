@@ -1,0 +1,17 @@
+package deviceet.sample.maintenance;
+
+import deviceet.sample.equipment.domain.EquipmentStatus;
+import lombok.Builder;
+
+import java.time.Instant;
+
+@Builder
+public record QListedMaintenanceRecord(
+        String id,
+        String equipmentId,
+        String equipmentName,
+        EquipmentStatus status,
+        String orgId,
+        Instant createdAt,
+        String createdBy) {
+}
