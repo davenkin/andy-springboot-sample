@@ -4,8 +4,6 @@ public class Constants {
     public static final String MONGO_ID = "_id";
     public static final String ID = "id";
     public static final String ORG_ID = "orgId";
-    @Deprecated
-    public static final String PLATFORM_ORG_ID = "PLATFORM_ORG_ID";
 
     public static final String DISABLE_PROFILE_PREFIX = "!";
     public static final String IT_PROFILE = "it";
@@ -18,15 +16,5 @@ public class Constants {
 
     //Database
     public static final String SHEDLOCK_COLLECTION = "shedlock";
-
-    //todo:move to aggregate root
-    public static final String DEVICE_COLLECTION = "device";
-
-    //Cache
-    //todo: move to cached repository
-    public static final String ORG_DEVICES_CACHE = "ORG_DEVICES";
-
-    //todo: remove
-    public static final String KAFKA_EXTERNAL_DEVICE_REGISTRATION_TOPIC = "test-device-registration-topic";
 
 }

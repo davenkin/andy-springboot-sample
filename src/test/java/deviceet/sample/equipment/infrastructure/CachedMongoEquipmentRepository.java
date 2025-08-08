@@ -1,6 +1,5 @@
 package deviceet.sample.equipment.infrastructure;
 
-import deviceet.business.device.domain.Device;
 import deviceet.common.infrastructure.AbstractMongoRepository;
 import deviceet.common.model.AggregateRoot;
 import deviceet.sample.equipment.domain.Equipment;
@@ -26,7 +25,7 @@ import static org.springframework.data.mongodb.core.query.Query.query;
 @Slf4j
 @Repository
 @RequiredArgsConstructor
-public class CachedMongoEquipmentRepository extends AbstractMongoRepository<Device> {
+public class CachedMongoEquipmentRepository extends AbstractMongoRepository<Equipment> {
     private static final String ORG_EQUIPMENT_CACHE = "ORG_EQUIPMENTS";
 
     @Cacheable(value = ORG_EQUIPMENT_CACHE, key = "#orgId")
