@@ -17,7 +17,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import static deviceet.TestUtils.TEST_PRINCIPAL;
+import static deviceet.TestConfiguration.TEST_PRINCIPAL;
 
 @Validated
 @RestController

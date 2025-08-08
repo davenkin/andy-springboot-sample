@@ -2,6 +2,7 @@ package deviceet.sample.equipment.eventhandler;
 
 import deviceet.common.event.consume.AbstractEventHandler;
 import deviceet.common.utils.TaskRunner;
+import deviceet.sample.equipment.domain.EquipmentRepository;
 import deviceet.sample.equipment.domain.event.EquipmentDeletedEvent;
 import deviceet.sample.equipment.job.task.DeleteAllMaintenanceRecordsUnderEquipmentTask;
 import lombok.RequiredArgsConstructor;
@@ -13,10 +14,18 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class EquipmentDeletedEventEventHandler extends AbstractEventHandler<EquipmentDeletedEvent> {
     private final DeleteAllMaintenanceRecordsUnderEquipmentTask deleteAllMaintenanceRecordsUnderEquipmentTask;
+    private final EquipmentRepository equipmentRepository;
 
     @Override
     public void handle(EquipmentDeletedEvent event) {
-        TaskRunner.run(() -> deleteAllMaintenanceRecordsUnderEquipmentTask.run(event.getEquipmentId()));
-        // todo: evict all equipment cache
+        TaskRunner.run(() -> {
+            long deletedCount = deleteAllMaintenanceRecordsUnderEquipmentTask.run(event.getEquipmentId());
+            log.info("Delete all {} maintenance records under equipment [{}].", deletedCount, event.getEquipmentId());
+        });
+
+        TaskRunner.run(() -> {
+            equipmentRepository.evictCachedEquipmentSummaries(event.getArOrgId());
+            log.debug("Evicted equipment summaries cache for org[{}].", event.getArOrgId());
+        });
     }
 }

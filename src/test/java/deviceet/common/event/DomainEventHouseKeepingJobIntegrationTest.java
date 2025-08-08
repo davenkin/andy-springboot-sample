@@ -14,8 +14,8 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
 
-import static deviceet.TestUtils.randomEquipmentName;
-import static deviceet.TestUtils.randomPrincipal;
+import static deviceet.RandomTestUtils.randomEquipmentName;
+import static deviceet.RandomTestUtils.randomPrincipal;
 import static java.time.Instant.now;
 import static java.time.temporal.ChronoUnit.DAYS;
 import static org.junit.jupiter.api.Assertions.*;

@@ -13,8 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-import static deviceet.TestUtils.randomEquipmentName;
-import static deviceet.TestUtils.randomPrincipal;
+import static deviceet.RandomTestUtils.randomEquipmentName;
+import static deviceet.RandomTestUtils.randomPrincipal;
 import static deviceet.common.event.DomainEventType.EQUIPMENT_CREATED_EVENT;
 import static deviceet.common.event.DomainEventType.EQUIPMENT_DELETED_EVENT;
 import static deviceet.common.exception.ErrorCode.AR_NOT_FOUND;

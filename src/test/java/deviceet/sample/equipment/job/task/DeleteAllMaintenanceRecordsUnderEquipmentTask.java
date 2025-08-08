@@ -1,15 +1,23 @@
 package deviceet.sample.equipment.job.task;
 
+import com.mongodb.client.result.DeleteResult;
+import deviceet.sample.maintenance.MaintenanceRecord;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 
-@Slf4j
+import static org.springframework.data.mongodb.core.query.Criteria.where;
+import static org.springframework.data.mongodb.core.query.Query.query;
+
 @Component
 @RequiredArgsConstructor
 public class DeleteAllMaintenanceRecordsUnderEquipmentTask {
+    private final MongoTemplate mongoTemplate;
 
-    public void run(String equipmentId) {
-
+    public long run(String equipmentId) {
+        Query query = query(where(MaintenanceRecord.Fields.equipmentId).is(equipmentId));
+        DeleteResult result = mongoTemplate.remove(query, MaintenanceRecord.class);
+        return result.getDeletedCount();
     }
 }

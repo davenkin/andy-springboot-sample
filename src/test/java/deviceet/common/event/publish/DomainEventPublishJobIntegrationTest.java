@@ -12,8 +12,8 @@ import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
 import java.util.concurrent.CompletableFuture;
 
-import static deviceet.TestUtils.randomEquipmentName;
-import static deviceet.TestUtils.randomPrincipal;
+import static deviceet.RandomTestUtils.randomEquipmentName;
+import static deviceet.RandomTestUtils.randomPrincipal;
 import static deviceet.common.event.DomainEventType.EQUIPMENT_CREATED_EVENT;
 import static deviceet.common.event.publish.DomainEventPublishStatus.*;
 import static java.util.concurrent.CompletableFuture.failedFuture;

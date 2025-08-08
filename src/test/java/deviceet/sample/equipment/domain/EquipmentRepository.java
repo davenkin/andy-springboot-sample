@@ -21,5 +21,9 @@ public interface EquipmentRepository {
     Optional<Equipment> byIdOptional(String id, String orgId);
 
     boolean exists(String id, String orgId);
+
+    List<EquipmentSummary> cachedEquipmentSummaries(String orgId);
+
+    void evictCachedEquipmentSummaries(String orgId);
 }
 

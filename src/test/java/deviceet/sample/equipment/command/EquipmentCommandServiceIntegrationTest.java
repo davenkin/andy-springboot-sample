@@ -7,8 +7,8 @@ import deviceet.sample.equipment.domain.EquipmentRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static deviceet.TestUtils.randomEquipmentName;
-import static deviceet.TestUtils.randomPrincipal;
+import static deviceet.RandomTestUtils.randomEquipmentName;
+import static deviceet.RandomTestUtils.randomPrincipal;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class EquipmentCommandServiceIntegrationTest extends IntegrationTest {
