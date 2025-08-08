@@ -8,4 +8,5 @@ public class MaintenanceRecord {
     private String equipmentId;
     private String equipmentName;
     private EquipmentStatus equipmentStatus;
+    private String description;
 }

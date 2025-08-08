@@ -5,8 +5,10 @@ import deviceet.common.utils.ResponseId;
 import deviceet.sample.equipment.command.CreateEquipmentCommand;
 import deviceet.sample.equipment.command.EquipmentCommandService;
 import deviceet.sample.equipment.command.UpdateEquipmentNameCommand;
+import deviceet.sample.equipment.domain.EquipmentSummary;
 import deviceet.sample.equipment.query.EquipmentQueryService;
 import deviceet.sample.equipment.query.ListEquipmentQuery;
+import deviceet.sample.equipment.query.QDetailedEquipment;
 import deviceet.sample.equipment.query.QListedEquipment;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -16,6 +18,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static deviceet.TestConfiguration.TEST_PRINCIPAL;
 
@@ -48,6 +52,22 @@ public class EquipmentController {
         // In real situations, principal is normally created from the current user in context, such as Spring Security's SecurityContextHolder
         Principal principal = TEST_PRINCIPAL;
         return this.equipmentQueryService.listEquipments(query, pageable, principal);
+    }
+
+    @GetMapping(value = "/{equipmentId}")
+    public QDetailedEquipment getEquipmentDetail(@PathVariable("equipmentId") @NotBlank String equipmentId) {
+        // In real situations, principal is normally created from the current user in context, such as Spring Security's SecurityContextHolder
+        Principal principal = TEST_PRINCIPAL;
+
+        return this.equipmentQueryService.getEquipmentDetail(equipmentId, principal);
+    }
+
+    @GetMapping(value = "/summaries")
+    public List<EquipmentSummary> getAllEquipmentSummaries() {
+        // In real situations, principal is normally created from the current user in context, such as Spring Security's SecurityContextHolder
+        Principal principal = TEST_PRINCIPAL;
+
+        return this.equipmentQueryService.getAllEquipmentSummaries(principal);
     }
 
 }

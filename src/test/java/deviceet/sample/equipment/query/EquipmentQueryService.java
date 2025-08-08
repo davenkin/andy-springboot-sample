@@ -3,6 +3,8 @@ package deviceet.sample.equipment.query;
 import deviceet.common.model.AggregateRoot;
 import deviceet.common.model.Principal;
 import deviceet.sample.equipment.domain.Equipment;
+import deviceet.sample.equipment.domain.EquipmentRepository;
+import deviceet.sample.equipment.domain.EquipmentSummary;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -22,9 +24,9 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 @RequiredArgsConstructor
 public class EquipmentQueryService {
     private final MongoTemplate mongoTemplate;
+    private final EquipmentRepository equipmentRepository;
 
     public Page<QListedEquipment> listEquipments(ListEquipmentQuery listEquipmentQuery, Pageable pageable, Principal principal) {
-
         Criteria criteria = where(AggregateRoot.Fields.orgId).is(principal.getOrgId());
 
         if (isNotBlank(listEquipmentQuery.search())) {
@@ -49,5 +51,21 @@ public class EquipmentQueryService {
 
         List<QListedEquipment> devices = mongoTemplate.find(query.with(pageable), QListedEquipment.class, EQUIPMENT_COLLECTION);
         return new PageImpl<>(devices, pageable, count);
+    }
+
+    public QDetailedEquipment getEquipmentDetail(String equipmentId, Principal principal) {
+        Equipment equipment = equipmentRepository.byId(equipmentId, principal.getOrgId());
+        return QDetailedEquipment.builder()
+                .id(equipment.getId())
+                .orgId(equipment.getOrgId())
+                .name(equipment.getName())
+                .status(equipment.getStatus())
+                .createdAt(equipment.getCreatedAt())
+                .createdBy(equipment.getCreatedBy())
+                .build();
+    }
+
+    public List<EquipmentSummary> getAllEquipmentSummaries(Principal principal) {
+        return equipmentRepository.cachedEquipmentSummaries(principal.getOrgId());
     }
 }
