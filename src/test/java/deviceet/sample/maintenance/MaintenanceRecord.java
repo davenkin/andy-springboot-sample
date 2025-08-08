@@ -1,6 +1,7 @@
 package deviceet.sample.maintenance;
 
 import deviceet.common.model.AggregateRoot;
+import deviceet.common.model.Principal;
 import deviceet.sample.equipment.domain.EquipmentStatus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,4 +26,11 @@ public class MaintenanceRecord extends AggregateRoot {
     private String equipmentName;
     private EquipmentStatus status;
     private String description;
+
+    public MaintenanceRecord(String equipmentId,
+                             String equipmentName,
+                             EquipmentStatus status,
+                             String description,
+                             Principal principal) {
+    }
 }

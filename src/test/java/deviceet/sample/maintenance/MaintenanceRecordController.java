@@ -19,11 +19,14 @@ import static deviceet.TestConfiguration.TEST_PRINCIPAL;
 @RequestMapping(value = "/maintenance-records")
 public class MaintenanceRecordController {
 
+    private final MaintenanceRecordCommandService maintenanceRecordCommandService;
+
     @PostMapping
     public ResponseId createMaintenanceRecord(@RequestBody @Valid CreateMaintenanceRecordCommand command) {
         // In real situations, principal is normally created from the current user in context, such as Spring Security's SecurityContextHolder
         Principal principal = TEST_PRINCIPAL;
-        return null;
+
+        return new ResponseId(maintenanceRecordCommandService.createMaintenanceRecord(command, principal));
     }
 
     @PostMapping("/list")

@@ -1,4 +1,4 @@
-package deviceet.sample.equipment.job.task;
+package deviceet.sample.equipment.domain.task;
 
 import com.mongodb.client.result.DeleteResult;
 import deviceet.sample.maintenance.MaintenanceRecord;

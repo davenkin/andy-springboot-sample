@@ -42,3 +42,4 @@
 - maintenance to reference equipment
 - maintenance event to update status of equipment
 - 删除device
+- domain中的对象不能访问command包中的对象，和query包，和infrastruce，和eventhandler

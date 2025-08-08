@@ -4,7 +4,7 @@ import deviceet.common.event.consume.AbstractEventHandler;
 import deviceet.common.utils.TaskRunner;
 import deviceet.sample.equipment.domain.EquipmentRepository;
 import deviceet.sample.equipment.domain.event.EquipmentDeletedEvent;
-import deviceet.sample.equipment.job.task.DeleteAllMaintenanceRecordsUnderEquipmentTask;
+import deviceet.sample.equipment.domain.task.DeleteAllMaintenanceRecordsUnderEquipmentTask;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

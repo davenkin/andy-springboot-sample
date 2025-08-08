@@ -61,6 +61,9 @@ The `1` in `(class:1)` indicates there can be only one class under a top level p
               state of the
               aggregate root, and should be raised by the aggregate root when its state changes. The naming convention
               is `[Aggregate Root Name] + [Passive form of verbs] + Event`, e.g. `UserCreatedEvent`.
+        - `task`(folder:1): Contains tasks.
+            - `XxxTask`(class:N): A task represents a standalone single operation, should end with "Task". Tasks are
+              usually called from jobs and event handlers.
     - `eventhandler`(folder:1): Contains all the event handler classes that results in updates on the aggregate root.
         - `XxxEventHandler`(class): Event handler class, should end with "EventHandler".
     - `infrastructure`(folder:1): Contains the infrastructure code that is related to the aggregate root.
@@ -68,9 +71,6 @@ The `1` in `(class:1)` indicates there can be only one class under a top level p
     - `job`(folder:1):Contains background jobs that are related to the aggregate root.
         - XxxScheduler(class:N): Scheduling configuration, should end with "Scheduler"
         - XxxJob(class:N): Represents a background job, should end with "Job". A job might run multiple tasks.
-        - `task`(folder:1): Contains tasks.
-            - `XxxTask`(class:N): A task represents a standalone single operation, should end with "Task". Tasks are
-              usually called from jobs and event handlers.
     - `query`(folder:1): For querying data, "query" represents the "Q"
       in [CQRS](https://microservices.io/patterns/data/cqrs.html).
         - `XxxQueryService`(class:N): The
