@@ -31,7 +31,7 @@ technical layers, use the following structure:
 The `1` in `(class:1)` indicates there can be only one class under a top level package, `(class:N)` for multiple.
 
 - `Aggregate Root`(folder:1): The top level package, an aggregate root represents a major business entity(e.g.
-  `device`).
+  `equipment`).
     - `command`(folder:1): For sending commands to the application, "command" represents the "C"
       in [CQRS](https://microservices.io/patterns/data/cqrs.html).
         - `XxxCommandService`(class:1): The
