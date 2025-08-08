@@ -2,6 +2,8 @@ package deviceet.common.utils;
 
 public class Constants {
     public static final String MONGO_ID = "_id";
+    public static final String ID = "id";
+    public static final String ORG_ID = "orgId";
     @Deprecated
     public static final String PLATFORM_ORG_ID = "PLATFORM_ORG_ID";
 

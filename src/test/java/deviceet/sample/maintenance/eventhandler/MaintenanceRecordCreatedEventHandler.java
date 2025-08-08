@@ -12,6 +12,6 @@ import org.springframework.stereotype.Component;
 public class MaintenanceRecordCreatedEventHandler extends AbstractEventHandler<MaintenanceRecordCreatedEvent> {
     @Override
     public void handle(MaintenanceRecordCreatedEvent event) {
-
+// todo: count records under equipment
     }
 }

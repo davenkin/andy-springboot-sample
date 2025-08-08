@@ -36,6 +36,14 @@ public class MaintenanceRecordController {
         return new ResponseId(maintenanceRecordCommandService.createMaintenanceRecord(command, principal));
     }
 
+    @DeleteMapping("/{maintenanceRecordId}")
+    public void deleteMaintenanceRecord(@PathVariable("maintenanceRecordId") @NotBlank String maintenanceRecordId) {
+        // In real situations, principal is normally created from the current user in context, such as Spring Security's SecurityContextHolder
+        Principal principal = TEST_PRINCIPAL;
+
+        this.maintenanceRecordCommandService.deleteMaintenanceRecord(maintenanceRecordId, principal);
+    }
+
     @PostMapping("/list")
     public Page<QListedMaintenanceRecord> listMaintenanceRecords(@RequestBody @Valid ListMaintenanceRecordsQuery query,
                                                                  @PageableDefault Pageable pageable) {

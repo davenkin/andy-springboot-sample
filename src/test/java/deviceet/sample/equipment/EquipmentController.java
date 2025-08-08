@@ -40,7 +40,7 @@ public class EquipmentController {
         return new ResponseId(this.equipmentCommandService.createEquipment(command, principal));
     }
 
-    @PutMapping(value = "/{equipmentId}/name")
+    @PutMapping("/{equipmentId}/name")
     public void updateEquipmentName(@PathVariable("equipmentId") @NotBlank String equipmentId,
                                     @RequestBody @Valid UpdateEquipmentNameCommand updateEquipmentNameCommand) {
         // In real situations, principal is normally created from the current user in context, such as Spring Security's SecurityContextHolder
@@ -49,7 +49,7 @@ public class EquipmentController {
         this.equipmentCommandService.updateEquipmentName(equipmentId, updateEquipmentNameCommand, principal);
     }
 
-    @PutMapping(value = "/{equipmentId}/holder")
+    @PutMapping("/{equipmentId}/holder")
     public void updateEquipmentHolder(@PathVariable("equipmentId") @NotBlank String equipmentId,
                                       @RequestBody @Valid UpdateEquipmentHolderCommand command) {
         // In real situations, principal is normally created from the current user in context, such as Spring Security's SecurityContextHolder
@@ -58,15 +58,24 @@ public class EquipmentController {
         this.equipmentCommandService.updateEquipmentHolder(equipmentId, command, principal);
     }
 
+    @DeleteMapping("/{equipmentId}")
+    public void deleteEquipment(@PathVariable("equipmentId") @NotBlank String equipmentId) {
+        // In real situations, principal is normally created from the current user in context, such as Spring Security's SecurityContextHolder
+        Principal principal = TEST_PRINCIPAL;
+
+        this.equipmentCommandService.deleteEquipment(equipmentId, principal);
+    }
+
     @PostMapping("/list")
     public Page<QListedEquipment> listEquipments(@RequestBody @Valid ListEquipmentQuery query,
                                                  @PageableDefault Pageable pageable) {
         // In real situations, principal is normally created from the current user in context, such as Spring Security's SecurityContextHolder
         Principal principal = TEST_PRINCIPAL;
+
         return this.equipmentQueryService.listEquipments(query, pageable, principal);
     }
 
-    @GetMapping(value = "/{equipmentId}")
+    @GetMapping("/{equipmentId}")
     public QDetailedEquipment getEquipmentDetail(@PathVariable("equipmentId") @NotBlank String equipmentId) {
         // In real situations, principal is normally created from the current user in context, such as Spring Security's SecurityContextHolder
         Principal principal = TEST_PRINCIPAL;
@@ -74,7 +83,7 @@ public class EquipmentController {
         return this.equipmentQueryService.getEquipmentDetail(equipmentId, principal);
     }
 
-    @GetMapping(value = "/summaries")
+    @GetMapping("/summaries")
     public List<EquipmentSummary> getAllEquipmentSummaries() {
         // In real situations, principal is normally created from the current user in context, such as Spring Security's SecurityContextHolder
         Principal principal = TEST_PRINCIPAL;

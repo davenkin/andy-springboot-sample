@@ -27,4 +27,10 @@ public class MaintenanceRecordCommandService {
         log.info("Created MaintenanceRecord[{}].", record.getId());
         return record.getId();
     }
+
+    public void deleteMaintenanceRecord(String maintenanceRecordId, Principal principal) {
+        MaintenanceRecord maintenanceRecord = maintenanceRecordRepository.byId(maintenanceRecordId, principal.getOrgId());
+        maintenanceRecordRepository.delete(maintenanceRecord);
+        log.info("Deleted MaintenanceRecord[{}].", maintenanceRecordId);
+    }
 }

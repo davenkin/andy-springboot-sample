@@ -23,6 +23,7 @@ public enum ErrorCode {
     //404
     NOT_FOUND(404),
     AR_NOT_FOUND(404),
+    MAINTENANCE_RECORD_NOT_FOUND(404),
 
     //405
     METHOD_NOT_ALLOWED(405),

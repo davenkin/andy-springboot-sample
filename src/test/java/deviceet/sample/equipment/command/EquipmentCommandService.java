@@ -41,4 +41,11 @@ public class EquipmentCommandService {
         equipmentRepository.save(equipment);
         log.info("Updated name for Equipment[{}].", equipment.getId());
     }
+
+    @Transactional
+    public void deleteEquipment(String equipmentId, Principal principal) {
+        Equipment equipment = equipmentRepository.byId(equipmentId, principal.getOrgId());
+        equipmentRepository.delete(equipment);
+        log.info("Deleted Equipment[{}].", equipmentId);
+    }
 }

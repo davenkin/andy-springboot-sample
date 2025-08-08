@@ -3,6 +3,8 @@ package deviceet.sample.maintenance.domain;
 import deviceet.common.model.AggregateRoot;
 import deviceet.common.model.Principal;
 import deviceet.sample.equipment.domain.EquipmentStatus;
+import deviceet.sample.maintenance.domain.event.MaintenanceRecordCreatedEvent;
+import deviceet.sample.maintenance.domain.event.MaintenanceRecordDeletedEvent;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
@@ -38,9 +40,15 @@ public class MaintenanceRecord extends AggregateRoot {
         this.equipmentName = equipmentName;
         this.status = status;
         this.description = description;
+        raiseEvent(new MaintenanceRecordCreatedEvent(this));
     }
 
     public static String newMaintenanceRecordId() {
         return "MTR" + newSnowflakeId();
+    }
+
+    @Override
+    public void onDelete() {
+        raiseEvent(new MaintenanceRecordDeletedEvent(this));
     }
 }
