@@ -1,4 +1,4 @@
-package deviceet.sample.maintenance;
+package deviceet.sample.maintenance.query;
 
 import deviceet.sample.equipment.domain.EquipmentStatus;
 import lombok.Builder;

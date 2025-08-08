@@ -1,7 +1,7 @@
-package deviceet.sample.equipment.domain.task;
+package deviceet.sample.maintenance.domain.task;
 
 import com.mongodb.client.result.DeleteResult;
-import deviceet.sample.maintenance.MaintenanceRecord;
+import deviceet.sample.maintenance.domain.MaintenanceRecord;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;

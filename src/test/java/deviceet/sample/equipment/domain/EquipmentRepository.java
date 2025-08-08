@@ -25,5 +25,7 @@ public interface EquipmentRepository {
     List<EquipmentSummary> cachedEquipmentSummaries(String orgId);
 
     void evictCachedEquipmentSummaries(String orgId);
+
+    boolean existsByName(String name, String orgId);
 }
 

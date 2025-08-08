@@ -4,6 +4,7 @@ import deviceet.common.model.Principal;
 import deviceet.common.utils.ResponseId;
 import deviceet.sample.equipment.command.CreateEquipmentCommand;
 import deviceet.sample.equipment.command.EquipmentCommandService;
+import deviceet.sample.equipment.command.UpdateEquipmentHolderCommand;
 import deviceet.sample.equipment.command.UpdateEquipmentNameCommand;
 import deviceet.sample.equipment.domain.EquipmentSummary;
 import deviceet.sample.equipment.query.EquipmentQueryService;
@@ -35,6 +36,7 @@ public class EquipmentController {
     public ResponseId createEquipment(@RequestBody @Valid CreateEquipmentCommand command) {
         // In real situations, principal is normally created from the current user in context, such as Spring Security's SecurityContextHolder
         Principal principal = TEST_PRINCIPAL;
+
         return new ResponseId(this.equipmentCommandService.createEquipment(command, principal));
     }
 
@@ -43,7 +45,17 @@ public class EquipmentController {
                                     @RequestBody @Valid UpdateEquipmentNameCommand updateEquipmentNameCommand) {
         // In real situations, principal is normally created from the current user in context, such as Spring Security's SecurityContextHolder
         Principal principal = TEST_PRINCIPAL;
+
         this.equipmentCommandService.updateEquipmentName(equipmentId, updateEquipmentNameCommand, principal);
+    }
+
+    @PutMapping(value = "/{equipmentId}/holder")
+    public void updateEquipmentHolder(@PathVariable("equipmentId") @NotBlank String equipmentId,
+                                      @RequestBody @Valid UpdateEquipmentHolderCommand command) {
+        // In real situations, principal is normally created from the current user in context, such as Spring Security's SecurityContextHolder
+        Principal principal = TEST_PRINCIPAL;
+
+        this.equipmentCommandService.updateEquipmentHolder(equipmentId, command, principal);
     }
 
     @PostMapping("/list")

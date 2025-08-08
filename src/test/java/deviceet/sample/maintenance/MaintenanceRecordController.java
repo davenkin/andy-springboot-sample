@@ -2,6 +2,12 @@ package deviceet.sample.maintenance;
 
 import deviceet.common.model.Principal;
 import deviceet.common.utils.ResponseId;
+import deviceet.sample.maintenance.command.CreateMaintenanceRecordCommand;
+import deviceet.sample.maintenance.command.MaintenanceRecordCommandService;
+import deviceet.sample.maintenance.query.ListMaintenanceRecordsQuery;
+import deviceet.sample.maintenance.query.MaintenanceRecordQueryService;
+import deviceet.sample.maintenance.query.QDetailedMaintenanceRecord;
+import deviceet.sample.maintenance.query.QListedMaintenanceRecord;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +26,7 @@ import static deviceet.TestConfiguration.TEST_PRINCIPAL;
 public class MaintenanceRecordController {
 
     private final MaintenanceRecordCommandService maintenanceRecordCommandService;
+    private final MaintenanceRecordQueryService maintenanceRecordQueryService;
 
     @PostMapping
     public ResponseId createMaintenanceRecord(@RequestBody @Valid CreateMaintenanceRecordCommand command) {
@@ -34,14 +41,16 @@ public class MaintenanceRecordController {
                                                                  @PageableDefault Pageable pageable) {
         // In real situations, principal is normally created from the current user in context, such as Spring Security's SecurityContextHolder
         Principal principal = TEST_PRINCIPAL;
-        return null;
+
+        return maintenanceRecordQueryService.listMaintenanceRecords(query, pageable, principal);
     }
 
     @GetMapping("/{maintenanceRecordId}")
     public QDetailedMaintenanceRecord getMaintenanceRecordDetail(@PathVariable("maintenanceRecordId") @NotBlank String maintenanceRecordId) {
         // In real situations, principal is normally created from the current user in context, such as Spring Security's SecurityContextHolder
         Principal principal = TEST_PRINCIPAL;
-        return null;
+
+        return maintenanceRecordQueryService.getMaintenanceRecordDetail(maintenanceRecordId, principal);
     }
 
 }

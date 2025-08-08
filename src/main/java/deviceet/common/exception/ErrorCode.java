@@ -30,6 +30,7 @@ public enum ErrorCode {
     //409
     CONFLICT(409),
     NOT_SAME_ORG(409),
+    EQUIPMENT_NAME_ALREADY_EXISTS(409),
 
     //429
     TOO_MANY_REQUEST(429),

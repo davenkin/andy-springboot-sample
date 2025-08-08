@@ -6,8 +6,10 @@
     - `MaintenanceRecord`: Represents a maintenance record created for an `Equipment`.
 - The business stories contains:
     - Create an `Equipment`.
-    - Update the name of an `Equipment`. The updated name should also be reflected in all `MaintenanceRecord`s for this
+    - Update the `name` of an `Equipment`. The updated name should also be reflected in all `MaintenanceRecord`s for
+      this
       `Equipment`,this is achieved using domain event.
+    - Update the `holder` of an `Equipment`.
     - Delete an `Equipment`. This should also delete all `MaintenanceRecord`s for this `Equipment`, this is achieved
       using domain event.
     - Create a `MaintenanceRecord`. Its `status` will be used to update the `status` of the `Equipment`, this

@@ -1,4 +1,4 @@
-package deviceet.sample.maintenance;
+package deviceet.sample.maintenance.command;
 
 import deviceet.sample.equipment.domain.EquipmentStatus;
 import jakarta.validation.constraints.NotBlank;
@@ -10,6 +10,6 @@ import lombok.Builder;
 public record CreateMaintenanceRecordCommand(
         @NotBlank String equipmentId,
         @NotBlank @Size(max = 1000) String description,
-        @NotNull EquipmentStatus equipmentStatus
+        @NotNull EquipmentStatus status
 ) {
 }

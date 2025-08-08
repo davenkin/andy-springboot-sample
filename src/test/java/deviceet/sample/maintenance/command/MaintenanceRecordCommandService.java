@@ -1,7 +1,10 @@
-package deviceet.sample.maintenance;
+package deviceet.sample.maintenance.command;
 
 
 import deviceet.common.model.Principal;
+import deviceet.sample.maintenance.domain.MaintenanceRecord;
+import deviceet.sample.maintenance.domain.MaintenanceRecordFactory;
+import deviceet.sample.maintenance.domain.MaintenanceRecordRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -17,7 +20,7 @@ public class MaintenanceRecordCommandService {
     @Transactional
     public String createMaintenanceRecord(CreateMaintenanceRecordCommand command, Principal principal) {
         MaintenanceRecord record = maintenanceRecordFactory.create(command.equipmentId(),
-                command.equipmentStatus(),
+                command.status(),
                 command.description(),
                 principal);
         maintenanceRecordRepository.save(record);

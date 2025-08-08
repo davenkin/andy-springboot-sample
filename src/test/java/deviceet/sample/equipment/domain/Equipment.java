@@ -29,6 +29,8 @@ public class Equipment extends AggregateRoot {
     public final static String EQUIPMENT_COLLECTION = "equipment";
     private String name;
     private EquipmentStatus status;
+    private String holder;
+    private long maintenanceRecordCount;
 
     public Equipment(String name, Principal principal) {
         super(newEquipmentId(), principal);
@@ -46,6 +48,10 @@ public class Equipment extends AggregateRoot {
         }
         this.name = newName;
         raiseEvent(new EquipmentNameUpdatedEvent(name, this));
+    }
+
+    public void updateHolder(String newHolder) {
+        this.holder = newHolder;
     }
 
     public void updateStatus(EquipmentStatus status) {

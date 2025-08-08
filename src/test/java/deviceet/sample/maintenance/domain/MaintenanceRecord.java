@@ -1,4 +1,4 @@
-package deviceet.sample.maintenance;
+package deviceet.sample.maintenance.domain;
 
 import deviceet.common.model.AggregateRoot;
 import deviceet.common.model.Principal;
@@ -10,7 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import static deviceet.sample.maintenance.MaintenanceRecord.MAINTENANCE_RECORD_COLLECTION;
+import static deviceet.common.utils.SnowflakeIdGenerator.newSnowflakeId;
+import static deviceet.sample.maintenance.domain.MaintenanceRecord.MAINTENANCE_RECORD_COLLECTION;
 import static lombok.AccessLevel.PRIVATE;
 
 @Slf4j
@@ -32,5 +33,14 @@ public class MaintenanceRecord extends AggregateRoot {
                              EquipmentStatus status,
                              String description,
                              Principal principal) {
+        super(newMaintenanceRecordId(), principal);
+        this.equipmentId = equipmentId;
+        this.equipmentName = equipmentName;
+        this.status = status;
+        this.description = description;
+    }
+
+    public static String newMaintenanceRecordId() {
+        return "MTR" + newSnowflakeId();
     }
 }

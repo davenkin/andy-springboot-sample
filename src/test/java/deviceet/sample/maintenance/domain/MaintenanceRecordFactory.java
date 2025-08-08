@@ -1,4 +1,4 @@
-package deviceet.sample.maintenance;
+package deviceet.sample.maintenance.domain;
 
 import deviceet.common.model.Principal;
 import deviceet.sample.equipment.domain.Equipment;
