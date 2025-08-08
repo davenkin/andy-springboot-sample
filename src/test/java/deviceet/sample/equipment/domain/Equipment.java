@@ -5,13 +5,15 @@ import deviceet.common.model.Principal;
 import deviceet.sample.equipment.domain.event.EquipmentCreatedEvent;
 import deviceet.sample.equipment.domain.event.EquipmentDeletedEvent;
 import deviceet.sample.equipment.domain.event.EquipmentNameUpdatedEvent;
-import deviceet.sample.maintenance.MaintenanceStatus;
+import deviceet.sample.equipment.domain.event.EquipmentStatusUpdatedEvent;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.Objects;
 
 import static deviceet.common.utils.SnowflakeIdGenerator.newSnowflakeId;
 import static deviceet.sample.equipment.domain.Equipment.EQUIPMENT_COLLECTION;
@@ -26,7 +28,7 @@ import static lombok.AccessLevel.PRIVATE;
 public class Equipment extends AggregateRoot {
     public final static String EQUIPMENT_COLLECTION = "equipment";
     private String name;
-    private MaintenanceStatus maintenanceStatus;
+    private EquipmentStatus status;
 
     public Equipment(String name, Principal principal) {
         super(newEquipmentId(), principal);
@@ -39,8 +41,20 @@ public class Equipment extends AggregateRoot {
     }
 
     public void updateName(String newName) {
+        if (Objects.equals(newName, this.name)) {
+            return;
+        }
         this.name = newName;
         raiseEvent(new EquipmentNameUpdatedEvent(name, this));
+    }
+
+    public void updateStatus(EquipmentStatus status) {
+        if (this.status == status) {
+            return;
+        }
+        this.status = status;
+        raiseEvent(new EquipmentStatusUpdatedEvent(this.status, this));
+
     }
 
     @Override

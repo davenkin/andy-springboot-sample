@@ -36,6 +36,7 @@
 - 如何使用pagination和sorting，可以使用spring的Pageable和Page<>
 - 算了，不要typealias了，
 - 测试mongock是否有效
+- 不使用spring data repository
 
 - equipment cache
 - maintenance to reference equipment

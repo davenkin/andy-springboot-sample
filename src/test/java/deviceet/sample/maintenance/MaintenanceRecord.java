@@ -1,8 +1,9 @@
 package deviceet.sample.maintenance;
 
-import deviceet.sample.equipment.domain.EquipmentReference;
+import deviceet.sample.equipment.domain.EquipmentStatus;
 
 public class MaintenanceRecord {
-    private EquipmentReference equipmentReference;
-    private MaintenanceStatus status;
+    private String equipmentId;
+    private String equipmentName;
+    private EquipmentStatus equipmentStatus;
 }

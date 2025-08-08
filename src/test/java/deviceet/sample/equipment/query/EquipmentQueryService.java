@@ -34,7 +34,7 @@ public class EquipmentQueryService {
         Query query = Query.query(criteria);
         query.fields().include(AggregateRoot.Fields.orgId,
                 Equipment.Fields.name,
-                Equipment.Fields.maintenanceStatus,
+                Equipment.Fields.status,
                 AggregateRoot.Fields.createdAt,
                 AggregateRoot.Fields.createdBy);
 

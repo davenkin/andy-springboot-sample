@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class EquipmentFactory {
+
     public Equipment create(String name, Principal principal) {
         return new Equipment(name, principal);
     }

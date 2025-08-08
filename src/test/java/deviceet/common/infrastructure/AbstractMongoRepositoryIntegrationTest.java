@@ -57,7 +57,7 @@ class AbstractMongoRepositoryIntegrationTest extends IntegrationTest {
         assertTrue(equipmentRepository.byIdOptional(equipment1.getId()).isPresent());
         assertTrue(equipmentRepository.byIdOptional(equipment2.getId()).isPresent());
         EquipmentCreatedEvent createdEvent1 = latestEventFor(equipment1.getId(), EQUIPMENT_CREATED_EVENT, EquipmentCreatedEvent.class);
-        assertEquals(equipment1.getId(), createdEvent1.getEquipmentId());
+        assertEquals(equipment1.getId(), createdEvent1.getArId());
         EquipmentCreatedEvent createdEvent2 = latestEventFor(equipment2.getId(), EQUIPMENT_CREATED_EVENT, EquipmentCreatedEvent.class);
         assertEquals(equipment2.getId(), createdEvent2.getEquipmentId());
     }

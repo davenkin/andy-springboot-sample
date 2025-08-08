@@ -10,5 +10,5 @@
       `Equipment`,this is achieved using domain event.
     - Delete an `Equipment`. This should also delete all `MaintenanceRecord`s for this `Equipment`, this is achieved
       using domain event.
-    - Create a `MaintenanceRecord`. Its `status` will be used to update the `maintenanceStatus` of the `Equipment`, this
+    - Create a `MaintenanceRecord`. Its `status` will be used to update the `status` of the `Equipment`, this
       is achieved using domain event.
