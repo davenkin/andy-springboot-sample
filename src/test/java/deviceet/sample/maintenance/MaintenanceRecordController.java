@@ -24,7 +24,6 @@ import static deviceet.TestConfiguration.TEST_PRINCIPAL;
 @RequiredArgsConstructor
 @RequestMapping(value = "/maintenance-records")
 public class MaintenanceRecordController {
-
     private final MaintenanceRecordCommandService maintenanceRecordCommandService;
     private final MaintenanceRecordQueryService maintenanceRecordQueryService;
 

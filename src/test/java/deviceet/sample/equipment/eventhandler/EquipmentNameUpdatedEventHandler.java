@@ -1,8 +1,10 @@
 package deviceet.sample.equipment.eventhandler;
 
 import deviceet.common.event.consume.AbstractEventHandler;
+import deviceet.common.utils.TaskRunner;
 import deviceet.sample.equipment.domain.EquipmentRepository;
 import deviceet.sample.equipment.domain.event.EquipmentNameUpdatedEvent;
+import deviceet.sample.equipment.domain.task.SyncEquipmentNameToMaintenanceRecordsTask;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -12,12 +14,16 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class EquipmentNameUpdatedEventHandler extends AbstractEventHandler<EquipmentNameUpdatedEvent> {
     private final EquipmentRepository equipmentRepository;
+    private final SyncEquipmentNameToMaintenanceRecordsTask syncEquipmentNameToMaintenanceRecordsTask;
 
     @Override
     public void handle(EquipmentNameUpdatedEvent event) {
-        equipmentRepository.evictCachedEquipmentSummaries(event.getArOrgId());
-        log.debug("Evicted equipment summaries cache for org[{}].", event.getArOrgId());
+        TaskRunner.run(() -> {
+            equipmentRepository.evictCachedEquipmentSummaries(event.getArOrgId());
+            log.debug("Evicted equipment summaries cache for org[{}].", event.getArOrgId());
 
-        //todo: 同步record的equipmentname
+        });
+
+        TaskRunner.run(() -> syncEquipmentNameToMaintenanceRecordsTask.run(event.getEquipmentId()));
     }
 }

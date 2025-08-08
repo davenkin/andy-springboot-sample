@@ -19,13 +19,10 @@ public class EquipmentDeletedEventEventHandler extends AbstractEventHandler<Equi
     @Override
     public void handle(EquipmentDeletedEvent event) {
         TaskRunner.run(() -> {
-            long deletedCount = deleteAllMaintenanceRecordsUnderEquipmentTask.run(event.getEquipmentId());
-            log.info("Delete all {} maintenance records under equipment [{}].", deletedCount, event.getEquipmentId());
-        });
-
-        TaskRunner.run(() -> {
             equipmentRepository.evictCachedEquipmentSummaries(event.getArOrgId());
             log.debug("Evicted equipment summaries cache for org[{}].", event.getArOrgId());
         });
+
+        TaskRunner.run(() -> deleteAllMaintenanceRecordsUnderEquipmentTask.run(event.getEquipmentId()));
     }
 }

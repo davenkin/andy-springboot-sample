@@ -14,9 +14,11 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 public class MaintenanceRecordDeletedEvent extends DomainEvent {
     private String maintenanceRecordId;
+    private String equipmentId;
 
     public MaintenanceRecordDeletedEvent(MaintenanceRecord record) {
         super(MAINTENANCE_RECORD_DELETED_EVENT, record);
         this.maintenanceRecordId = record.getId();
+        this.equipmentId = record.getEquipmentId();
     }
 }
