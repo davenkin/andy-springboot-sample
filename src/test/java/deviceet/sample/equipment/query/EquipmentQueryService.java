@@ -31,6 +31,10 @@ public class EquipmentQueryService {
             criteria.and(Equipment.Fields.name).regex(listEquipmentQuery.search());
         }
 
+        if (listEquipmentQuery.status() != null) {
+            criteria.and(Equipment.Fields.status).is(listEquipmentQuery.status());
+        }
+
         Query query = Query.query(criteria);
         query.fields().include(AggregateRoot.Fields.orgId,
                 Equipment.Fields.name,
