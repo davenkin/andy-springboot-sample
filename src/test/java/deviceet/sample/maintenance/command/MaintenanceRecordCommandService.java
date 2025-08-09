@@ -28,6 +28,7 @@ public class MaintenanceRecordCommandService {
         return record.getId();
     }
 
+    @Transactional
     public void deleteMaintenanceRecord(String maintenanceRecordId, Principal principal) {
         MaintenanceRecord maintenanceRecord = maintenanceRecordRepository.byId(maintenanceRecordId, principal.getOrgId());
         maintenanceRecordRepository.delete(maintenanceRecord);
