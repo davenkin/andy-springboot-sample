@@ -1,4 +1,4 @@
-package deviceet.sample.equipment;
+package deviceet.sample.equipment.controller;
 
 import deviceet.common.model.principal.Principal;
 import deviceet.common.util.ResponseId;

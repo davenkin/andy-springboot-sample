@@ -40,6 +40,8 @@ The `1` in `(class:1)` indicates there can be only one class under a top level p
         - `XxxCommand`(class:N): Represent a single command, it contains the data that you want to send to the
           application, should end
           with "Command".
+    - `controller`(folder:1): For HTTP controllers
+        - `XxxController`(class:1): The controller class, should end with "Controller".
     - `domain`(folder:1): Contains all the domain models.
         - `Xxx`(class:N): Domain objects.
         - `XxxRepository`(class:1): Repository interface for persisting aggregate root, should end with "Repository",
@@ -78,5 +80,3 @@ The `1` in `(class:1)` indicates there can be only one class under a top level p
           queries, should end with "QueryService".
         - `XxxQuery`(class:N): Request class of a query, should end with "Query".
         - `QXxx`(class:N): Response class of a query, should start with the letter "Q".
-    - `XxxController`(class:1): The controller class, should end with "Controller".
-

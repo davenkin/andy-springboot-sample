@@ -1,4 +1,4 @@
-package deviceet.sample.maintenance;
+package deviceet.sample.maintenance.controller;
 
 import deviceet.common.model.principal.Principal;
 import deviceet.common.util.ResponseId;
