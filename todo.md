@@ -37,6 +37,9 @@
 - 算了，不要typealias了，
 - 测试mongock是否有效
 - 不使用spring data repository
+- 集成测试尽量不用mock
+- 测试方法采用下划线格式
+- 任何ID都由程序自己生成，而不用数据库生成，比如Equipment.newEquipmentId();
 
 - equipment cache
 - maintenance to reference equipment

@@ -9,7 +9,7 @@ public class TaskRunner {
         try {
             runnable.run();
         } catch (Exception ex) {
-            log.error("Failed to run task: {} ", runnable.getClass().getName().split("\\$")[0], ex);
+            log.error("Failed to run: ", ex);
         }
     }
 

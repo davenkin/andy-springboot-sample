@@ -36,6 +36,16 @@ public class Principal {
         this.roles = Set.of(role);
     }
 
+    public static Principal robotForOrg(String orgId) {
+        requireNonBlank(orgId, "orgId must not be blank.");
+        return new Principal(ROBOT_USER_ID, ROBOT_USER_NAME, ROOT, orgId);
+    }
+
+    public static Principal robot() {
+        return ROBOT;
+    }
+
+
     @Override
     public String toString() {
         return "Principal{" +
