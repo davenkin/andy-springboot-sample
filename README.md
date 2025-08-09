@@ -1,15 +1,15 @@
-### Introduction
+## Introduction
 
 - todo: add you introductions
 
-### Tech stack
+## Tech stack
 
 - Spring Boot 3.5.3
 - Spring Data Mongodb 4.5.1
 - Spring Kafka 3.3.7
 - Kafka Clients 3.8.1
 
-### How to run locally
+## How to run locally
 
 - First run `./start-docker-compose.sh` to start the following infrastructures:
     - `MongoDB`: localhost:27123
@@ -27,7 +27,10 @@
   successfully.
 - To stop local docker compose and delete data volume, run `./stop-docker-compose.sh`.
 
-### How to run tests
+## How to build
+- Run `./build.sh` to build the project locally.
+
+## How to run tests
 
 - To run tests, locate them inside IDE and run them directly from there.
 - We do both unit testing and integration testing.
