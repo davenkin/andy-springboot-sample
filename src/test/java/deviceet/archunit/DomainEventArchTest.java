@@ -9,7 +9,7 @@ import deviceet.common.event.consume.AbstractEventHandler;
 import org.springframework.data.annotation.TypeAlias;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
-import static deviceet.archunit.ArchUnitUtils.*;
+import static deviceet.archunit.util.ArchUnitUtils.*;
 
 @AnalyzeClasses(packages = "deviceet.business", importOptions = DoNotIncludeTests.class)
 class DomainEventArchTest {

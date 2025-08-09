@@ -1,4 +1,4 @@
-package deviceet.archunit;
+package deviceet.archunit.util;
 
 import com.tngtech.archunit.base.DescribedPredicate;
 import com.tngtech.archunit.core.domain.JavaClass;
