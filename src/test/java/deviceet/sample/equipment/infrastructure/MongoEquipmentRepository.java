@@ -22,7 +22,7 @@ public class MongoEquipmentRepository extends AbstractMongoRepository<Equipment>
 
     @Override
     public List<EquipmentSummary> cachedEquipmentSummaries(String orgId) {
-        return cachedMongoEquipmentRepository.cachedEquipmentSummaries(orgId);
+        return cachedMongoEquipmentRepository.cachedEquipmentSummaries(orgId).summaries();
     }
 
     @Override
