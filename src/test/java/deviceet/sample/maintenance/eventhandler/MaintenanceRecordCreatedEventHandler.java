@@ -21,13 +21,17 @@ public class MaintenanceRecordCreatedEventHandler extends AbstractEventHandler<M
     @Override
     public void handle(MaintenanceRecordCreatedEvent event) {
         TaskRunner.run(() -> countMaintenanceRecordsForEquipmentTask.run(event.getEquipmentId()));
-        TaskRunner.run(() -> equipmentRepository.byIdOptional(event.getEquipmentId()).ifPresent(equipment -> {
+        TaskRunner.run(() -> updateEquipmentStatus(event));
+    }
+
+    private void updateEquipmentStatus(MaintenanceRecordCreatedEvent event) {
+        equipmentRepository.byIdOptional(event.getEquipmentId()).ifPresent(equipment -> {
             maintenanceRecordRepository.latestFor(event.getEquipmentId()).ifPresent(record -> {
                 equipment.updateStatus(record.getStatus());
                 equipmentRepository.save(equipment);
                 log.info("Updated equipment[{}] status from its lasted maintenance record[{}].",
                         equipment.getId(), record.getId());
             });
-        }));
+        });
     }
 }

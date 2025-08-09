@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+import static deviceet.common.utils.CommonUtils.requireNonBlank;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 @Repository
@@ -16,6 +17,8 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 public class MongoMaintenanceRecordRepository extends AbstractMongoRepository<MaintenanceRecord> implements MaintenanceRecordRepository {
     @Override
     public Optional<MaintenanceRecord> latestFor(String equipmentId) {
+        requireNonBlank(equipmentId, "equipmentId must not be blank.");
+
         Query query = Query.query(where(MaintenanceRecord.Fields.equipmentId).is(equipmentId));
         return Optional.ofNullable(mongoTemplate.findOne(query, MaintenanceRecord.class));
     }
