@@ -4,10 +4,11 @@
 
 ## Tech stack
 
+- Java 17
 - Spring Boot 3.5.3
 - Spring Data Mongodb 4.5.1
+- Spring Data Redis 3.5.0
 - Spring Kafka 3.3.7
-- Kafka Clients 3.8.1
 
 ## How to run locally
 
@@ -66,7 +67,7 @@ decisions. Each ADR is stored in the `ADRs` directory and follows a specific for
 - The `src/test/java/deviceet/sample` folder contains various common coding practices that should be followed when
   implementing your own features. Please refer to [sample code introduction](src/test/java/deviceet/sample/sample-code-introduction.md) for more detail.
 
-## Major top level business entities
+## Top level business entities
 
 | Business Entity   | Chinese | Abbreviation | Description                                                                                                                          |
 |-------------------|---------|--------------|--------------------------------------------------------------------------------------------------------------------------------------|
