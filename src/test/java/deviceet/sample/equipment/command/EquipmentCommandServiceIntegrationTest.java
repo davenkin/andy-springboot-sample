@@ -39,7 +39,7 @@ class EquipmentCommandServiceIntegrationTest extends IntegrationTest {
     }
 
     @Test
-    void shouldUpdateEquipmentName() {
+    void should_update_equipment_name() {
         Principal principal = randomUserPrincipal();
 
         CreateEquipmentCommand createEquipmentCommand = randomCreateEquipmentCommand();

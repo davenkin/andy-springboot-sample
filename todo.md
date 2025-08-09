@@ -40,10 +40,5 @@
 - 集成测试尽量不用mock
 - 测试方法采用下划线格式
 - 任何ID都由程序自己生成，而不用数据库生成，比如Equipment.newEquipmentId();
-
-- equipment cache
-- maintenance to reference equipment
-- maintenance event to update status of equipment
-- 删除device
-- domain中的对象不能访问command包中的对象，和query包，和infrastruce，和eventhandler
+- 当需要引用对象字段时，使用@FieldNameConstants
 - ID不由数据库生成，有代码自己生成

@@ -22,7 +22,7 @@ class PackageDependencyArchTest {
             .because("The common package is shard by all businesses, it should not depend on any specific business packages.");
 
     @ArchTest
-    static final ArchRule businessClassesShouldAllUnderCertainPackages = classes()
+    static final ArchRule businessClassesShouldAllUnderSpecificPackages = classes()
             .that()
             .resideInAnyPackage("..deviceet.business..")
             .should()
