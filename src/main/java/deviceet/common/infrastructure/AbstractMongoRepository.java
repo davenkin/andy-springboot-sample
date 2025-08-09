@@ -4,7 +4,7 @@ import deviceet.common.event.DomainEvent;
 import deviceet.common.event.publish.PublishingDomainEventDao;
 import deviceet.common.exception.ServiceException;
 import deviceet.common.model.AggregateRoot;
-import deviceet.common.operator.CurrentPrincipalProvider;
+import deviceet.common.operator.CurrentOperator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -40,7 +40,7 @@ public abstract class AbstractMongoRepository<AR extends AggregateRoot> {
     private PublishingDomainEventDao publishingDomainEventDao;
 
     @Autowired
-    private CurrentPrincipalProvider currentPrincipalProvider;
+    private CurrentOperator currentOperator;
 
     private final Class<?> arClass;
 
@@ -53,7 +53,7 @@ public abstract class AbstractMongoRepository<AR extends AggregateRoot> {
         requireNonNull(ar, arType() + " must not be null.");
         requireNonBlank(ar.getId(), arType() + " ID must not be blank.");
 
-        ar.onModify(currentPrincipalProvider.currentPrincipalUserId());
+        ar.onModify(currentOperator.id());
         mongoTemplate.save(ar);
         stageEvents(ar.getEvents());
         ar.clearEvents();
@@ -70,7 +70,7 @@ public abstract class AbstractMongoRepository<AR extends AggregateRoot> {
             if (isNotEmpty(ar.getEvents())) {
                 events.addAll(ar.getEvents());
             }
-            ar.onModify(currentPrincipalProvider.currentPrincipalUserId());
+            ar.onModify(currentOperator.id());
             mongoTemplate.save(ar);
             ar.clearEvents();
         });
@@ -163,7 +163,7 @@ public abstract class AbstractMongoRepository<AR extends AggregateRoot> {
     private void stageEvents(List<DomainEvent> events) {
         if (isNotEmpty(events)) {
             List<DomainEvent> orderedEvents = events.stream().sorted(comparing(DomainEvent::getRaisedAt)).toList();
-            String raisedBy = currentPrincipalProvider.currentPrincipalUserId();
+            String raisedBy = currentOperator.id();
             orderedEvents.forEach(event -> event.raisedBy(raisedBy));
             publishingDomainEventDao.stage(orderedEvents);
         }

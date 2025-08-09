@@ -11,7 +11,8 @@ import static deviceet.common.model.principal.Role.PLATFORM;
 @EqualsAndHashCode
 public class PlatformPrincipal implements Principal {
     public static final PlatformPrincipal PLATFORM_PRINCIPAL = new PlatformPrincipal();
-    public static final String PLATFORM_ID = "PLATFORM";
+    public static final String PLATFORM_ID = "PLATFORM001";
+    public static final String PLATFORM_NAME = "PLATFORM";
 
     private PlatformPrincipal() {
     }
@@ -23,7 +24,7 @@ public class PlatformPrincipal implements Principal {
 
     @Override
     public String getName() {
-        return PLATFORM_ID;
+        return PLATFORM_NAME;
     }
 
     @Override

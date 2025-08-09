@@ -5,9 +5,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 @EnableForIT
-public class FakeCurrentPrincipalProvider implements CurrentPrincipalProvider {
+public class FakeCurrentOperator implements CurrentOperator {
     @Override
-    public String currentPrincipalUserId() {
-        return null;
+    public String id() {
+        return "FakeOperator";
     }
 }

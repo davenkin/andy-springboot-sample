@@ -14,6 +14,14 @@ public class RandomTestUtils {
         return "EQUIPMENT_NAME_" + RandomStringUtils.secure().nextAlphanumeric(10);
     }
 
+    public static CreateEquipmentCommand randomCreateEquipmentCommand() {
+        return new CreateEquipmentCommand(randomEquipmentName());
+    }
+
+    public static UpdateEquipmentNameCommand randomUpdateEquipmentNameCommand() {
+        return new UpdateEquipmentNameCommand(randomEquipmentName());
+    }
+
     public static String randomUserId() {
         return "USER_" + RandomStringUtils.secure().nextAlphanumeric(10);
     }
@@ -32,14 +40,6 @@ public class RandomTestUtils {
 
     public static UserPrincipal randomUserPrincipal() {
         return UserPrincipal.of(randomUserId(), randomUserName(), randomRole(), randomOrgId());
-    }
-
-    public static CreateEquipmentCommand randomCreateEquipmentCommand() {
-        return new CreateEquipmentCommand(randomEquipmentName());
-    }
-
-    public static UpdateEquipmentNameCommand randomUpdateEquipmentNameCommand() {
-        return new UpdateEquipmentNameCommand(randomEquipmentName());
     }
 
     public static <T extends Enum<T>> T randomEnum(Class<T> enumClass) {
