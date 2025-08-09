@@ -19,7 +19,7 @@ import static lombok.AccessLevel.PRIVATE;
 @FieldNameConstants
 @NoArgsConstructor(access = PRIVATE)
 @Document(CONSUMING_EVENT_COLLECTION)
-@TypeAlias("CONSUMING_EVENT")
+@TypeAlias(CONSUMING_EVENT_COLLECTION)
 public class ConsumingEvent {
     private String eventId;
     private String type;

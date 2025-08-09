@@ -25,7 +25,7 @@ public class DomainEventScheduler {
     }
 
     @Scheduled(cron = "0 10 2 1 * ?")
-    @SchedulerLock(name = "removeOldDomainEvents", lockAtMostFor = "60m", lockAtLeastFor = "1m")
+    @SchedulerLock(name = "removeOldDomainEvents", lockAtMostFor = "PT60M", lockAtLeastFor = "PT1M")
     public void removeOldDomainEvents() {
         LockAssert.assertLocked();
         try {

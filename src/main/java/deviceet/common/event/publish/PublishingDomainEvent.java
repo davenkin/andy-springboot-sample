@@ -19,7 +19,7 @@ import static lombok.AccessLevel.PRIVATE;
 @FieldNameConstants
 @NoArgsConstructor(access = PRIVATE)
 @Document(PUBLISHING_EVENT_COLLECTION)
-@TypeAlias("PUBLISHING_DOMAIN_EVENT")
+@TypeAlias(PUBLISHING_EVENT_COLLECTION)
 public class PublishingDomainEvent {
     private String id;
     private DomainEvent event;

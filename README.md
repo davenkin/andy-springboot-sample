@@ -23,15 +23,15 @@
     - Run `./clear-and-run-local.sh`: this starts the application with debug port on 5005, it also automatically starts
       docker-compose by first removing existing docker contains if any, and also deletes all their data.
     - Run `main` in  `SpringBootWebApplication`, assuming that docker-compose is already up running.
-- After that open [http://localhost:5123/about(http://localhost:5123/about) to check if the application runs
+- After that open [http://localhost:5123/about](http://localhost:5123/about) to check if the application runs
   successfully.
 - To stop local docker compose and delete data volume, run `./stop-docker-compose.sh`.
 
 ### How to run tests
 
-- To run tests, locate them inside IDE and run them directly from there
-- We do both unit testing and integration testing
-- For unit testing, we mainly test classes under `domain` package
+- To run tests, locate them inside IDE and run them directly from there.
+- We do both unit testing and integration testing.
+- For unit testing, we mainly test classes under `domain` package.
 - For integration testing, the following types of classes are tested:
     - CommandService(e.g. `EquipmentCommandServiceIntegrationTest`)
     - QueryService(e.g. `EquipmentQueryServiceIntegrationTest`)
@@ -56,7 +56,12 @@
 ## Architecture Decision Records (ADRs)
 
 This project uses [Architecture Decision Records (ADRs)](https://adr.github.io/) to document important architectural
-decisions. Each ADR is stored in the `ADRs` directory and follows a specific format.
+decisions. Each ADR is stored in the `ADRs` directory and follows a specific format. Please refer to [What is ADR](ADRs/000_what_is_ADR.md) for more detail.
+
+## Sample code for consistent coding practices
+
+- The `src/test/java/deviceet/sample` folder contains various common coding practices that should be followed when
+  implementing your own features. Please refer to [sample code introduction](src/test/java/deviceet/sample/sample-code-introduction.md) for more detail.
 
 ## Major top level business entities
 
@@ -65,20 +70,3 @@ decisions. Each ADR is stored in the `ADRs` directory and follows a specific for
 | Equipment         | 装备      |              | Sample top level business entity that serves as a reference for consitent coding practice. An Equipment has many MaintenanceRecords. |
 | MaintenanceRecord | 装备维护记录  |              | Another sample top level business entity. Multiple MaintenanceRecords can be created for a single  Equipment.                        |
 
-## Sample code for consistent coding practices
-
-- The `src/test/java/deviceet/sample` folder contains various common coding practices that shoule be followed when
-  implementing your own features.
-- There are 2 main business entities under `sample` folder:
-    - `Equipment`: Represents an equipment that needs to be managed, such as a computer.
-    - `MaintenanceRecord`: Represents a maintenance record created for an `Equipment`.
-- The business stories contains:
-    - Create an `Equipment`.
-    - Update the `name` of an `Equipment`. The updated name should also be reflected in all `MaintenanceRecord`s for
-      this
-      `Equipment`,this is achieved using domain event.
-    - Update the `holder` of an `Equipment`.
-    - Delete an `Equipment`. This should also delete all `MaintenanceRecord`s for this `Equipment`, this is achieved
-      using domain event.
-    - Create a `MaintenanceRecord`. Its `status` will be used to update the `status` of the `Equipment`, this
-      is achieved using domain event.
