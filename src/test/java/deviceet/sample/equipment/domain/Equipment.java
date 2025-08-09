@@ -1,7 +1,7 @@
 package deviceet.sample.equipment.domain;
 
 import deviceet.common.model.AggregateRoot;
-import deviceet.common.model.Principal;
+import deviceet.common.model.principal.Principal;
 import deviceet.sample.equipment.domain.event.EquipmentCreatedEvent;
 import deviceet.sample.equipment.domain.event.EquipmentDeletedEvent;
 import deviceet.sample.equipment.domain.event.EquipmentNameUpdatedEvent;

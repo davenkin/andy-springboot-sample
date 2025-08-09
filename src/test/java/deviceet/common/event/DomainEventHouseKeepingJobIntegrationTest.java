@@ -4,7 +4,7 @@ import deviceet.IntegrationTest;
 import deviceet.common.event.consume.ConsumingEvent;
 import deviceet.common.event.consume.ConsumingEventDao;
 import deviceet.common.event.publish.PublishingDomainEventDao;
-import deviceet.common.model.Principal;
+import deviceet.common.model.principal.Principal;
 import deviceet.sample.equipment.domain.Equipment;
 import deviceet.sample.equipment.domain.event.EquipmentCreatedEvent;
 import deviceet.sample.equipment.eventhandler.EquipmentCreatedEventHandler;
@@ -15,7 +15,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import java.util.List;
 
 import static deviceet.RandomTestUtils.randomEquipmentName;
-import static deviceet.RandomTestUtils.randomPrincipal;
+import static deviceet.RandomTestUtils.randomUserPrincipal;
 import static java.time.Instant.now;
 import static java.time.temporal.ChronoUnit.DAYS;
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,7 +35,7 @@ class DomainEventHouseKeepingJobIntegrationTest extends IntegrationTest {
 
     @Test
     void should_remove_old_publishing_domain_events_from_mongo() {
-        Principal principal = randomPrincipal();
+        Principal principal = randomUserPrincipal();
         EquipmentCreatedEvent event1 = new EquipmentCreatedEvent(new Equipment(randomEquipmentName(), principal));
         EquipmentCreatedEvent event2 = new EquipmentCreatedEvent(new Equipment(randomEquipmentName(), principal));
         ReflectionTestUtils.setField(event1, DomainEvent.Fields.raisedAt, now().minus(110, DAYS));
@@ -52,7 +52,7 @@ class DomainEventHouseKeepingJobIntegrationTest extends IntegrationTest {
 
     @Test
     void should_remove_old_consuming_domain_events_from_mongo() {
-        Principal principal = randomPrincipal();
+        Principal principal = randomUserPrincipal();
         EquipmentCreatedEvent event1 = new EquipmentCreatedEvent(new Equipment(randomEquipmentName(), principal));
         EquipmentCreatedEvent event2 = new EquipmentCreatedEvent(new Equipment(randomEquipmentName(), principal));
         ConsumingEvent consumingEvent1 = new ConsumingEvent(event1.getId(), event1);

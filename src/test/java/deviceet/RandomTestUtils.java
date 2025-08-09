@@ -1,7 +1,7 @@
 package deviceet;
 
-import deviceet.common.model.Principal;
-import deviceet.common.model.Role;
+import deviceet.common.model.principal.Role;
+import deviceet.common.model.principal.UserPrincipal;
 import deviceet.sample.equipment.command.CreateEquipmentCommand;
 import deviceet.sample.equipment.command.UpdateEquipmentNameCommand;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -11,27 +11,27 @@ import static org.apache.commons.lang3.RandomUtils.secure;
 public class RandomTestUtils {
 
     public static String randomEquipmentName() {
-        return RandomStringUtils.secure().nextAlphanumeric(10);
+        return "EQUIPMENT_NAME_" + RandomStringUtils.secure().nextAlphanumeric(10);
     }
 
     public static String randomUserId() {
-        return RandomStringUtils.secure().nextAlphanumeric(10);
+        return "USER_" + RandomStringUtils.secure().nextAlphanumeric(10);
     }
 
     public static String randomUserName() {
-        return RandomStringUtils.secure().nextAlphanumeric(5) + ":User";
+        return "USER_NAME_" + RandomStringUtils.secure().nextAlphanumeric(10);
     }
 
     public static String randomOrgId() {
-        return RandomStringUtils.secure().nextAlphanumeric(10);
+        return "ORG_" + RandomStringUtils.secure().nextAlphanumeric(10);
     }
 
     public static Role randomRole() {
         return randomEnum(Role.class);
     }
 
-    public static Principal randomPrincipal() {
-        return new Principal(randomUserId(), randomUserName(), randomRole(), randomOrgId());
+    public static UserPrincipal randomUserPrincipal() {
+        return UserPrincipal.of(randomUserId(), randomUserName(), randomRole(), randomOrgId());
     }
 
     public static CreateEquipmentCommand randomCreateEquipmentCommand() {

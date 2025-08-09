@@ -1,7 +1,7 @@
 package deviceet.sample.equipment.query;
 
 import deviceet.IntegrationTest;
-import deviceet.common.model.Principal;
+import deviceet.common.model.principal.Principal;
 import deviceet.sample.equipment.command.CreateEquipmentCommand;
 import deviceet.sample.equipment.command.EquipmentCommandService;
 import org.junit.jupiter.api.Test;
@@ -12,7 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import java.util.stream.IntStream;
 
 import static deviceet.RandomTestUtils.randomEquipmentName;
-import static deviceet.RandomTestUtils.randomPrincipal;
+import static deviceet.RandomTestUtils.randomUserPrincipal;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class EquipmentQueryServiceIntegrationTest extends IntegrationTest {
@@ -24,7 +24,7 @@ class EquipmentQueryServiceIntegrationTest extends IntegrationTest {
 
     @Test
     void shouldListEquipments() {
-        Principal principal = randomPrincipal();
+        Principal principal = randomUserPrincipal();
         IntStream.range(0, 20).forEach(i -> {
             CreateEquipmentCommand createEquipmentCommand = new CreateEquipmentCommand(randomEquipmentName());
             equipmentCommandService.createEquipment(createEquipmentCommand, principal);

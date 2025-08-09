@@ -2,7 +2,7 @@ package deviceet.common.event.publish;
 
 import deviceet.IntegrationTest;
 import deviceet.common.event.publish.infrastructure.FakeDomainEventSender;
-import deviceet.common.model.Principal;
+import deviceet.common.model.principal.Principal;
 import deviceet.sample.equipment.command.CreateEquipmentCommand;
 import deviceet.sample.equipment.command.EquipmentCommandService;
 import deviceet.sample.equipment.domain.event.EquipmentCreatedEvent;
@@ -13,7 +13,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import java.util.concurrent.CompletableFuture;
 
 import static deviceet.RandomTestUtils.randomEquipmentName;
-import static deviceet.RandomTestUtils.randomPrincipal;
+import static deviceet.RandomTestUtils.randomUserPrincipal;
 import static deviceet.common.event.DomainEventType.EQUIPMENT_CREATED_EVENT;
 import static deviceet.common.event.publish.DomainEventPublishStatus.*;
 import static java.util.concurrent.CompletableFuture.failedFuture;
@@ -38,7 +38,7 @@ class DomainEventPublishJobIntegrationTest extends IntegrationTest {
 
     @Test
     void should_publish_domain_events() {
-        Principal principal = randomPrincipal();
+        Principal principal = randomUserPrincipal();
         String arId1 = equipmentCommandService.createEquipment(CreateEquipmentCommand.builder().name(randomEquipmentName()).build(), principal);
         String arId2 = equipmentCommandService.createEquipment(CreateEquipmentCommand.builder().name(randomEquipmentName()).build(), principal);
         String arId3 = equipmentCommandService.createEquipment(CreateEquipmentCommand.builder().name(randomEquipmentName()).build(), principal);
@@ -69,7 +69,7 @@ class DomainEventPublishJobIntegrationTest extends IntegrationTest {
 
     @Test
     void should_fail_publish_domain_events_with_max_of_3_attempts() {
-        Principal principal = randomPrincipal();
+        Principal principal = randomUserPrincipal();
         String arId = equipmentCommandService.createEquipment(CreateEquipmentCommand.builder().name(randomEquipmentName()).build(), principal);
         EquipmentCreatedEvent event = latestEventFor(arId, EQUIPMENT_CREATED_EVENT, EquipmentCreatedEvent.class);
         doReturn(failedFuture(new RuntimeException("stub exception"))).when(domainEventSender).send(any());
@@ -98,7 +98,7 @@ class DomainEventPublishJobIntegrationTest extends IntegrationTest {
 
     @Test
     void should_publish_successfully_if_sender_recovered() {
-        Principal principal = randomPrincipal();
+        Principal principal = randomUserPrincipal();
         String arId = equipmentCommandService.createEquipment(CreateEquipmentCommand.builder().name(randomEquipmentName()).build(), principal);
         EquipmentCreatedEvent event = latestEventFor(arId, EQUIPMENT_CREATED_EVENT, EquipmentCreatedEvent.class);
         doReturn(failedFuture(new RuntimeException("stub exception")))

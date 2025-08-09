@@ -2,7 +2,7 @@ package deviceet.common.infrastructure;
 
 import deviceet.IntegrationTest;
 import deviceet.common.exception.ServiceException;
-import deviceet.common.model.Principal;
+import deviceet.common.model.principal.Principal;
 import deviceet.sample.equipment.domain.Equipment;
 import deviceet.sample.equipment.domain.EquipmentFactory;
 import deviceet.sample.equipment.domain.EquipmentRepository;
@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 import static deviceet.RandomTestUtils.randomEquipmentName;
-import static deviceet.RandomTestUtils.randomPrincipal;
+import static deviceet.RandomTestUtils.randomUserPrincipal;
 import static deviceet.common.event.DomainEventType.EQUIPMENT_CREATED_EVENT;
 import static deviceet.common.event.DomainEventType.EQUIPMENT_DELETED_EVENT;
 import static deviceet.common.exception.ErrorCode.AR_NOT_FOUND;
@@ -32,7 +32,7 @@ class AbstractMongoRepositoryIntegrationTest extends IntegrationTest {
 
     @Test
     void should_save_ar() {
-        Principal principal = randomPrincipal();
+        Principal principal = randomUserPrincipal();
         Equipment equipment = equipmentFactory.create(randomEquipmentName(), principal);
         assertEquals(1, equipment.getEvents().size());
         assertInstanceOf(EquipmentCreatedEvent.class, equipment.getEvents().get(0));
@@ -48,7 +48,7 @@ class AbstractMongoRepositoryIntegrationTest extends IntegrationTest {
 
     @Test
     void should_save_ars() {
-        Principal principal = randomPrincipal();
+        Principal principal = randomUserPrincipal();
         Equipment equipment1 = equipmentFactory.create(randomEquipmentName(), principal);
         Equipment equipment2 = equipmentFactory.create(randomEquipmentName(), principal);
 
@@ -64,8 +64,8 @@ class AbstractMongoRepositoryIntegrationTest extends IntegrationTest {
 
     @Test
     void should_throw_exception_if_not_the_same_org() {
-        Equipment equipment1 = equipmentFactory.create(randomEquipmentName(), randomPrincipal());
-        Equipment equipment2 = equipmentFactory.create(randomEquipmentName(), randomPrincipal());
+        Equipment equipment1 = equipmentFactory.create(randomEquipmentName(), randomUserPrincipal());
+        Equipment equipment2 = equipmentFactory.create(randomEquipmentName(), randomUserPrincipal());
 
         ServiceException exception = assertThrows(ServiceException.class, () -> equipmentRepository.save(List.of(equipment1, equipment2)));
         assertEquals(NOT_SAME_ORG, exception.getCode());
@@ -73,7 +73,7 @@ class AbstractMongoRepositoryIntegrationTest extends IntegrationTest {
 
     @Test
     void should_delete_ar() {
-        Principal principal = randomPrincipal();
+        Principal principal = randomUserPrincipal();
         Equipment equipment = equipmentFactory.create(randomEquipmentName(), principal);
 
         equipmentRepository.save(equipment);
@@ -88,7 +88,7 @@ class AbstractMongoRepositoryIntegrationTest extends IntegrationTest {
 
     @Test
     void should_delete_ars() {
-        Principal principal = randomPrincipal();
+        Principal principal = randomUserPrincipal();
         Equipment equipment1 = equipmentFactory.create(randomEquipmentName(), principal);
         Equipment equipment2 = equipmentFactory.create(randomEquipmentName(), principal);
 
@@ -111,8 +111,8 @@ class AbstractMongoRepositoryIntegrationTest extends IntegrationTest {
 
     @Test
     void should_throw_exception_if_not_the_same_org_for_delete() {
-        Equipment equipment1 = equipmentFactory.create(randomEquipmentName(), randomPrincipal());
-        Equipment equipment2 = equipmentFactory.create(randomEquipmentName(), randomPrincipal());
+        Equipment equipment1 = equipmentFactory.create(randomEquipmentName(), randomUserPrincipal());
+        Equipment equipment2 = equipmentFactory.create(randomEquipmentName(), randomUserPrincipal());
 
         ServiceException exception = assertThrows(ServiceException.class, () -> equipmentRepository.delete(List.of(equipment1, equipment2)));
         assertEquals(NOT_SAME_ORG, exception.getCode());
@@ -120,7 +120,7 @@ class AbstractMongoRepositoryIntegrationTest extends IntegrationTest {
 
     @Test
     void should_fetch_ar_by_id() {
-        Principal principal = randomPrincipal();
+        Principal principal = randomUserPrincipal();
         Equipment equipment = equipmentFactory.create(randomEquipmentName(), principal);
         assertFalse(equipmentRepository.exists(equipment.getId(), principal.getOrgId()));
 

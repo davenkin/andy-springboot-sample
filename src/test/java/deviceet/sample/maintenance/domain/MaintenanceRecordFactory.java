@@ -1,6 +1,6 @@
 package deviceet.sample.maintenance.domain;
 
-import deviceet.common.model.Principal;
+import deviceet.common.model.principal.Principal;
 import deviceet.sample.equipment.domain.Equipment;
 import deviceet.sample.equipment.domain.EquipmentRepository;
 import deviceet.sample.equipment.domain.EquipmentStatus;

@@ -1,6 +1,7 @@
 package deviceet.common.model;
 
 import deviceet.common.event.DomainEvent;
+import deviceet.common.model.principal.Principal;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
@@ -46,7 +47,7 @@ public abstract class AggregateRoot {
         this.id = id;
         this.orgId = orgId;
         this.createdAt = Instant.now();
-        this.createdBy = principal.getUserId();
+        this.createdBy = principal.getId();
     }
 
     protected AggregateRoot(String id, Principal principal) {
@@ -56,7 +57,7 @@ public abstract class AggregateRoot {
         this.id = id;
         this.orgId = principal.getOrgId();
         this.createdAt = Instant.now();
-        this.createdBy = principal.getUserId();
+        this.createdBy = principal.getId();
     }
 
     // raiseEvent() only stores events in aggregate root temporarily, the events will then be persisted into DB by Repository within the same transaction of saving entities

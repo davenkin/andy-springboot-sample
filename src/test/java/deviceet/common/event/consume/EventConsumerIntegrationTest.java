@@ -1,7 +1,7 @@
 package deviceet.common.event.consume;
 
 import deviceet.IntegrationTest;
-import deviceet.common.model.Principal;
+import deviceet.common.model.principal.Principal;
 import deviceet.sample.equipment.command.CreateEquipmentCommand;
 import deviceet.sample.equipment.command.EquipmentCommandService;
 import deviceet.sample.equipment.command.UpdateEquipmentNameCommand;
@@ -18,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
 import static deviceet.RandomTestUtils.randomEquipmentName;
-import static deviceet.RandomTestUtils.randomPrincipal;
+import static deviceet.RandomTestUtils.randomUserPrincipal;
 import static deviceet.common.event.DomainEventType.EQUIPMENT_CREATED_EVENT;
 import static deviceet.common.event.DomainEventType.EQUIPMENT_NAME_UPDATED_EVENT;
 import static org.junit.jupiter.api.Assertions.*;
@@ -47,7 +47,7 @@ class EventConsumerIntegrationTest extends IntegrationTest {
 
     @Test
     void should_only_handle_events_that_can_be_handled() {
-        Principal principal = randomPrincipal();
+        Principal principal = randomUserPrincipal();
         String arId = equipmentCommandService.createEquipment(randomCreateEquipmentCommand(), principal);
         EquipmentCreatedEvent createdEvent = latestEventFor(arId, EQUIPMENT_CREATED_EVENT, EquipmentCreatedEvent.class);
 
@@ -61,7 +61,7 @@ class EventConsumerIntegrationTest extends IntegrationTest {
 
     @Test
     void should_call_handler_for_event_hierarchy() {
-        Principal principal = randomPrincipal();
+        Principal principal = randomUserPrincipal();
         String arId = equipmentCommandService.createEquipment(randomCreateEquipmentCommand(), principal);
         equipmentCommandService.updateEquipmentName(arId, randomUpdateEquipmentNameCommand(), principal);
         EquipmentNameUpdatedEvent updatedEvent = latestEventFor(arId, EQUIPMENT_NAME_UPDATED_EVENT, EquipmentNameUpdatedEvent.class);
@@ -76,7 +76,7 @@ class EventConsumerIntegrationTest extends IntegrationTest {
 
     @Test
     void multiple_handlers_should_run_in_order_of_priority() {
-        Principal principal = randomPrincipal();
+        Principal principal = randomUserPrincipal();
         String arId = equipmentCommandService.createEquipment(randomCreateEquipmentCommand(), principal);
         EquipmentCreatedEvent createdEvent = latestEventFor(arId, EQUIPMENT_CREATED_EVENT, EquipmentCreatedEvent.class);
         when(createdEventHandler.priority()).thenReturn(0);
@@ -93,7 +93,7 @@ class EventConsumerIntegrationTest extends IntegrationTest {
 
     @Test
     void multiple_handlers_should_run_in_order_of_priority_reversely() {
-        Principal principal = randomPrincipal();
+        Principal principal = randomUserPrincipal();
         String arId = equipmentCommandService.createEquipment(randomCreateEquipmentCommand(), principal);
         EquipmentCreatedEvent createdEvent = latestEventFor(arId, EQUIPMENT_CREATED_EVENT, EquipmentCreatedEvent.class);
         when(createdEventHandler.priority()).thenReturn(1);
@@ -110,7 +110,7 @@ class EventConsumerIntegrationTest extends IntegrationTest {
 
     @Test
     void should_mark_as_consumed_if_non_transactional_handler_throws_exception() {
-        Principal principal = randomPrincipal();
+        Principal principal = randomUserPrincipal();
         String arId = equipmentCommandService.createEquipment(randomCreateEquipmentCommand(), principal);
         EquipmentCreatedEvent createdEvent = latestEventFor(arId, EQUIPMENT_CREATED_EVENT, EquipmentCreatedEvent.class);
         doThrow(new RuntimeException("stub exception")).when(createdEventHandler).handle(any(EquipmentCreatedEvent.class));
@@ -125,7 +125,7 @@ class EventConsumerIntegrationTest extends IntegrationTest {
 
     @Test
     void should_not_mark_as_consumed_if_transactional_handler_throws_exception() {
-        Principal principal = randomPrincipal();
+        Principal principal = randomUserPrincipal();
         String arId = equipmentCommandService.createEquipment(randomCreateEquipmentCommand(), principal);
         EquipmentCreatedEvent createdEvent = latestEventFor(arId, EQUIPMENT_CREATED_EVENT, EquipmentCreatedEvent.class);
         doThrow(new RuntimeException("stub exception")).when(createdEventHandler).handle(any(EquipmentCreatedEvent.class));
@@ -139,7 +139,7 @@ class EventConsumerIntegrationTest extends IntegrationTest {
 
     @Test
     void should_not_mark_as_consumed_for_idempotent_handler() {
-        Principal principal = randomPrincipal();
+        Principal principal = randomUserPrincipal();
         String arId = equipmentCommandService.createEquipment(randomCreateEquipmentCommand(), principal);
         EquipmentCreatedEvent createdEvent = latestEventFor(arId, EQUIPMENT_CREATED_EVENT, EquipmentCreatedEvent.class);
         when(createdEventHandler.isIdempotent()).thenReturn(true);
@@ -154,7 +154,7 @@ class EventConsumerIntegrationTest extends IntegrationTest {
 
     @Test
     void multiple_handlers_should_run_independently() {
-        Principal principal = randomPrincipal();
+        Principal principal = randomUserPrincipal();
         String arId = equipmentCommandService.createEquipment(randomCreateEquipmentCommand(), principal);
         equipmentCommandService.updateEquipmentName(arId, randomUpdateEquipmentNameCommand(), principal);
         EquipmentNameUpdatedEvent updatedEvent = latestEventFor(arId, EQUIPMENT_NAME_UPDATED_EVENT, EquipmentNameUpdatedEvent.class);
@@ -171,7 +171,7 @@ class EventConsumerIntegrationTest extends IntegrationTest {
 
     @Test
     void should_run_again_for_idempotent_handler() {
-        Principal principal = randomPrincipal();
+        Principal principal = randomUserPrincipal();
         String arId = equipmentCommandService.createEquipment(randomCreateEquipmentCommand(), principal);
         EquipmentCreatedEvent createdEvent = latestEventFor(arId, EQUIPMENT_CREATED_EVENT, EquipmentCreatedEvent.class);
         when(createdEventHandler.isIdempotent()).thenReturn(true);
@@ -184,7 +184,7 @@ class EventConsumerIntegrationTest extends IntegrationTest {
 
     @Test
     void should_not_handle_again_for_non_idempotent_handler() {
-        Principal principal = randomPrincipal();
+        Principal principal = randomUserPrincipal();
         String arId = equipmentCommandService.createEquipment(randomCreateEquipmentCommand(), principal);
         EquipmentCreatedEvent createdEvent = latestEventFor(arId, EQUIPMENT_CREATED_EVENT, EquipmentCreatedEvent.class);
         when(createdEventHandler.isIdempotent()).thenReturn(false);

@@ -1,7 +1,7 @@
 package deviceet.sample.equipment.command;
 
 import deviceet.IntegrationTest;
-import deviceet.common.model.Principal;
+import deviceet.common.model.principal.Principal;
 import deviceet.sample.equipment.domain.Equipment;
 import deviceet.sample.equipment.domain.EquipmentRepository;
 import deviceet.sample.equipment.domain.event.EquipmentCreatedEvent;
@@ -23,7 +23,7 @@ class EquipmentCommandServiceIntegrationTest extends IntegrationTest {
 
     @Test
     void should_create_equipment() {
-        Principal principal = randomPrincipal();
+        Principal principal = randomUserPrincipal();
 
         CreateEquipmentCommand createEquipmentCommand = randomCreateEquipmentCommand();
         String equipmentId = equipmentCommandService.createEquipment(createEquipmentCommand, principal);
@@ -40,7 +40,7 @@ class EquipmentCommandServiceIntegrationTest extends IntegrationTest {
 
     @Test
     void shouldUpdateEquipmentName() {
-        Principal principal = randomPrincipal();
+        Principal principal = randomUserPrincipal();
 
         CreateEquipmentCommand createEquipmentCommand = randomCreateEquipmentCommand();
         String equipmentId = equipmentCommandService.createEquipment(createEquipmentCommand, principal);

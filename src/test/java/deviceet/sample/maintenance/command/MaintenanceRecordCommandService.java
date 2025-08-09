@@ -1,7 +1,7 @@
 package deviceet.sample.maintenance.command;
 
 
-import deviceet.common.model.Principal;
+import deviceet.common.model.principal.Principal;
 import deviceet.sample.maintenance.domain.MaintenanceRecord;
 import deviceet.sample.maintenance.domain.MaintenanceRecordFactory;
 import deviceet.sample.maintenance.domain.MaintenanceRecordRepository;
