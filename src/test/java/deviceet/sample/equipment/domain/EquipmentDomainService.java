@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import java.util.Objects;
 
 import static deviceet.common.exception.ErrorCode.EQUIPMENT_NAME_ALREADY_EXISTS;
-import static deviceet.common.utils.NullableMapUtils.mapOf;
+import static deviceet.common.util.NullableMapUtils.mapOf;
 
 @Component
 @RequiredArgsConstructor

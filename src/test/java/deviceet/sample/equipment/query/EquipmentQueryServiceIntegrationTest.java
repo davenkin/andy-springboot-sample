@@ -2,7 +2,6 @@ package deviceet.sample.equipment.query;
 
 import deviceet.IntegrationTest;
 import deviceet.common.model.principal.Principal;
-import deviceet.sample.equipment.command.CreateEquipmentCommand;
 import deviceet.sample.equipment.command.EquipmentCommandService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,7 @@ import org.springframework.data.domain.PageRequest;
 
 import java.util.stream.IntStream;
 
-import static deviceet.RandomTestUtils.randomEquipmentName;
+import static deviceet.RandomTestUtils.randomCreateEquipmentCommand;
 import static deviceet.RandomTestUtils.randomUserPrincipal;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -23,14 +22,13 @@ class EquipmentQueryServiceIntegrationTest extends IntegrationTest {
     private EquipmentCommandService equipmentCommandService;
 
     @Test
-    void shouldListEquipments() {
+    void should_list_equipments() {
         Principal principal = randomUserPrincipal();
         IntStream.range(0, 20).forEach(i -> {
-            CreateEquipmentCommand createEquipmentCommand = new CreateEquipmentCommand(randomEquipmentName());
-            equipmentCommandService.createEquipment(createEquipmentCommand, principal);
+            equipmentCommandService.createEquipment(randomCreateEquipmentCommand(), principal);
         });
-        ListEquipmentQuery query = ListEquipmentQuery.builder().build();
 
+        ListEquipmentQuery query = ListEquipmentQuery.builder().build();
         Page<QListedEquipment> listedEquipments = equipmentQueryService.listEquipments(query, PageRequest.of(0, 12), principal);
 
         assertEquals(12, listedEquipments.getContent().size());

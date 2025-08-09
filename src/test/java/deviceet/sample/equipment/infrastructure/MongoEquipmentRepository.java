@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static deviceet.common.utils.CommonUtils.requireNonBlank;
+import static deviceet.common.util.CommonUtils.requireNonBlank;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
 

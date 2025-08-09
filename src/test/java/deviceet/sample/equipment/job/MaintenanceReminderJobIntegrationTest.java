@@ -9,7 +9,7 @@ class MaintenanceReminderJobIntegrationTest extends IntegrationTest {
     private MaintenanceReminderJob maintenanceReminderJob;
 
     @Test
-    void shouldRunMaintenanceReminderJob() {
+    void should_run_maintenance_reminder_job() {
         maintenanceReminderJob.run();
     }
 }

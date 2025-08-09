@@ -7,10 +7,11 @@ import lombok.experimental.FieldNameConstants;
 
 import java.time.Instant;
 
-import static deviceet.common.utils.SnowflakeIdGenerator.newSnowflakeId;
+import static deviceet.common.util.SnowflakeIdGenerator.newSnowflakeId;
 import static java.util.Objects.requireNonNull;
 import static lombok.AccessLevel.PROTECTED;
 
+// Base class for all domain events
 @Getter
 @FieldNameConstants
 @NoArgsConstructor(access = PROTECTED)

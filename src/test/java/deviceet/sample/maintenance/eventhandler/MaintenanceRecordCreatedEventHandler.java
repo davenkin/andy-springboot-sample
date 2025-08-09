@@ -1,7 +1,7 @@
 package deviceet.sample.maintenance.eventhandler;
 
 import deviceet.common.event.consume.AbstractEventHandler;
-import deviceet.common.utils.TaskRunner;
+import deviceet.common.util.TaskRunner;
 import deviceet.sample.equipment.domain.EquipmentRepository;
 import deviceet.sample.equipment.domain.task.CountMaintenanceRecordsForEquipmentTask;
 import deviceet.sample.maintenance.domain.MaintenanceRecordRepository;
@@ -21,12 +21,12 @@ public class MaintenanceRecordCreatedEventHandler extends AbstractEventHandler<M
     @Override
     public void handle(MaintenanceRecordCreatedEvent event) {
         TaskRunner.run(() -> countMaintenanceRecordsForEquipmentTask.run(event.getEquipmentId()));
-        TaskRunner.run(() -> updateEquipmentStatus(event));
+        TaskRunner.run(() -> updateEquipmentStatus(event.getEquipmentId()));
     }
 
-    private void updateEquipmentStatus(MaintenanceRecordCreatedEvent event) {
-        equipmentRepository.byIdOptional(event.getEquipmentId()).ifPresent(equipment -> {
-            maintenanceRecordRepository.latestFor(event.getEquipmentId()).ifPresent(record -> {
+    private void updateEquipmentStatus(String equipmentId) {
+        equipmentRepository.byIdOptional(equipmentId).ifPresent(equipment -> {
+            maintenanceRecordRepository.latestFor(equipmentId).ifPresent(record -> {
                 equipment.updateStatus(record.getStatus());
                 equipmentRepository.save(equipment);
                 log.info("Updated equipment[{}] status from its lasted maintenance record[{}].",

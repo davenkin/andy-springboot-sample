@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 
 import static deviceet.common.event.consume.ConsumingEvent.Fields.consumedAt;
 import static deviceet.common.event.publish.PublishingDomainEvent.Fields.raisedAt;
-import static deviceet.common.utils.Constants.CONSUMING_EVENT_COLLECTION;
-import static deviceet.common.utils.Constants.PUBLISHING_EVENT_COLLECTION;
+import static deviceet.common.util.Constants.CONSUMING_EVENT_COLLECTION;
+import static deviceet.common.util.Constants.PUBLISHING_EVENT_COLLECTION;
 import static java.time.Instant.now;
 import static java.time.temporal.ChronoUnit.DAYS;
 import static org.springframework.data.mongodb.core.query.Criteria.where;

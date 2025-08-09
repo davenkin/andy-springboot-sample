@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
-import static deviceet.common.utils.Constants.SHEDLOCK_COLLECTION;
+import static deviceet.common.util.Constants.SHEDLOCK_COLLECTION;
 
 @Configuration(proxyBeanMethods = false)
 public class DistributedLockConfiguration {

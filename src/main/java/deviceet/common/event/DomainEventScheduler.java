@@ -1,5 +1,6 @@
 package deviceet.common.event;
 
+import deviceet.common.configuration.profile.DisableForIT;
 import deviceet.common.event.publish.DomainEventPublishJob;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
+@DisableForIT
 @RequiredArgsConstructor
 public class DomainEventScheduler {
     private final DomainEventPublishJob domainEventPublishJob;

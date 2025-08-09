@@ -27,7 +27,7 @@ import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 import org.springframework.util.backoff.ExponentialBackOff;
 
-import static deviceet.common.utils.Constants.PUBLISHING_EVENT_COLLECTION;
+import static deviceet.common.util.Constants.PUBLISHING_EVENT_COLLECTION;
 
 @Slf4j
 @DisableForIT

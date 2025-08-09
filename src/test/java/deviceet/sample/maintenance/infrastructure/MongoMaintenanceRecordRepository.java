@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-import static deviceet.common.utils.CommonUtils.requireNonBlank;
+import static deviceet.common.util.CommonUtils.requireNonBlank;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 @Repository

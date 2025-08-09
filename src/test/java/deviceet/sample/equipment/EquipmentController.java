@@ -1,7 +1,7 @@
 package deviceet.sample.equipment;
 
 import deviceet.common.model.principal.Principal;
-import deviceet.common.utils.ResponseId;
+import deviceet.common.util.ResponseId;
 import deviceet.sample.equipment.command.CreateEquipmentCommand;
 import deviceet.sample.equipment.command.EquipmentCommandService;
 import deviceet.sample.equipment.command.UpdateEquipmentHolderCommand;

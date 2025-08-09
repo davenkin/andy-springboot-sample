@@ -8,8 +8,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.Instant;
 
-import static deviceet.common.utils.CommonUtils.requireNonBlank;
-import static deviceet.common.utils.Constants.CONSUMING_EVENT_COLLECTION;
+import static deviceet.common.util.CommonUtils.requireNonBlank;
+import static deviceet.common.util.Constants.CONSUMING_EVENT_COLLECTION;
 import static java.util.Objects.requireNonNull;
 import static lombok.AccessLevel.PRIVATE;
 

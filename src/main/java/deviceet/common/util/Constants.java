@@ -1,4 +1,4 @@
-package deviceet.common.utils;
+package deviceet.common.util;
 
 public class Constants {
     public static final String MONGO_ID = "_id";

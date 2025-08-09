@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Profile;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-import static deviceet.common.utils.Constants.IT_PROFILE;
+import static deviceet.common.util.Constants.IT_PROFILE;
 
 //Enable for integration test
 @Retention(RetentionPolicy.RUNTIME)

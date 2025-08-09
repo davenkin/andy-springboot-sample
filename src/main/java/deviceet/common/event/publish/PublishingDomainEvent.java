@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.Instant;
 
 import static deviceet.common.event.publish.DomainEventPublishStatus.CREATED;
-import static deviceet.common.utils.Constants.PUBLISHING_EVENT_COLLECTION;
+import static deviceet.common.util.Constants.PUBLISHING_EVENT_COLLECTION;
 import static java.util.Objects.requireNonNull;
 import static lombok.AccessLevel.PRIVATE;
 

@@ -1,7 +1,7 @@
 package deviceet.sample.equipment.eventhandler;
 
 import deviceet.common.event.consume.AbstractEventHandler;
-import deviceet.common.utils.TaskRunner;
+import deviceet.common.util.TaskRunner;
 import deviceet.sample.equipment.domain.EquipmentRepository;
 import deviceet.sample.equipment.domain.event.EquipmentDeletedEvent;
 import deviceet.sample.maintenance.domain.task.DeleteAllMaintenanceRecordsUnderEquipmentTask;

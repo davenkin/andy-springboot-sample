@@ -1,6 +1,6 @@
 package deviceet.common.event.consume;
 
-import static deviceet.common.utils.CommonUtils.singleParameterizedArgumentClassOf;
+import static deviceet.common.util.CommonUtils.singleParameterizedArgumentClassOf;
 
 // All event handler should extend this class
 public abstract class AbstractEventHandler<T> {

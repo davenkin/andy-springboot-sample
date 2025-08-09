@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
-import static deviceet.common.utils.Constants.KAFKA_DOMAIN_EVENT_TOPIC;
+import static deviceet.common.util.Constants.KAFKA_DOMAIN_EVENT_TOPIC;
 
 // Entry point for receiving events from Kafka
 // This is the only place where event consuming touches Kafka, hence the coupling to Kafka is minimised
@@ -28,6 +28,6 @@ public class SpringKafkaEventListener {
         this.eventConsumer.consumeDomainEvent(event);
     }
 
-    // add more listener
+    // add more listeners
 
 }

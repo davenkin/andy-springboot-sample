@@ -16,8 +16,8 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 import static deviceet.common.exception.ErrorCode.MAINTENANCE_RECORD_NOT_FOUND;
-import static deviceet.common.utils.Constants.*;
-import static deviceet.common.utils.NullableMapUtils.mapOf;
+import static deviceet.common.util.Constants.*;
+import static deviceet.common.util.NullableMapUtils.mapOf;
 import static deviceet.sample.maintenance.domain.MaintenanceRecord.MAINTENANCE_RECORD_COLLECTION;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.springframework.data.mongodb.core.query.Criteria.where;

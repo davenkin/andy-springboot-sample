@@ -13,7 +13,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 import static deviceet.common.model.AggregateRoot.Fields.createdAt;
-import static deviceet.common.utils.CommonUtils.requireNonBlank;
+import static deviceet.common.util.CommonUtils.requireNonBlank;
 import static deviceet.sample.equipment.domain.Equipment.EQUIPMENT_COLLECTION;
 import static org.springframework.data.domain.Sort.Direction.ASC;
 import static org.springframework.data.domain.Sort.by;

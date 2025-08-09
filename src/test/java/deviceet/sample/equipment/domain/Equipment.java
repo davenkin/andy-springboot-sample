@@ -15,7 +15,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Objects;
 
-import static deviceet.common.utils.SnowflakeIdGenerator.newSnowflakeId;
+import static deviceet.common.util.SnowflakeIdGenerator.newSnowflakeId;
 import static deviceet.sample.equipment.domain.Equipment.EQUIPMENT_COLLECTION;
 import static lombok.AccessLevel.PRIVATE;
 

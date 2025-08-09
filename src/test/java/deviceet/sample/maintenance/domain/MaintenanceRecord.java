@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import static deviceet.common.utils.SnowflakeIdGenerator.newSnowflakeId;
+import static deviceet.common.util.SnowflakeIdGenerator.newSnowflakeId;
 import static deviceet.sample.maintenance.domain.MaintenanceRecord.MAINTENANCE_RECORD_COLLECTION;
 import static lombok.AccessLevel.PRIVATE;
 

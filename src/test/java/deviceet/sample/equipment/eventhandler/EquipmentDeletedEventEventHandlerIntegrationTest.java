@@ -16,7 +16,7 @@ import static deviceet.common.event.DomainEventType.EQUIPMENT_DELETED_EVENT;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class EquipmentDeletedEventEventHandlerIntegrationTest extends IntegrationTest {
+class EquipmentDeletedEventEventHandlerIntegrationTest extends IntegrationTest {
     @Autowired
     private EquipmentDeletedEventEventHandler equipmentDeletedEventEventHandler;
 
@@ -30,7 +30,7 @@ public class EquipmentDeletedEventEventHandlerIntegrationTest extends Integratio
     private MaintenanceRecordRepository maintenanceRecordRepository;
 
     @Test
-    public void delete_equipment_should_also_delete_all_its_maintenance_records() {
+    void delete_equipment_should_also_delete_all_its_maintenance_records() {
         Principal principal = randomUserPrincipal();
         CreateEquipmentCommand createEquipmentCommand = randomCreateEquipmentCommand();
         String equipmentId = equipmentCommandService.createEquipment(createEquipmentCommand, principal);

@@ -16,10 +16,10 @@ import java.util.*;
 import static com.google.common.collect.ImmutableSet.toImmutableSet;
 import static deviceet.common.exception.ErrorCode.AR_NOT_FOUND;
 import static deviceet.common.exception.ErrorCode.NOT_SAME_ORG;
-import static deviceet.common.utils.CommonUtils.requireNonBlank;
-import static deviceet.common.utils.CommonUtils.singleParameterizedArgumentClassOf;
-import static deviceet.common.utils.Constants.MONGO_ID;
-import static deviceet.common.utils.NullableMapUtils.mapOf;
+import static deviceet.common.util.CommonUtils.requireNonBlank;
+import static deviceet.common.util.CommonUtils.singleParameterizedArgumentClassOf;
+import static deviceet.common.util.Constants.MONGO_ID;
+import static deviceet.common.util.NullableMapUtils.mapOf;
 import static java.util.Comparator.comparing;
 import static java.util.Objects.requireNonNull;
 import static java.util.Optional.empty;
@@ -29,6 +29,7 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
 
 // Base class for all repositories
+// Repository is per AggregateRoot type, namely only AggregateRoot can have Repository
 
 @SuppressWarnings("unchecked")
 @Slf4j

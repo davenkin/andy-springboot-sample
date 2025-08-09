@@ -1,7 +1,7 @@
 package deviceet.sample.maintenance;
 
 import deviceet.common.model.principal.Principal;
-import deviceet.common.utils.ResponseId;
+import deviceet.common.util.ResponseId;
 import deviceet.sample.maintenance.command.CreateMaintenanceRecordCommand;
 import deviceet.sample.maintenance.command.MaintenanceRecordCommandService;
 import deviceet.sample.maintenance.query.ListMaintenanceRecordsQuery;

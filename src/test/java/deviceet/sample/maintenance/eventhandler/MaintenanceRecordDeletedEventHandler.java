@@ -1,7 +1,7 @@
 package deviceet.sample.maintenance.eventhandler;
 
 import deviceet.common.event.consume.AbstractEventHandler;
-import deviceet.common.utils.TaskRunner;
+import deviceet.common.util.TaskRunner;
 import deviceet.sample.equipment.domain.task.CountMaintenanceRecordsForEquipmentTask;
 import deviceet.sample.maintenance.domain.event.MaintenanceRecordDeletedEvent;
 import lombok.RequiredArgsConstructor;

@@ -4,7 +4,7 @@ import lombok.EqualsAndHashCode;
 
 import java.util.Set;
 
-import static deviceet.common.utils.CommonUtils.requireNonBlank;
+import static deviceet.common.util.CommonUtils.requireNonBlank;
 import static java.util.Objects.requireNonNull;
 
 // Represents a human user principal, used by CommandService and QueryService for human user interaction

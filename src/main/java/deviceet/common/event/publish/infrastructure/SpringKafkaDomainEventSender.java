@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.concurrent.CompletableFuture;
 
-import static deviceet.common.utils.Constants.KAFKA_DOMAIN_EVENT_TOPIC;
+import static deviceet.common.util.Constants.KAFKA_DOMAIN_EVENT_TOPIC;
 
 // Send domain events to Kafka
 // This is the only place where event publishing touches Kafka, hence the coupling to Kafka is minimised

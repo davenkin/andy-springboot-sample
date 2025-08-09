@@ -17,9 +17,9 @@ import redis.embedded.RedisServer;
 
 import java.io.IOException;
 
-import static deviceet.common.utils.CommonUtils.mongoConcatFields;
-import static deviceet.common.utils.CommonUtils.requireNonBlank;
-import static deviceet.common.utils.Constants.IT_PROFILE;
+import static deviceet.common.util.CommonUtils.mongoConcatFields;
+import static deviceet.common.util.CommonUtils.requireNonBlank;
+import static deviceet.common.util.Constants.IT_PROFILE;
 import static java.util.Objects.requireNonNull;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.data.domain.Sort.Direction.DESC;

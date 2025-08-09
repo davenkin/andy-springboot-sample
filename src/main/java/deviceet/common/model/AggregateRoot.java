@@ -12,7 +12,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
-import static deviceet.common.utils.CommonUtils.requireNonBlank;
+import static deviceet.common.util.CommonUtils.requireNonBlank;
 import static java.util.Objects.requireNonNull;
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;

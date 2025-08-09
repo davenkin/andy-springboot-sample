@@ -1,4 +1,4 @@
-package deviceet.common.utils;
+package deviceet.common.util;
 
 import deviceet.common.exception.ServiceException;
 

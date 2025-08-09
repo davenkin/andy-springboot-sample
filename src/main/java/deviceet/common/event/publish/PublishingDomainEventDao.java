@@ -12,8 +12,8 @@ import java.util.List;
 
 import static deviceet.common.event.publish.DomainEventPublishStatus.*;
 import static deviceet.common.event.publish.PublishingDomainEvent.Fields.*;
-import static deviceet.common.utils.CommonUtils.requireNonBlank;
-import static deviceet.common.utils.Constants.MONGO_ID;
+import static deviceet.common.util.CommonUtils.requireNonBlank;
+import static deviceet.common.util.Constants.MONGO_ID;
 import static java.util.Objects.requireNonNull;
 import static org.springframework.data.domain.Sort.Direction.ASC;
 import static org.springframework.data.domain.Sort.by;

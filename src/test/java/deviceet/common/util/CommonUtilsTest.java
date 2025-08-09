@@ -1,4 +1,4 @@
-package deviceet.common.utils;
+package deviceet.common.util;
 
 import deviceet.common.exception.ServiceException;
 import org.junit.jupiter.api.Test;
@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static deviceet.common.exception.ErrorCode.SYSTEM_ERROR;
-import static deviceet.common.utils.CommonUtils.mongoConcatFields;
+import static deviceet.common.util.CommonUtils.mongoConcatFields;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CommonUtilsTest {
