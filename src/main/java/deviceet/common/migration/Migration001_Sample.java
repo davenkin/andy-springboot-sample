@@ -2,6 +2,7 @@ package deviceet.common.migration;
 
 import io.mongock.api.annotations.ChangeUnit;
 import io.mongock.api.annotations.Execution;
+import io.mongock.api.annotations.RollbackExecution;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
@@ -15,11 +16,9 @@ public class Migration001_Sample {
         log.debug("Sample change log executed.");
     }
 
-// By default Mongock is configured as transactional, hence no need to rollback as transactions manages rollback automatically
-
-//    @RollbackExecution
-//    public void sampleRollbackException(MongoTemplate mongoTemplate) {
-//        // roll back
-//        log.debug("Sample change log rolled back.");
-//    }
+    @RollbackExecution
+    public void sampleRollbackException(MongoTemplate mongoTemplate) {
+        // roll back
+        log.debug("Sample change log rolled back.");
+    }
 }

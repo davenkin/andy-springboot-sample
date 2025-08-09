@@ -1,6 +1,6 @@
 ### Introduction
 
-- Device management API for deviceet.
+- todo: add you introductions
 
 ### Tech stack
 
@@ -11,31 +11,46 @@
 
 ### How to run locally
 
-- First you need run `./start-docker-compose.sh` to start the following local infrastructures:
+- First run `./start-docker-compose.sh` to start the following infrastructures:
     - `MongoDB`: localhost:27123
     - `Kafka`: localhost:9123
     - `Kafka UI`: [http://localhost:8123](http://localhost:8123)
     - `Keycloak`: [http://localhost:7123](http://localhost:7123)
     - `Redis`: localhost:6123
 - Run the application in one of the following ways:
-    - Run `./run-local.sh`: this opens debug port on 5005, assuming that docker-compose is already up running.
-    - Run `./clear-and-run-local.sh`: this opens debug port on 5005 and starts a fresh new docker compose set up.
-    - Run `main` in  `SpringBootWebApplication`.
-- After that open `http://localhost:5123/about` to check if the application runs successfully.
-- To stop local docker compose and delete data, run `./stop-docker-compose.sh`.
+    - Run `./run-local.sh`: this starts the application with debug port on 5005, assuming that docker-compose is already
+      up running.
+    - Run `./clear-and-run-local.sh`: this starts the application with debug port on 5005, it also automatically starts
+      docker-compose by first removing existing docker contains if any, and also deletes all their data.
+    - Run `main` in  `SpringBootWebApplication`, assuming that docker-compose is already up running.
+- After that open [http://localhost:5123/about(http://localhost:5123/about) to check if the application runs
+  successfully.
+- To stop local docker compose and delete data volume, run `./stop-docker-compose.sh`.
 
 ### How to run tests
 
 - To run tests, locate them inside IDE and run them directly from there
-- We don't do unit testing, instead we only write integration tests
-- Tests uses `it` profile(`application-it.yaml`), which stands for `Integration Test`. Integrate tests do not use local
-  docker-compose infrastructures as we don't want to rely on docker for running tests. Instead we want developers to
+- We do both unit testing and integration testing
+- For unit testing, we mainly test classes under `domain` package
+- For integration testing, the following types of classes are tested:
+    - CommandService(e.g. `EquipmentCommandServiceIntegrationTest`)
+    - QueryService(e.g. `EquipmentQueryServiceIntegrationTest`)
+    - EventHandler(e.g. `EquipmentDeletedEventEventHandlerIntegrationTest`)
+    - Job(e.g. `RemoveOldMaintenanceRecordsJobIntegrationTest`)
+- For integration testing, the following types of classes are NOT tested:
+    - Repository: they are already covered in other integration tests
+    - Controller: Controllers are very thin but requires a heavy set up for testing, so we decided not to test
+- Integration test uses a Spring profile named `it`(`application-it.yaml`) for its own configuration. Integration tests
+  do
+  not use local
+  docker-compose infrastructures as we don't want to rely on docker for running tests. Instead, we want to ensure
+  developers to
   clone the code and the tests
-  just work without any extra setup. In order to achieve this, we have the following setup:
-    - `MongoDB`: uses in memory Mongo provided by `de.flapdoodle.embed`.
+  just work without any extra setup. In order to achieve this, we have the following setup for integration tests:
+    - `MongoDB`: uses in memory Mongo provided by `de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring3x`.
     - `Kafka`: disabled as we don't cover event publishing nor event consumer in our tests.
-    - `Redis`: uses an embedded redis server
-    - `Keycloak`: disabled as we don't cover authentication and authorization in our tests.
+    - `Redis`: uses an embedded redis server `com.github.codemonstur:embedded-redis`.
+    - `Keycloak`: disabled as we don't cover authentication in our tests.
     - All consumed external HTTP services are mocked.
 
 ## Architecture Decision Records (ADRs)
@@ -43,9 +58,27 @@
 This project uses [Architecture Decision Records (ADRs)](https://adr.github.io/) to document important architectural
 decisions. Each ADR is stored in the `ADRs` directory and follows a specific format.
 
-## Terminology
+## Major top level business entities
 
-| Term         | Chinese | Abbreviation | Description                                                                                                     |
-|--------------|---------|--------------|-----------------------------------------------------------------------------------------------------------------|
-| User         | 用户      |              | Represents a user under an organization.                                                                        |
-| Organization | 组织（租户）  | Org          | An organization is a client containing it's own data resources, including a set of users, a set of devices etc. |
+| Business Entity   | Chinese | Abbreviation | Description                                                                                                                          |
+|-------------------|---------|--------------|--------------------------------------------------------------------------------------------------------------------------------------|
+| Equipment         | 装备      |              | Sample top level business entity that serves as a reference for consitent coding practice. An Equipment has many MaintenanceRecords. |
+| MaintenanceRecord | 装备维护记录  |              | Another sample top level business entity. Multiple MaintenanceRecords can be created for a single  Equipment.                        |
+
+## Sample code for consistent coding practices
+
+- The `src/test/java/deviceet/sample` folder contains various common coding practices that shoule be followed when
+  implementing your own features.
+- There are 2 main business entities under `sample` folder:
+    - `Equipment`: Represents an equipment that needs to be managed, such as a computer.
+    - `MaintenanceRecord`: Represents a maintenance record created for an `Equipment`.
+- The business stories contains:
+    - Create an `Equipment`.
+    - Update the `name` of an `Equipment`. The updated name should also be reflected in all `MaintenanceRecord`s for
+      this
+      `Equipment`,this is achieved using domain event.
+    - Update the `holder` of an `Equipment`.
+    - Delete an `Equipment`. This should also delete all `MaintenanceRecord`s for this `Equipment`, this is achieved
+      using domain event.
+    - Create a `MaintenanceRecord`. Its `status` will be used to update the `status` of the `Equipment`, this
+      is achieved using domain event.
