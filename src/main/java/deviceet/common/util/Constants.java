@@ -15,6 +15,5 @@ public class Constants {
     public static final String CONSUMING_EVENT_COLLECTION = "consuming-event";
 
     //Database
-    public static final String SHEDLOCK_COLLECTION = "shedlock";
 
 }
