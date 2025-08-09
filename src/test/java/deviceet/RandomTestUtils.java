@@ -4,6 +4,8 @@ import deviceet.common.model.principal.Role;
 import deviceet.common.model.principal.UserPrincipal;
 import deviceet.sample.equipment.command.CreateEquipmentCommand;
 import deviceet.sample.equipment.command.UpdateEquipmentNameCommand;
+import deviceet.sample.equipment.domain.EquipmentStatus;
+import deviceet.sample.maintenance.command.CreateMaintenanceRecordCommand;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import static org.apache.commons.lang3.RandomUtils.secure;
@@ -22,8 +24,24 @@ public class RandomTestUtils {
         return new UpdateEquipmentNameCommand(randomEquipmentName());
     }
 
+    public static CreateMaintenanceRecordCommand randomCreateMaintenanceRecordCommand(String equipmentId) {
+        return CreateMaintenanceRecordCommand.builder()
+                .equipmentId(equipmentId)
+                .description(randomDescription())
+                .status(randomEquipmentStatus())
+                .build();
+    }
+
+    public static String randomDescription() {
+        return RandomStringUtils.secure().nextAscii(20);
+    }
+
     public static String randomUserId() {
         return "USER_" + RandomStringUtils.secure().nextAlphanumeric(10);
+    }
+
+    public static EquipmentStatus randomEquipmentStatus() {
+        return randomEnum(EquipmentStatus.class);
     }
 
     public static String randomUserName() {

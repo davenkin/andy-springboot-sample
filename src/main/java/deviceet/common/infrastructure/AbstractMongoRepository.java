@@ -132,6 +132,7 @@ public abstract class AbstractMongoRepository<AR extends AggregateRoot> {
     public AR byId(String id, String orgId) {
         requireNonBlank(id, arType() + " ID must not be blank.");
         requireNonBlank(orgId, "orgId must not be blank.");
+
         AR ar = this.byId(id);
         if (Objects.equals(ar.getOrgId(), orgId)) {
             return ar;
@@ -146,6 +147,13 @@ public abstract class AbstractMongoRepository<AR extends AggregateRoot> {
 
         Optional<AR> ar = byIdOptional(id);
         return ar.isPresent() && Objects.equals(ar.get().getOrgId(), orgId) ? ar : empty();
+    }
+
+    public boolean exists(String id) {
+        requireNonBlank(id, arType() + " ID must not be blank.");
+
+        Query query = query(where(MONGO_ID).is(id));
+        return mongoTemplate.exists(query, arClass);
     }
 
     public boolean exists(String id, String orgId) {

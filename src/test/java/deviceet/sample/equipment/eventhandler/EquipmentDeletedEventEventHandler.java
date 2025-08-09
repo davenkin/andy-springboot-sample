@@ -25,4 +25,14 @@ public class EquipmentDeletedEventEventHandler extends AbstractEventHandler<Equi
 
         TaskRunner.run(() -> deleteAllMaintenanceRecordsUnderEquipmentTask.run(event.getEquipmentId()));
     }
+
+    @Override
+    public boolean isIdempotent() {
+        return true;// This handler can run multiple times safely
+    }
+
+    @Override
+    public boolean isTransactional() {
+        return false; // Better not be transactional as it deletes multiple records which can exceed Mongo transaction restrictions
+    }
 }

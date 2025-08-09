@@ -10,4 +10,6 @@ public interface MaintenanceRecordRepository {
     void delete(MaintenanceRecord record);
 
     Optional<MaintenanceRecord> latestFor(String equipmentId);
+
+    boolean exists(String id);
 }
