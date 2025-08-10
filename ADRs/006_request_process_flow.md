@@ -15,7 +15,7 @@ There are mainly 3 ways to interact with the software:
 
 - Send HTTP request to the application
 - Scheduled jobs triggered by timers
-- Send messages to the application, such as via Kafka/MQTT etc.
+- Send messages/events to the application, such as via Kafka/MQTT etc.
 
 For HTTP requests, they can be further split into 4 categories:
 
@@ -67,7 +67,8 @@ public class EquipmentFactory {
 ```
 
 4. In the `Equipment` constructor, generate the ID for `Equipment` using `newEquipmentId()`, set data fields, and raise
-   `EquipmentCreatedEvent`:
+   `EquipmentCreatedEvent`. After `raiseEvent()` is called, the `EquipmentCreatedEvent` will be send to Kafka
+   automatically by the event infrastructure and further actions are required from your side:
 
 ```java
     public Equipment(String name, Principal principal) {
@@ -238,7 +239,8 @@ example, when querying a list of `Equipment`s:
 Here Spring's `Pageable` and `Page` should be used for pagination. `EquipmentQueryService` is at the same level with
 `EquipmentCommandService`, they both are under the category of `ApplicationService`.
 
-2. `EquipmentQueryService.listEquipments()` uses `MongoTemplate` to query data from database directly.
+2. `EquipmentQueryService.listEquipments()` uses `MongoTemplate` to query data from database directly, and uses its own
+   data model class `QListedEquipment`:
 
 ```java
     public Page<QListedEquipment> listEquipments(ListEquipmentQuery listEquipmentQuery, Pageable pageable, Principal principal) {
@@ -261,3 +263,79 @@ Here Spring's `Pageable` and `Page` should be used for pagination. `EquipmentQue
         return new PageImpl<>(devices, pageable, count);
     }
 ```
+
+### Scheduled jobs triggered by timers
+
+First create a scheduler in the `job` package:
+
+```java
+public class EquipmentScheduler {
+    private final MaintenanceReminderJob maintenanceReminderJob;
+
+    @Scheduled(cron = "0 10 2 1 * ?")
+    @SchedulerLock(name = "maintenanceReminderJob")
+    public void maintenanceReminderJob() {
+        LockAssert.assertLocked();
+        this.maintenanceReminderJob.run();
+    }
+}
+```
+
+Then create a job class:
+
+```java
+public class MaintenanceReminderJob {
+
+    public void run() {
+        log.info("MaintenanceReminderJob started.");
+
+        //do something
+
+        log.info("MaintenanceReminderJob ended.");
+    }
+}
+```
+
+### Consuming events from e.g. Kafka
+
+The Kafka event consuming infrastructure is already set up. You only need to do 2 things for consuming events.
+
+1. Make sure the topic is subscribed in `SpringKafkaEventListener` by configuring
+   `topics = {KAFKA_DOMAIN_EVENT_TOPIC},`:
+
+```java
+public class SpringKafkaEventListener {
+    private final EventConsumer eventConsumer;
+
+    @KafkaListener(id = "domain-event-listener",
+            groupId = "domain-event-listener",
+            topics = {KAFKA_DOMAIN_EVENT_TOPIC},
+            concurrency = "3")
+    public void listenDomainEvent(DomainEvent event) {
+        this.eventConsumer.consumeDomainEvent(event);
+    }
+}
+```
+
+You may add more `@KafkaListener` methods if a different category of events are consumed.
+
+2. Create an EventHandler class that extends `AbstractEventHandler`:
+
+```java
+@Slf4j
+@Component
+@RequiredArgsConstructor
+public class EquipmentCreatedEventHandler extends AbstractEventHandler<EquipmentCreatedEvent> {
+    private final EquipmentRepository equipmentRepository;
+
+    @Override
+    public void handle(EquipmentCreatedEvent event) {
+        equipmentRepository.evictCachedEquipmentSummaries(event.getArOrgId());
+        log.debug("Evicted equipment summaries cache for org[{}].", event.getArOrgId());
+    }
+}
+```
+
+The `EventHandler` serves the same purpose as `CommandService`, which orchestrates various other components such as
+`Repository`, `AggreateRoot` and `Factory` to accomplish a certain process. Hence the `EventHandler` itself should be
+contain business logic.

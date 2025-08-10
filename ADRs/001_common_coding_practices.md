@@ -33,7 +33,7 @@
 - Always use `ServiceException` for raising exceptions, don't create your own exception classes. Reason: The
   `ServiceException` is a flat exception model that makes exception modeling much easier than hierarchical exceptions.
 
-```java
+  ```java
     public void updateEquipmentName(Equipment equipment, String newName) {
         if (!Objects.equals(newName, equipment.getName()) &&
             equipmentRepository.existsByName(newName, equipment.getOrgId())) {
@@ -44,4 +44,16 @@
 
         equipment.updateName(newName);
     }
-```
+  ```
+
+- Use Spring Data's default pagination mechanism. This means the following query parameters should be used:
+    - `page`: the zero-based page index
+    - `size`: the page size
+    - `sort`: for sorting, format is `sort=abc,desc`, where `abc` is the field to be sorted, `desc` means descending and
+      `asc` means ascending.
+    - Also the following configuration is applied for responding a stable `Page` object.
+
+  ```java
+  @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO)
+  public class CommonConfiguration {}
+  ```
