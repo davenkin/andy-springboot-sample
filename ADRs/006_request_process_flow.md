@@ -14,7 +14,7 @@ We choose to follow a standard way to implement various **request process flows*
 There are mainly 3 ways to interact with the software:
 
 - Send HTTP request to the application
-- Scheduled jobs triggered timers
+- Scheduled jobs triggered by timers
 - Send messages to the application, such as via Kafka/MQTT etc.
 
 For HTTP requests, they can be further split into 4 categories:
@@ -31,7 +31,7 @@ With the above, we end up with the following types of interactions, let's explai
 Creating data involves 2 major steps: Create and Save. Take "Creating an equipment" as an example, the request process
 flow is:
 
-1. Receive the request in the `EquipmentController`, controller calls `EquipmentCommandService`.
+1. Receive the request in the `EquipmentController`, controller calls `EquipmentCommandService`:
 
 ```java
     @PostMapping
@@ -55,8 +55,8 @@ flow is:
     }
 ```
 
-3. `EquipmentFactory` is used to create the `Equipment` object. Remember: for code consistency, usually use Factory to
-   create AggregateRoots.
+3. `EquipmentFactory` is used to create the `Equipment` object. Remember: for code consistency, always use Factory to
+   create AggregateRoots:
 
 ```java
 public class EquipmentFactory {
@@ -67,7 +67,7 @@ public class EquipmentFactory {
 ```
 
 4. In the `Equipment` constructor, generate the ID for `Equipment` using `newEquipmentId()`, set data fields, and raise
-   `EquipmentCreatedEvent`
+   `EquipmentCreatedEvent`:
 
 ```java
     public Equipment(String name, Principal principal) {
@@ -81,7 +81,7 @@ public class EquipmentFactory {
     }
 ```
 
-5. Call `EquipmentRepository.save()` to save the newly created `Equipment` object.
+5. Call `EquipmentRepository.save()` to save the newly created `Equipment` object:
 
 ```java
 public interface EquipmentRepository {
@@ -96,7 +96,7 @@ public interface EquipmentRepository {
 Updating data has 3 major steps: (1)Load the AggregateRoot; (2)Call AggregateRoot's business method; (3) Save it back to
 database. Take updating `Equipment`'s holder name as an example.
 
-1. The request first arrived at `EquipmentController.updateEquipmentHolder()`
+1. The request first arrived at `EquipmentController.updateEquipmentHolder()`:
 
 ```java
     @PutMapping("/{equipmentId}/holder")
@@ -109,7 +109,7 @@ database. Take updating `Equipment`'s holder name as an example.
     }
 ```
 
-2. The controller calls `EquipmentCommandService.updateEquipmentHolder()`
+2. The controller calls `EquipmentCommandService.updateEquipmentHolder()`:
 
 ```java
     @Transactional
@@ -121,32 +121,32 @@ database. Take updating `Equipment`'s holder name as an example.
     }
 ```
 
-3. `EquipmentCommandService` loads the `Equipment` by its ID
+3. `EquipmentCommandService` loads the `Equipment` by its ID:
 
 ```java
         Equipment equipment = equipmentRepository.byId(id, principal.getOrgId());
 ```
 
-4. Then call `Equipment`'s business method `Equipment.updateHolder()`
+4. Then call `Equipment`'s business method `Equipment.updateHolder()`:
 
 ```java
         equipment.updateHolder(command.name());
 ```
 
 5. Inside the business method, domain event can be raised according to requirements.
-6. Save the updated `Equipment` back into database
+6. Save the updated `Equipment` back into database:
 
 ```java
         equipmentRepository.save(equipment);
 ```
 
-7. No need to return anything from `EquipmentCommandService.updateEquipmentHolder()`
+7. No need to return anything from `EquipmentCommandService.updateEquipmentHolder()`.
 
 Sometimes, the whole business logic is not suitable to be put inside AggregateRoot like `Equipment.updateHolder()`. For
 such case, we can use a DomainService. For example, when updating `Equipment`'s name, we need to check if the name is
 already been occupied, which cannot be fulfilled by `Equipment` itself. Instead of calling `Equipment.updateName()`
 directly from `EquipmentCommandService`, `EquipmentDomainService.updateEquipmentName()` is called from
-`EquipmentCommandService`.
+`EquipmentCommandService`:
 
 ```java
     @Transactional
@@ -159,7 +159,7 @@ directly from `EquipmentCommandService`, `EquipmentDomainService.updateEquipment
 ```
 
 Inside `EquipmentDomainService.updateEquipmentName()`, it first checks whether the name is already taken, if not then
-update `Equipment`'s name.
+update `Equipment`'s name:
 
 ```java
     public void updateEquipmentName(Equipment equipment, String newName) {
@@ -174,4 +174,45 @@ update `Equipment`'s name.
     }
 ```
 
+### HTTP request for deleting data
 
+For deleting data, first load the `AggregateRoot` and then delete it. For example, for deleting an `Equipment`
+
+1. Request arrived at `EquipmentController`:
+
+```java
+    @DeleteMapping("/{equipmentId}")
+    public void deleteEquipment(@PathVariable("equipmentId") @NotBlank String equipmentId) {
+        // In real situations, principal is normally created from the current user in context, such as Spring Security's SecurityContextHolder
+        Principal principal = TEST_USER_PRINCIPAL;
+
+        this.equipmentCommandService.deleteEquipment(equipmentId, principal);
+    }
+
+```
+
+2. `EquipmentController` calls `EquipmentCommandService`:
+
+```java
+    @Transactional
+    public void deleteEquipment(String equipmentId, Principal principal) {
+        Equipment equipment = equipmentRepository.byId(equipmentId, principal.getOrgId());
+        equipmentRepository.delete(equipment);
+        log.info("Deleted Equipment[{}].", equipmentId);
+    }
+```
+
+3. `EquipmentCommandService` loads the `Equipment`, then call `EquipmentRepository.delete()` to delete it. You might be
+   wondering, why we need to first load the `Equipment` into memory then do the deletion. Will it be much simpler to
+   directly delete by ID? The reason is that, before deletion, there might be some validations that need to happen, and
+   also it might raise domain events. So, in order to ensure such possibilities, the whole `Equipment` object is loaded
+   into the memory.
+4. When `EquipmentRepository.delete()` is called, it automatically calls `AggregateRoot.onDelete()` which is implemented
+   by `Equipment` to raise `EquipmentDeletedEvent`:
+
+```java
+    @Override
+    public void onDelete() {
+        raiseEvent(new EquipmentDeletedEvent(this));
+    }
+```
