@@ -89,7 +89,7 @@ public interface EquipmentRepository {
 }
 ```
 
-6. Return the ID of the newly created Equipment object to the HTTP client.
+6. Return the ID of the newly created Equipment object to the caller.
 
 ### HTTP request for updating data
 
@@ -214,5 +214,50 @@ For deleting data, first load the `AggregateRoot` and then delete it. For exampl
     @Override
     public void onDelete() {
         raiseEvent(new EquipmentDeletedEvent(this));
+    }
+```
+
+### HTTP request for querying data
+
+As we are using [CQRS](./004_use_cqrs.md), querying data can bypass the domain models and talk to database directly. For
+example, when querying a list of `Equipment`s:
+
+1. The request hit `EquipmentController`, which further calls `EquipmentQueryService.listEquipments()`:
+
+```java
+    @PostMapping("/list")
+    public Page<QListedEquipment> listEquipments(@RequestBody @Valid ListEquipmentQuery query,
+                                                 @PageableDefault Pageable pageable) {
+        // In real situations, principal is normally created from the current user in context, such as Spring Security's SecurityContextHolder
+        Principal principal = TEST_USER_PRINCIPAL;
+
+        return this.equipmentQueryService.listEquipments(query, pageable, principal);
+    }
+```
+
+Here Spring's `Pageable` and `Page` should be used for pagination. `EquipmentQueryService` is at the same level with
+`EquipmentCommandService`, they both are under the category of `ApplicationService`.
+
+2. `EquipmentQueryService` uses `MongoTemplate` to query data from database directly.
+
+```java
+    public Page<QListedEquipment> listEquipments(ListEquipmentQuery listEquipmentQuery, Pageable pageable, Principal principal) {
+        Criteria criteria = where(AggregateRoot.Fields.orgId).is(principal.getOrgId());
+
+        if (isNotBlank(listEquipmentQuery.search())) {
+            criteria.and(Equipment.Fields.name).regex(listEquipmentQuery.search());
+        }
+        
+        //more code omitted
+
+        Query query = Query.query(criteria);
+
+        long count = mongoTemplate.count(query, Equipment.class);
+        if (count == 0) {
+            return Page.empty(pageable);
+        }
+
+        List<QListedEquipment> devices = mongoTemplate.find(query.with(pageable), QListedEquipment.class, EQUIPMENT_COLLECTION);
+        return new PageImpl<>(devices, pageable, count);
     }
 ```
