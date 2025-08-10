@@ -1,6 +1,6 @@
 An architecture decision record (ADR) is a document that captures an important architectural decision made along with its context and consequences.
 
-For each ADR, please write a separate file in the `ADRs` directory, using the format `000-What-is-ADR.md`, where `000` is a sequential number that indicates the order of the ADRs.
+For each ADR, please write a separate file in the `ADRs` directory, using the format `000_what_is_adr.md`, where `000` is a sequential number that indicates the order of the ADRs.
 
 When writing an ADR file, please follow the below content templates:
 
