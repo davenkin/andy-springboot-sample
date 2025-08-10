@@ -1,6 +1,10 @@
 ## Introduction
 
-- todo: add you introductions
+- This is a sample Spring Boot project for building Microservice APIs with an emphasis on the following areas:
+    - Domain Driven Design (DDD)
+    - Event Driven Architecture (EDA)
+    - Command Query Responsibility Segregation (CQRS)
+    - Clean Architecture
 
 ## Tech stack
 
@@ -29,6 +33,7 @@
 - To stop local docker compose and delete data volume, run `./stop-docker-compose.sh`.
 
 ## How to build
+
 - Run `./build.sh` to build the project locally.
 
 ## How to run tests
@@ -37,14 +42,19 @@
 - We do both unit testing and integration testing.
 - For unit testing, we mainly test classes under `domain` package.
 - For integration testing, the following types of classes are tested:
-    - CommandService(e.g. `EquipmentCommandServiceIntegrationTest`)
-    - QueryService(e.g. `EquipmentQueryServiceIntegrationTest`)
-    - EventHandler(e.g. `EquipmentDeletedEventEventHandlerIntegrationTest`)
-    - Job(e.g. `RemoveOldMaintenanceRecordsJobIntegrationTest`)
+    - CommandService (
+      e.g. [EquipmentCommandServiceIntegrationTest](src/test/java/deviceet/sample/equipment/command/EquipmentCommandServiceIntegrationTest.java))
+    - QueryService (
+      e.g. [EquipmentQueryServiceIntegrationTest](src/test/java/deviceet/sample/equipment/query/EquipmentQueryServiceIntegrationTest.java))
+    - EventHandler (
+      e.g. [EquipmentDeletedEventEventHandlerIntegrationTest](src/test/java/deviceet/sample/equipment/eventhandler/EquipmentDeletedEventEventHandlerIntegrationTest.java))
+    - Job (
+      e.g. [RemoveOldMaintenanceRecordsJobIntegrationTest](src/test/java/deviceet/sample/maintenance/job/RemoveOldMaintenanceRecordsJobIntegrationTest.java))
 - For integration testing, the following types of classes are NOT tested:
-    - Repository: they are already covered in other integration tests
+    - Repository: they are already covered in other types of integration tests
     - Controller: Controllers are very thin but requires a heavy set up for testing, so we decided not to test
-- Integration test uses a Spring profile named `it`(`application-it.yaml`) for its own configuration. Integration tests
+- Integration test uses a Spring profile named `it`([application-it.yaml](src/test/resources/application-it.yaml)) for
+  its own configuration. Integration tests
   do
   not use local
   docker-compose infrastructures as we don't want to rely on docker for running tests. Instead, we want to ensure
@@ -60,12 +70,14 @@
 ## Architecture Decision Records (ADRs)
 
 This project uses [Architecture Decision Records (ADRs)](https://adr.github.io/) to document important architectural
-decisions. Each ADR is stored in the `ADRs` directory and follows a specific format. Please refer to [What is ADR](ADRs/000_what_is_ADR.md) for more detail.
+decisions. Each ADR is stored in the `ADRs` directory and follows a specific format. Please refer
+to [What is ADR](ADRs/000_what_is_ADR.md) for more detail.
 
 ## Sample code for consistent coding practices
 
 - The `src/test/java/deviceet/sample` folder contains various common coding practices that should be followed when
-  implementing your own features. Please refer to [sample code introduction](src/test/java/deviceet/sample/sample-code-introduction.md) for more detail.
+  implementing your own features. Please refer
+  to [sample code introduction](src/test/java/deviceet/sample/sample-code-introduction.md) for more detail.
 
 ## Top level business entities
 
