@@ -72,7 +72,7 @@
 
 This project uses [Architecture Decision Records (ADRs)](https://adr.github.io/) to document important architectural
 decisions. Each ADR is stored in the `ADRs` directory and follows a specific format. Please refer
-to [What is ADR](ADRs/000_what_is_ADR.md) for more detail.
+to [What is ADR](ADRs/000_what_is_adr.md) for more detail.
 
 ## Sample code for consistent coding practices
 

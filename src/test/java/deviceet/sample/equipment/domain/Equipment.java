@@ -39,7 +39,7 @@ public class Equipment extends AggregateRoot {
     }
 
     public static String newEquipmentId() {
-        return "EQP" + newSnowflakeId();
+        return "EQP" + newSnowflakeId(); // Generate ID in the code
     }
 
     public void updateName(String newName) {
