@@ -15,7 +15,8 @@
     }
   ```
 
-- Prefer using Java Record over Lombok for value objects. Reason: Records are Java's built in support, they are more concise
+- Prefer using Java Record over Lombok for value objects. Reason: Records are Java's built in support, they are more
+  concise
   and embodies common best practices like immutability.
 
     ```java
@@ -56,4 +57,15 @@
   ```java
   @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO)
   public class CommonConfiguration {}
+  ```
+  Example with `Pageable` and `Page`(always use `@PageableDefault` as well):
+  ```java
+    @PostMapping("/list")
+    public Page<QListedEquipment> listEquipments(@RequestBody @Valid ListEquipmentQuery query,
+                                                 @PageableDefault Pageable pageable) {
+        // In real situations, principal is normally created from the current user in context, such as Spring Security's SecurityContextHolder
+        Principal principal = TEST_USER_PRINCIPAL;
+
+        return this.equipmentQueryService.listEquipments(query, pageable, principal);
+    }
   ```
