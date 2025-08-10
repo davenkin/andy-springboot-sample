@@ -35,16 +35,9 @@
   `ServiceException` is a flat exception model that makes exception modeling much easier than hierarchical exceptions.
 
   ```java
-    public void updateEquipmentName(Equipment equipment, String newName) {
-        if (!Objects.equals(newName, equipment.getName()) &&
-            equipmentRepository.existsByName(newName, equipment.getOrgId())) {
-            throw new ServiceException(EQUIPMENT_NAME_ALREADY_EXISTS,
-                    "Equipment Name Already Exists.",
-                    mapOf(AggregateRoot.Fields.id, equipment.getId(), Equipment.Fields.name, newName));
-        }
-
-        equipment.updateName(newName);
-    }
+          throw new ServiceException(EQUIPMENT_NAME_ALREADY_EXISTS,
+                  "Equipment Name Already Exists.",
+                  mapOf(AggregateRoot.Fields.id, equipment.getId(), Equipment.Fields.name, newName));
   ```
 
 - Use Spring Data's default pagination mechanism. This means the following query parameters should be used:
