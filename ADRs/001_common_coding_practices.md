@@ -29,7 +29,7 @@
   ```
 - Never use Lombok's `@Setter` and `@Data`(which implicitly creates setters). Reason: Setters are bad as they break the
   principles of cohesion and information hiding. Also, objects with setters are just data containers like C's struct,
-  they does not convey any business logic, making the code hard to read and comprehend.
+  they does not convey any business intent, making the code hard to read and comprehend.
 - Always use `ServiceException` for raising exceptions, don't create your own exception classes. Reason: The
   `ServiceException` is a flat exception model that makes exception modeling much easier than hierarchical exceptions.
 
