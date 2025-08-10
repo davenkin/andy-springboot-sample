@@ -15,7 +15,7 @@
     }
   ```
 
-- Prefer using Java Record over Lombok for value objects. Reason: Records Java built in support, and are more concise
+- Prefer using Java Record over Lombok for value objects. Reason: Records are Java's built in support, they are more concise
   and embodies common best practices like immutability.
 
     ```java
