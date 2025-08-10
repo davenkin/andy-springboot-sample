@@ -29,25 +29,9 @@ public class EquipmentQueryService {
     public Page<QListedEquipment> listEquipments(ListEquipmentQuery listEquipmentQuery, Pageable pageable, Principal principal) {
         Criteria criteria = where(AggregateRoot.Fields.orgId).is(principal.getOrgId());
 
-        if (isNotBlank(listEquipmentQuery.search())) {
-            criteria.and(Equipment.Fields.name).regex(listEquipmentQuery.search());
-        }
-
-        if (listEquipmentQuery.status() != null) {
-            criteria.and(Equipment.Fields.status).is(listEquipmentQuery.status());
-        }
+        //code omitted
 
         Query query = Query.query(criteria);
-        query.fields().include(AggregateRoot.Fields.orgId,
-                Equipment.Fields.name,
-                Equipment.Fields.status,
-                AggregateRoot.Fields.createdAt,
-                AggregateRoot.Fields.createdBy);
-
-        long count = mongoTemplate.count(query, Equipment.class);
-        if (count == 0) {
-            return Page.empty(pageable);
-        }
 
         List<QListedEquipment> devices = mongoTemplate.find(query.with(pageable), QListedEquipment.class, EQUIPMENT_COLLECTION);
         return new PageImpl<>(devices, pageable, count);
