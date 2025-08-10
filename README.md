@@ -1,10 +1,11 @@
 ## Introduction
 
 - This is a sample Spring Boot project for building Microservice APIs with an emphasis on the following areas:
-    - Domain Driven Design (DDD)
-    - Event Driven Architecture (EDA)
-    - Command Query Responsibility Segregation (CQRS)
-    - Clean Architecture
+    - [Command Query Responsibility Segregation](https://learn.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/apply-simplified-microservice-cqrs-ddd-patterns) (
+      CQRS)
+    - [Event Driven Architecture](https://microservices.io/patterns/data/event-driven-architecture.html) (EDA)
+    - [Domain Driven Design](https://martinfowler.com/bliki/DomainDrivenDesign.html) (DDD)
+    - [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
 
 ## Tech stack
 
