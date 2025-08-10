@@ -27,3 +27,6 @@
         Instant createdAt,
         String createdBy) {}
   ```
+- Never use Lombok's `@Setter` and `@Data`(which implicitly creates setters). Reason: Setters are bad as they break the
+  principles of cohesion and information hiding. Also, objects with setters are just data containers like C's struct,
+  they does not convey any business logic, making the code hard to read and comprehend.
