@@ -296,7 +296,11 @@ public class MaintenanceReminderJob {
 }
 ```
 
-### Consuming events from e.g. Kafka
+The job class serves the same purpose as `CommandService`, which orchestrates various other components such as
+`Repository`, `AggreateRoot` and `Factory` to accomplish a certain process. Hence the job itself should not
+contain business logic.
+
+### Consuming events from Kafka
 
 The Kafka event consuming infrastructure is already set up. You only need to do 2 things for consuming events.
 
@@ -337,5 +341,5 @@ public class EquipmentCreatedEventHandler extends AbstractEventHandler<Equipment
 ```
 
 The `EventHandler` serves the same purpose as `CommandService`, which orchestrates various other components such as
-`Repository`, `AggreateRoot` and `Factory` to accomplish a certain process. Hence the `EventHandler` itself should be
+`Repository`, `AggreateRoot` and `Factory` to accomplish a certain process. Hence the `EventHandler` itself should not
 contain business logic.
