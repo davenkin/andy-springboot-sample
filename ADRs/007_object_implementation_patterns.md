@@ -12,6 +12,20 @@ For the same type of objects, we follow the same implementation patterns.
 
 ## Implementation
 
+- Aggregate Root
+- Repository
+- Controller
+- CommandService
+- Command
+- DomainService
+- Domain Event
+- EventHandler
+- Factory
+- Task
+- Job
+- QueryService
+- Query
+
 ### Aggregate Root
 
 - Aggregate Roots are the most important types of objects in your software, they contain your core domain logic, they
@@ -37,6 +51,7 @@ For the same type of objects, we follow the same implementation patterns.
     - `@Document(EQUIPMENT_COLLECTION)`: for MongoDB collection
     - `@NoArgsConstructor(access = PRIVATE)`: for Jackson deserialization
 - Aggregate Root should not be annotated with `@Setter`, `@Builder` or  `@Data`
+- Besides Aggregate Root, there can be other types of domain objects in the domain model, such as `EquipmentStatus`
 
 Example [Equipment](../src/test/java/deviceet/sample/equipment/domain/Equipment.java):
 
@@ -95,7 +110,7 @@ public interface EquipmentRepository {
 ```
 
 Example for Repository
-implementation[MongoEquipmentRepository](../src/test/java/deviceet/sample/equipment/infrastructure/MongoEquipmentRepository.java):
+implementation [MongoEquipmentRepository](../src/test/java/deviceet/sample/equipment/infrastructure/MongoEquipmentRepository.java):
 
 ```java
 @Repository
@@ -173,6 +188,8 @@ public class EquipmentController {
 - Every public method in CommandService should represent a use case, and should be annotated with `@Transactional`
 - Methods in CommandService usually accepts a request Command class as parameter, as well as a `Principal`
 - CommandService should not contain business logic
+- CommandService returns the AggregateRoot's ID for creating objects, and return `void` for updating or deleting
+  AggregateRoots
 - Please follow [requst process flow](./006_request_process_flow.md) on how to implement CommandServices
 
 Example [EquipmentCommandService](../src/test/java/deviceet/sample/equipment/command/EquipmentCommandService.java):
@@ -214,6 +231,38 @@ public record CreateMaintenanceRecordCommand(
 ) {
 }
 ```
+
+### DomainService
+
+- DomainService is totally different from CommandService(or QueryService) in that DomainService is part of the domain
+  model, but CommandService is the gate to domain model
+- DomainService holds domain logic
+- Normally we don't want DomainService, as domain logic should best be reside in Aggregate Roots, so DomainService is
+  our last resort if the business logic is not suitable to be put inside Aggregate Roots.
+
+Example [EquipmentDomainService](../src/test/java/deviceet/sample/equipment/domain/EquipmentDomainService.java):
+
+```java
+@Component
+@RequiredArgsConstructor
+public class EquipmentDomainService {
+    private final EquipmentRepository equipmentRepository;
+
+    public void updateEquipmentName(Equipment equipment, String newName) {
+        if (!Objects.equals(newName, equipment.getName()) &&
+            equipmentRepository.existsByName(newName, equipment.getOrgId())) {
+            throw new ServiceException(EQUIPMENT_NAME_ALREADY_EXISTS,
+                    "Equipment Name Already Exists.",
+                    mapOf(AggregateRoot.Fields.id, equipment.getId(), Equipment.Fields.name, newName));
+        }
+
+        equipment.updateName(newName);
+    }
+}
+```
+
+In the above example, the business logic of checking duplicated equipment name falls outside the ability of `Equipment`
+itself, hence `EquipmentDomainService` is used instead.
 
 ### Domain Event
 
@@ -347,3 +396,74 @@ public class SyncEquipmentNameToMaintenanceRecordsTask {
 }
 ```
 
+### Job
+
+- Job represents a background operation triggered by a timer
+- Jobs are quite similar to Tasks, the difference is that Job is relatively heavy weight and addresses a systematic
+  problem, yet Tasks handles a single specific problem
+
+Example [RemoveOldMaintenanceRecordsJob](../src/test/java/deviceet/sample/maintenance/job/RemoveOldMaintenanceRecordsJob.java):
+
+```java
+@Slf4j
+@Component
+@AllArgsConstructor
+public class RemoveOldMaintenanceRecordsJob {
+    private static final int KEEP_DAYS = 180;
+    private final MongoTemplate mongoTemplate;
+
+    public void run() {
+        log.info("Start removing maintenance records that are more than {} days old.", KEEP_DAYS);
+        Query query = Query.query(where(AggregateRoot.Fields.createdAt).lt(Instant.now().minus(KEEP_DAYS, DAYS)));
+        DeleteResult result = mongoTemplate.remove(query, MaintenanceRecord.class);
+        log.info("Removed {} maintenance records that are more than {} days old.", KEEP_DAYS, result.getDeletedCount());
+    }
+}
+```
+
+### QueryService
+
+- QueryService and CommandService both belongs to ApplicationService
+- QueryService's only purpose is for querying data
+- QueryService exists to stand apart from CommandService, making the QueryService a separate concern
+- QueryService follows CQRS principle in that it can access database directly, bypassing the Domain Model which
+  CommandService relies on
+- QueryService can have its own data model just for querying data, for
+  example [QListedEquipment](../src/test/java/deviceet/sample/equipment/query/QListedEquipment.java) represents an
+  Equipment item in the list
+
+Example [EquipmentQueryService](../src/test/java/deviceet/sample/equipment/query/EquipmentQueryService.java):
+
+```java
+@Component
+@RequiredArgsConstructor
+public class EquipmentQueryService {
+    private final MongoTemplate mongoTemplate;
+    private final EquipmentRepository equipmentRepository;
+
+    public Page<QListedEquipment> listEquipments(ListEquipmentQuery listEquipmentQuery, Pageable pageable, Principal principal) {
+        Criteria criteria = where(AggregateRoot.Fields.orgId).is(principal.getOrgId());
+
+        if (isNotBlank(listEquipmentQuery.search())) {
+            criteria.and(Equipment.Fields.name).regex(listEquipmentQuery.search());
+        }
+        
+        // more code ommited
+}
+```
+
+### Query
+
+- Query objects are quite similar to Command objects, the main difference is that Query objects are request objects that
+  instructs the software to read data, yet Command objects are for writing data
+- Query objects should be modeled as Java Record
+- Query objects can be annotated with `@Builder` for testing purpose
+- Query objects should use JSR-303 annotations  (such as `@NotNull`, `@Max` and `@Pattern`) for data validation
+
+Example [ListEquipmentQuery](../src/test/java/deviceet/sample/equipment/query/ListEquipmentQuery.java):
+
+```java
+@Builder
+public record ListEquipmentQuery(String search, EquipmentStatus status) {
+}
+```
