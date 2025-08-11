@@ -187,3 +187,98 @@ public class MaintenanceRecordCreatedEvent extends DomainEvent {
 }
 ```
 
+### EventHandler
+
+- All EventHandlers should
+  extend [AbstractEventHandler](../src/main/java/deviceet/common/event/consume/AbstractEventHandler.java)
+- You may choose to override `AbstractEventHandler`'s `isIdempotent()`, `isTransactional()` and `priority()` for
+  specific purposes
+- EventHandler serves a similar purpose as CommandService in that they both result in data state changes in the
+  software, and they both are facade which orchestrate other components to work but does not contain business logic by
+  itself
+- EventHandler can use `ExceptionSwallowRunner` to run multiple independent operations, in which exception raised in one
+  operation does not affect later operations
+
+Example [EquipmentDeletedEventEventHandler](../src/test/java/deviceet/sample/equipment/eventhandler/EquipmentDeletedEventEventHandler.java):
+
+```java
+@Slf4j
+@Component
+@RequiredArgsConstructor
+public class EquipmentDeletedEventEventHandler extends AbstractEventHandler<EquipmentDeletedEvent> {
+    private final DeleteAllMaintenanceRecordsUnderEquipmentTask deleteAllMaintenanceRecordsUnderEquipmentTask;
+    private final EquipmentRepository equipmentRepository;
+
+    @Override
+    public void handle(EquipmentDeletedEvent event) {
+        ExceptionSwallowRunner.run(() -> {
+            equipmentRepository.evictCachedEquipmentSummaries(event.getArOrgId());
+        });
+
+        ExceptionSwallowRunner.run(() -> deleteAllMaintenanceRecordsUnderEquipmentTask.run(event.getEquipmentId()));
+    }
+
+    @Override
+    public boolean isIdempotent() {
+        return true;// This handler can run multiple times safely
+    }
+
+    @Override
+    public boolean isTransactional() {
+        return false; // Better not be transactional as it deletes multiple records which can exceed Mongo transaction restrictions
+    }
+}
+```
+
+### Factory
+
+- Factory is used to create Aggregate Root
+- In Factories, before calling Aggregate Roots's constructors, there usually exists some business validations
+- If no business validation is required, the Factory can be as simple as just call Aggregate Roots's constructors, but
+  for consistency, let's always use Factory to create Aggregate Roots.
+- Use Factory to create Aggregate Roots makes our code more explict as the creation of Aggregate Roots is an important
+  moment in software
+
+Example [MaintenanceRecordFactory](../src/test/java/deviceet/sample/maintenance/domain/MaintenanceRecordFactory.java):
+
+```java
+@Component
+@RequiredArgsConstructor
+public class MaintenanceRecordFactory {
+
+    public MaintenanceRecord create(Equipment equipment,
+                                    EquipmentStatus status,
+                                    String description,
+                                    Principal principal) {
+        return new MaintenanceRecord(equipment.getId(), equipment.getName(), status, description, principal);
+    }
+}
+```
+
+### Task
+
+- Tasks represents a standalone operation that usually involves multiple database rows(documents)
+- Tasks is like DomainService, but for convenience it can access database directly using `MongoTemplate`
+- Tasks are usually called by EventHandlers
+
+Example [SyncEquipmentNameToMaintenanceRecordsTask](../src/test/java/deviceet/sample/equipment/domain/task/SyncEquipmentNameToMaintenanceRecordsTask.java):
+
+```java
+@Slf4j
+@Component
+@RequiredArgsConstructor
+public class SyncEquipmentNameToMaintenanceRecordsTask {
+    private final MongoTemplate mongoTemplate;
+    private final EquipmentRepository equipmentRepository;
+
+    public void run(String equipmentId) {
+        equipmentRepository.byIdOptional(equipmentId).ifPresent(equipment -> {
+            Query query = new Query(where(MaintenanceRecord.Fields.equipmentId).is(equipmentId));
+            Update update = new Update().set(MaintenanceRecord.Fields.equipmentName, equipment.getName());
+            mongoTemplate.updateMulti(query, update, MaintenanceRecord.class);
+            log.info("Synced equipment[{}] name to all maintenance records.", equipment.getId());
+        });
+    }
+}
+```
+

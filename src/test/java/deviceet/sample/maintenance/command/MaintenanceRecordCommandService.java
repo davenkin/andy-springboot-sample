@@ -2,6 +2,8 @@ package deviceet.sample.maintenance.command;
 
 
 import deviceet.common.model.principal.Principal;
+import deviceet.sample.equipment.domain.Equipment;
+import deviceet.sample.equipment.domain.EquipmentRepository;
 import deviceet.sample.maintenance.domain.MaintenanceRecord;
 import deviceet.sample.maintenance.domain.MaintenanceRecordFactory;
 import deviceet.sample.maintenance.domain.MaintenanceRecordRepository;
@@ -16,10 +18,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class MaintenanceRecordCommandService {
     private final MaintenanceRecordFactory maintenanceRecordFactory;
     private final MaintenanceRecordRepository maintenanceRecordRepository;
+    private final EquipmentRepository equipmentRepository;
 
     @Transactional
     public String createMaintenanceRecord(CreateMaintenanceRecordCommand command, Principal principal) {
-        MaintenanceRecord record = maintenanceRecordFactory.create(command.equipmentId(),
+        Equipment equipment = equipmentRepository.byId(command.equipmentId(), principal.getOrgId());
+        MaintenanceRecord record = maintenanceRecordFactory.create(equipment,
                 command.status(),
                 command.description(),
                 principal);

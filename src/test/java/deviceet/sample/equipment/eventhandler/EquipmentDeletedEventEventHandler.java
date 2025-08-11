@@ -1,7 +1,7 @@
 package deviceet.sample.equipment.eventhandler;
 
 import deviceet.common.event.consume.AbstractEventHandler;
-import deviceet.common.util.TaskRunner;
+import deviceet.common.util.ExceptionSwallowRunner;
 import deviceet.sample.equipment.domain.EquipmentRepository;
 import deviceet.sample.equipment.domain.event.EquipmentDeletedEvent;
 import deviceet.sample.maintenance.domain.task.DeleteAllMaintenanceRecordsUnderEquipmentTask;
@@ -18,12 +18,8 @@ public class EquipmentDeletedEventEventHandler extends AbstractEventHandler<Equi
 
     @Override
     public void handle(EquipmentDeletedEvent event) {
-        TaskRunner.run(() -> {
-            equipmentRepository.evictCachedEquipmentSummaries(event.getArOrgId());
-            log.debug("Evicted equipment summaries cache for org[{}].", event.getArOrgId());
-        });
-
-        TaskRunner.run(() -> deleteAllMaintenanceRecordsUnderEquipmentTask.run(event.getEquipmentId()));
+        ExceptionSwallowRunner.run(() -> equipmentRepository.evictCachedEquipmentSummaries(event.getArOrgId()));
+        ExceptionSwallowRunner.run(() -> deleteAllMaintenanceRecordsUnderEquipmentTask.run(event.getEquipmentId()));
     }
 
     @Override

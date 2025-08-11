@@ -16,6 +16,5 @@ public class EquipmentCreatedEventHandler extends AbstractEventHandler<Equipment
     @Override
     public void handle(EquipmentCreatedEvent event) {
         equipmentRepository.evictCachedEquipmentSummaries(event.getArOrgId());
-        log.debug("Evicted equipment summaries cache for org[{}].", event.getArOrgId());
     }
 }

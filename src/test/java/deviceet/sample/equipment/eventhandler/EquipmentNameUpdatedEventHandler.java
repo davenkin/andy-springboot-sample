@@ -1,7 +1,7 @@
 package deviceet.sample.equipment.eventhandler;
 
 import deviceet.common.event.consume.AbstractEventHandler;
-import deviceet.common.util.TaskRunner;
+import deviceet.common.util.ExceptionSwallowRunner;
 import deviceet.sample.equipment.domain.EquipmentRepository;
 import deviceet.sample.equipment.domain.event.EquipmentNameUpdatedEvent;
 import deviceet.sample.equipment.domain.task.SyncEquipmentNameToMaintenanceRecordsTask;
@@ -18,12 +18,7 @@ public class EquipmentNameUpdatedEventHandler extends AbstractEventHandler<Equip
 
     @Override
     public void handle(EquipmentNameUpdatedEvent event) {
-        TaskRunner.run(() -> {
-            equipmentRepository.evictCachedEquipmentSummaries(event.getArOrgId());
-            log.debug("Evicted equipment summaries cache for org[{}].", event.getArOrgId());
-
-        });
-
-        TaskRunner.run(() -> syncEquipmentNameToMaintenanceRecordsTask.run(event.getEquipmentId()));
+        ExceptionSwallowRunner.run(() -> equipmentRepository.evictCachedEquipmentSummaries(event.getArOrgId()));
+        ExceptionSwallowRunner.run(() -> syncEquipmentNameToMaintenanceRecordsTask.run(event.getEquipmentId()));
     }
 }

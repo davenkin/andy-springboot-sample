@@ -1,7 +1,7 @@
 package deviceet.sample.maintenance.eventhandler;
 
 import deviceet.common.event.consume.AbstractEventHandler;
-import deviceet.common.util.TaskRunner;
+import deviceet.common.util.ExceptionSwallowRunner;
 import deviceet.sample.equipment.domain.task.CountMaintenanceRecordsForEquipmentTask;
 import deviceet.sample.maintenance.domain.event.MaintenanceRecordDeletedEvent;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +16,6 @@ public class MaintenanceRecordDeletedEventHandler extends AbstractEventHandler<M
 
     @Override
     public void handle(MaintenanceRecordDeletedEvent event) {
-        TaskRunner.run(() -> countMaintenanceRecordsForEquipmentTask.run(event.getEquipmentId()));
+        ExceptionSwallowRunner.run(() -> countMaintenanceRecordsForEquipmentTask.run(event.getEquipmentId()));
     }
 }
