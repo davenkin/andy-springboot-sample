@@ -18,6 +18,8 @@ For the same type of objects, we follow the same implementation patterns.
   are the sole reason your software exists
 - Aggregate Root should extend [AggregateRoot](../src/main/java/deviceet/common/model/AggregateRoot.java) base
   class
+- All changes to the internal state of Aggregate Roots should go via the public methods of Aggregate Roots
+- Every public methods in Aggregate Root should leave the Aggregate Root in valid state according to business rules
 - Aggregate Root should use meaningful constructors to create itself
 - For code consistency, always use Factory to create Aggregate Root
 - Aggregate Root should not have builder method because builder method can easily results in invalid object
@@ -68,6 +70,69 @@ public class Equipment extends AggregateRoot {
         }
         this.name = newName; // Update object state 
         raiseEvent(new EquipmentNameUpdatedEvent(name, this)); // Raise domain event
+    }
+}
+```
+
+### Repository
+
+- Repository abstracts database interactions for accessing Aggregate Roots
+- Every Aggregate Root has its own Repository class
+- Repositories should first have an interface class and then a concrete implementation class
+  Example for Repository
+  interface [EquipmentRepository](../src/test/java/deviceet/sample/equipment/domain/EquipmentRepository.java):
+
+```java
+public interface EquipmentRepository {
+    void save(Equipment equipment);
+
+    void save(List<Equipment> equipments);
+
+    void delete(Equipment equipment);
+    
+    // more code omitted
+}
+```
+
+Example for Repository
+implementation[MongoEquipmentRepository](../src/test/java/deviceet/sample/equipment/infrastructure/MongoEquipmentRepository.java):
+
+```java
+@Repository
+@RequiredArgsConstructor
+public class MongoEquipmentRepository extends AbstractMongoRepository<Equipment> implements EquipmentRepository {
+    private final CachedMongoEquipmentRepository cachedMongoEquipmentRepository;
+
+    @Override
+    public List<EquipmentSummary> cachedEquipmentSummaries(String orgId) {
+        return cachedMongoEquipmentRepository.cachedEquipmentSummaries(orgId).summaries();
+    }
+    // more code ommited
+}
+```
+
+- All Repository implementation should
+  extend [AbstractMongoRepository](../src/main/java/deviceet/common/infrastructure/AbstractMongoRepository.java)
+- For cache, the Repository implementation can reference a cache Repository, the cache Repository also extends
+  `AbstractMongoRepository`
+
+Example of cache
+Repository [CachedMongoEquipmentRepository](../src/test/java/deviceet/sample/equipment/infrastructure/CachedMongoEquipmentRepository.java):
+
+```java
+@Slf4j
+@Repository
+@RequiredArgsConstructor
+public class CachedMongoEquipmentRepository extends AbstractMongoRepository<Equipment> {
+    private static final String ORG_EQUIPMENT_CACHE = "ORG_EQUIPMENTS";
+
+    @Cacheable(value = ORG_EQUIPMENT_CACHE, key = "#orgId")
+    public CachedOrgEquipmentSummaries cachedEquipmentSummaries(String orgId) {
+        requireNonBlank(orgId, "orgId must not be blank.");
+
+        Query query = query(where(AggregateRoot.Fields.orgId).is(orgId)).with(by(ASC, createdAt));
+        query.fields().include(AggregateRoot.Fields.orgId, Equipment.Fields.name, Equipment.Fields.status);
+        return new CachedOrgEquipmentSummaries(mongoTemplate.find(query, EquipmentSummary.class, EQUIPMENT_COLLECTION));
     }
 }
 ```
