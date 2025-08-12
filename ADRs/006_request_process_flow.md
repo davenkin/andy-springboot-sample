@@ -37,7 +37,7 @@ flow is:
     @PostMapping
     public ResponseId createEquipment(@RequestBody @Valid CreateEquipmentCommand command) {
         // In real situations, principal is normally created from the current user in context, such as Spring Security's SecurityContextHolder
-        Principal principal = TEST_USER_PRINCIPAL;
+        Principal principal = SAMPLE_USER_PRINCIPAL;
 
         return new ResponseId(this.equipmentCommandService.createEquipment(command, principal));
     }
@@ -68,7 +68,7 @@ public class EquipmentFactory {
 
 4. In the `Equipment` constructor, generate the ID for `Equipment` using `newEquipmentId()`, set data fields, and raise
    `EquipmentCreatedEvent`. After `raiseEvent()` is called, the `EquipmentCreatedEvent` will be send to Kafka
-   automatically by the event infrastructure and further actions are required from your side:
+   automatically by the event infrastructure and no further actions are required from your side:
 
 ```java
     public Equipment(String name, Principal principal) {
@@ -104,7 +104,7 @@ database. Take updating `Equipment`'s holder name as an example.
     public void updateEquipmentHolder(@PathVariable("equipmentId") @NotBlank String equipmentId,
                                       @RequestBody @Valid UpdateEquipmentHolderCommand command) {
         // In real situations, principal is normally created from the current user in context, such as Spring Security's SecurityContextHolder
-        Principal principal = TEST_USER_PRINCIPAL;
+        Principal principal = SAMPLE_USER_PRINCIPAL;
 
         this.equipmentCommandService.updateEquipmentHolder(equipmentId, command, principal);
     }
@@ -185,7 +185,7 @@ For deleting data, first load the `AggregateRoot` and then delete it. For exampl
     @DeleteMapping("/{equipmentId}")
     public void deleteEquipment(@PathVariable("equipmentId") @NotBlank String equipmentId) {
         // In real situations, principal is normally created from the current user in context, such as Spring Security's SecurityContextHolder
-        Principal principal = TEST_USER_PRINCIPAL;
+        Principal principal = SAMPLE_USER_PRINCIPAL;
 
         this.equipmentCommandService.deleteEquipment(equipmentId, principal);
     }
@@ -230,7 +230,7 @@ example, when querying a list of `Equipment`s:
     public Page<QListedEquipment> listEquipments(@RequestBody @Valid ListEquipmentQuery query,
                                                  @PageableDefault Pageable pageable) {
         // In real situations, principal is normally created from the current user in context, such as Spring Security's SecurityContextHolder
-        Principal principal = TEST_USER_PRINCIPAL;
+        Principal principal = SAMPLE_USER_PRINCIPAL;
 
         return this.equipmentQueryService.listEquipments(query, pageable, principal);
     }

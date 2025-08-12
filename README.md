@@ -4,7 +4,6 @@
     - [Command Query Responsibility Segregation (CQRS)](https://learn.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/apply-simplified-microservice-cqrs-ddd-patterns)
     - [Event Driven Architecture (EDA)](https://microservices.io/patterns/data/event-driven-architecture.html)
     - [Domain Driven Design (DDD)](https://martinfowler.com/bliki/DomainDrivenDesign.html)
-    - [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
 
 ## Tech stack
 

@@ -30,12 +30,12 @@ For the same type of objects, we follow the same implementation patterns.
 
 - Aggregate Roots are the most important types of objects in your software, they contain your core domain logic, they
   are the sole reason your software exists
-- Aggregate Root should extend [AggregateRoot](../src/main/java/deviceet/common/model/AggregateRoot.java) base
+- All Aggregate Roots should extend [AggregateRoot](../src/main/java/deviceet/common/model/AggregateRoot.java) base
   class
 - All changes to the internal state of Aggregate Roots should go via the public methods of Aggregate Roots
 - Every public methods in Aggregate Root should leave the Aggregate Root in valid state according to business rules
 - Aggregate Root should use meaningful constructors to create itself
-- For code consistency, always use Factory to create Aggregate Root
+- For code consistency, always use Factory to create Aggregate Root, no matter how simple it is
 - Aggregate Root should not have builder method because builder method can easily results in invalid object
 - Aggregate Root should have a globally unique ID and this ID should be generate from the code but not database
 - Aggregate Root should have meaningful business methods for changing its own state. Every business method should ensure
@@ -175,7 +175,7 @@ public class EquipmentController {
     @PostMapping
     public ResponseId createEquipment(@RequestBody @Valid CreateEquipmentCommand command) {
         // In real situations, principal is normally created from the current user in context, such as Spring Security's SecurityContextHolder
-        Principal principal = TEST_USER_PRINCIPAL;
+        Principal principal = SAMPLE_USER_PRINCIPAL;
 
         return new ResponseId(this.equipmentCommandService.createEquipment(command, principal));
     }

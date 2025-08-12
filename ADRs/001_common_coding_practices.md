@@ -57,7 +57,7 @@
     public Page<QListedEquipment> listEquipments(@RequestBody @Valid ListEquipmentQuery query,
                                                  @PageableDefault Pageable pageable) {
         // In real situations, principal is normally created from the current user in context, such as Spring Security's SecurityContextHolder
-        Principal principal = TEST_USER_PRINCIPAL;
+        Principal principal = SAMPLE_USER_PRINCIPAL;
 
         return this.equipmentQueryService.listEquipments(query, pageable, principal);
     }

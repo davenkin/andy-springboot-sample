@@ -17,7 +17,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import static deviceet.TestConfiguration.TEST_USER_PRINCIPAL;
+import static deviceet.sample.SampleFixture.SAMPLE_USER_PRINCIPAL;
 
 @Validated
 @RestController
@@ -30,7 +30,7 @@ public class MaintenanceRecordController {
     @PostMapping
     public ResponseId createMaintenanceRecord(@RequestBody @Valid CreateMaintenanceRecordCommand command) {
         // In real situations, principal is normally created from the current user in context, such as Spring Security's SecurityContextHolder
-        Principal principal = TEST_USER_PRINCIPAL;
+        Principal principal = SAMPLE_USER_PRINCIPAL;
 
         return new ResponseId(maintenanceRecordCommandService.createMaintenanceRecord(command, principal));
     }
@@ -38,7 +38,7 @@ public class MaintenanceRecordController {
     @DeleteMapping("/{maintenanceRecordId}")
     public void deleteMaintenanceRecord(@PathVariable("maintenanceRecordId") @NotBlank String maintenanceRecordId) {
         // In real situations, principal is normally created from the current user in context, such as Spring Security's SecurityContextHolder
-        Principal principal = TEST_USER_PRINCIPAL;
+        Principal principal = SAMPLE_USER_PRINCIPAL;
 
         this.maintenanceRecordCommandService.deleteMaintenanceRecord(maintenanceRecordId, principal);
     }
@@ -47,7 +47,7 @@ public class MaintenanceRecordController {
     public Page<QListedMaintenanceRecord> listMaintenanceRecords(@RequestBody @Valid ListMaintenanceRecordsQuery query,
                                                                  @PageableDefault Pageable pageable) {
         // In real situations, principal is normally created from the current user in context, such as Spring Security's SecurityContextHolder
-        Principal principal = TEST_USER_PRINCIPAL;
+        Principal principal = SAMPLE_USER_PRINCIPAL;
 
         return maintenanceRecordQueryService.listMaintenanceRecords(query, pageable, principal);
     }
@@ -55,7 +55,7 @@ public class MaintenanceRecordController {
     @GetMapping("/{maintenanceRecordId}")
     public QDetailedMaintenanceRecord getMaintenanceRecordDetail(@PathVariable("maintenanceRecordId") @NotBlank String maintenanceRecordId) {
         // In real situations, principal is normally created from the current user in context, such as Spring Security's SecurityContextHolder
-        Principal principal = TEST_USER_PRINCIPAL;
+        Principal principal = SAMPLE_USER_PRINCIPAL;
 
         return maintenanceRecordQueryService.getMaintenanceRecordDetail(maintenanceRecordId, principal);
     }
