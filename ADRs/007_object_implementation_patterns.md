@@ -373,7 +373,7 @@ public class MaintenanceRecordFactory {
 
 - Tasks represents a standalone operation that usually involves multiple database rows(documents)
 - Tasks is like DomainService, but for convenience it can access database directly using `MongoTemplate`
-- Tasks are usually called by EventHandlers
+- Tasks are usually called by EventHandlers but not always
 
 Example [SyncEquipmentNameToMaintenanceRecordsTask](../src/test/java/deviceet/sample/equipment/domain/task/SyncEquipmentNameToMaintenanceRecordsTask.java):
 
