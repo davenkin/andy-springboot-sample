@@ -62,3 +62,18 @@
         return this.equipmentQueryService.listEquipments(query, pageable, principal);
     }
   ```
+
+- Use Java 8's `Instant` to represent timestamp, don't use `OffsetDateTime` or `ZonedDateTime`. Reason: `Instant` is
+  designed for such purpose, there is no point in storing timezone information inside a timestamp.
+- Set application default timezone to 'UTC' explicitly by `TimeZone.setDefault(TimeZone.getTimeZone("UTC"))`. Reason: A
+  unified default timezone makes things much easier when it come to maters about time.
+
+```java
+@SpringBootApplication
+public class SpringBootWebApplication {
+    public static void main(String[] args) {
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC")); // Set default timezone to 'UTC'
+        SpringApplication.run(SpringBootWebApplication.class, args);
+    }
+}
+```

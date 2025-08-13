@@ -1,6 +1,6 @@
 ## Introduction
 
-- This is a sample Spring Boot project for building Microservice APIs with an emphasis on the following areas:
+- This is a sample Spring Boot project for building Microservices with an emphasis on the following areas:
     - [Command Query Responsibility Segregation (CQRS)](https://learn.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/apply-simplified-microservice-cqrs-ddd-patterns)
     - [Event Driven Architecture (EDA)](https://microservices.io/patterns/data/event-driven-architecture.html)
     - [Domain Driven Design (DDD)](https://martinfowler.com/bliki/DomainDrivenDesign.html)

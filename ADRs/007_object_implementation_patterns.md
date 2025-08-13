@@ -12,19 +12,19 @@ For the same type of objects, we follow the same implementation patterns.
 
 ## Implementation
 
-- Aggregate Root
-- Repository
-- Controller
-- CommandService
-- Command
-- DomainService
-- Domain Event
-- EventHandler
-- Factory
-- Task
-- Job
-- QueryService
-- Query
+- [Aggregate Root](#aggregate-root)
+- [Repository](#repository)
+- [Controller](#controller)
+- [CommandService](#commandservice)
+- [Command](#command)
+- [DomainService](#domainservice)
+- [Domain Event](#domain-event)
+- [EventHandler](#eventhandler')
+- [Factory](#factory)
+- [Task](#task)
+- [Job](#job)
+- [QueryService](#queryservice)
+- [Query](#query)
 
 ### Aggregate Root
 
@@ -305,12 +305,20 @@ public class MaintenanceRecordCreatedEvent extends DomainEvent {
 
 - All EventHandlers should
   extend [AbstractEventHandler](../src/main/java/deviceet/common/event/consume/AbstractEventHandler.java)
+- An event can be handled by multiple EventHandlers, and they operate independently to each other
 - You may choose to override `AbstractEventHandler`'s `isIdempotent()`, `isTransactional()` and `priority()` for
-  specific purposes
+  specific purposes, where:
+    - `isIdempotent()`: return `true` if the handler can be run repeatedly without any problem, default value is `false`
+    - `isTransactional()`: return `true` if the handler should be atomic, normally it should return `true` which is also
+      the default value. It should return `false` for cases where the handlers does not involve database operations, or
+      it handles large amount of database records that exceeds the MongoDB transaction limits.
+    - `priority()`: used for multiple handlers with the same event, return the priority of the handler, smaller value
+      means higher priority
 - EventHandler serves a similar purpose as CommandService in that they both result in data state changes in the
   software, and they both are facade which orchestrate other components to work but does not contain business logic by
-  itself
-- EventHandler can use `ExceptionSwallowRunner` to run multiple independent operations, in which exception raised in one
+  themselves
+- EventHandler can use `ExceptionSwallowRunner` to run multiple independent operations, in which exceptions raised in
+  one
   operation does not affect later operations
 
 Example [EquipmentDeletedEventEventHandler](../src/test/java/deviceet/sample/equipment/eventhandler/EquipmentDeletedEventEventHandler.java):
@@ -330,16 +338,6 @@ public class EquipmentDeletedEventEventHandler extends AbstractEventHandler<Equi
         });
 
         ExceptionSwallowRunner.run(() -> deleteAllMaintenanceRecordsUnderEquipmentTask.run(event.getEquipmentId()));
-    }
-
-    @Override
-    public boolean isIdempotent() {
-        return true;// This handler can run multiple times safely
-    }
-
-    @Override
-    public boolean isTransactional() {
-        return false; // Better not be transactional as it deletes multiple records which can exceed Mongo transaction restrictions
     }
 }
 ```

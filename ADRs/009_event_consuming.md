@@ -1,4 +1,4 @@
-# Domain event consuming
+# Event consuming
 
 todo: impl
 

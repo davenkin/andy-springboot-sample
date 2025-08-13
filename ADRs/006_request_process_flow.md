@@ -15,16 +15,16 @@ There are mainly 3 ways to interact with the software:
 
 - Send HTTP request to the application
 - Scheduled jobs triggered by timers
-- Send messages/events to the application, such as via Kafka/MQTT etc.
+- Consuming events from Kafka
 
-For HTTP requests, they can be further split into 4 categories:
+For HTTP requests, they can be further split into multiple sub-categories, giving us the following process flows:
 
-- HTTP request for creating data
-- HTTP request for updating data
-- HTTP request for deleting data
-- HTTP request for querying data
-
-With the above, we end up with the following types of interactions, let's explain them one by one.
+- [HTTP request for creating data](#http-request-for-creating-data)
+- [HTTP request for updating data](#http-request-for-updating-data)
+- [HTTP request for deleting data](#http-request-for-deleting-data)
+- [HTTP request for querying data](#http-request-for-querying-data)
+- [Scheduled jobs triggered by timers](#scheduled-jobs-triggered-by-timers)
+- [Consuming events from Kafka](#consuming-events-from-kafka)
 
 ### HTTP request for creating data
 
