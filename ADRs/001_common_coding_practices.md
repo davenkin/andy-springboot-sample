@@ -45,7 +45,7 @@
     - `size`: the page size
     - `sort`: for sorting, format is `sort=abc,desc`, where `abc` is the field to be sorted, `desc` means descending and
       `asc` means ascending.
-    - Also the following configuration is applied for responding a stable `Page` object.
+    - Also the following configuration should be applied for responding a stable `Page` object.
 
   ```java
   @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO)
