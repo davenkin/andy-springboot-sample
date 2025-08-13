@@ -42,3 +42,5 @@
 - 任何ID都由程序自己生成，而不用数据库生成，比如Equipment.newEquipmentId();
 - 当需要引用对象字段时，使用@FieldNameConstants
 - ID不由数据库生成，有代码自己生成
+- AggregateRoot -》AbstractAggregateRoot，文档中也要改
+- DomainEvent -》 AbstractDomainEvent，文档中也要改
