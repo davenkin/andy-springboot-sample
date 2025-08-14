@@ -31,6 +31,9 @@ public class EventConsumer {
     public void consumeDomainEvent(DomainEvent event) {
         this.consume(new ConsumingEvent(event.getId(), event));
     }
+    public void consumeXxxEvent(XxxEvent event) {
+        this.consume(new ConsumingEvent(event.getId(), event));
+    }
 
     private void consume(ConsumingEvent event) {
         if (event == null) {

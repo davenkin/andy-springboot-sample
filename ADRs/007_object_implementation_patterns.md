@@ -278,7 +278,8 @@ itself, hence `EquipmentDomainService` is used instead.
     - `@Getter`: for retrieving data (actually getters are quite bad as it violates information hiding principle, but
       for convenience let's keep them)
     - `@TypeAlias(MAINTENANCE_RECORD_CREATED_EVENT)`: use a explict type alias, otherwise the FQCN will be used by
-      Spring Data MongoDB which does not survive changing package locations
+      Spring Data MongoDB which does not survive changing package locations. The value should be the same as the event's
+      `DomainEventType` such as `MAINTENANCE_RECORD_CREATED_EVENT`
     - `@NoArgsConstructor(access = PRIVATE)`: for Jackson deserialization
 
 Example [MaintenanceRecordCreatedEvent](../src/test/java/deviceet/sample/maintenance/domain/event/MaintenanceRecordCreatedEvent.java):
