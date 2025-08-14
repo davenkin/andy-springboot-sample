@@ -1,7 +1,7 @@
 # Common coding practices
 
 - Do not rely on database to generate IDs, instead, generate IDs within the code. This means when the object is created,
-  its ID should already been generated. Reason: This decouples our code from database implementations.
+  its ID should already been generated. Reason: This decouples our code from database implementations and also makes testing much easier.
 
     ```java
     public Equipment(String name, Principal principal) {
