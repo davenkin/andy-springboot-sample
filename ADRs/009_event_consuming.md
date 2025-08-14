@@ -45,8 +45,9 @@ public class EquipmentCreatedEventHandler extends AbstractEventHandler<Equipment
 
 - When extends [AbstractEventHandler](../src/main/java/deviceet/common/event/consume/AbstractEventHandler.java), you may
   override the following methods:
-    - `isIdempotent()`: Returns `true` if the handler itself is idempotent, if `false` is returned, `consuming-event`
-      table will be used to achieve idempotency
+    - `isIdempotent()`: Returns `true` if the handler itself is idempotent, if `false` is returned, the
+      `consuming-event`
+      table will be used to achieve idempotency.
     - `isTransactional()`: Returns `true` to put the handler inside a transaction
     - If `isIdempotent()` return `false` and `isTransactional()` return `true`, both the `consuming-event` table and the
       handler will be put inside the same transaction
