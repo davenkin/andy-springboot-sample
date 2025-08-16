@@ -2,19 +2,20 @@
 
 ## Context
 
-Publishing Domain Events can be as easy as calling `kafkaTemplate.send()` whenever you want. But doing so has a big
+Publishing Domain Events can be as easy as calling `kafkaTemplate.send()` whenever you need to. But doing so has a big
 problem:
 
-- In normal use cases we will first write to database and then send events to Kafka, yet these two operations cannot be
+- In normal use cases we will firstly write to database and then send events to Kafka, yet these two operations cannot
+  be
   made inside an atomic operation, which might
   result in data inconsistency. For example, the writing to database succeeds but sending events to Kafka fails, or vice
   vasa. This kind of problem is essentially a distributed transaction problem.
 
-Some techniques exists to address such problem, like [JTA](http://en.wikipedia.org/wiki/Jakarta_Transactions)
+Some techniques exist to address such problem, like [JTA](http://en.wikipedia.org/wiki/Jakarta_Transactions)
 or [X/Open XA](https://en.wikipedia.org/wiki/X/Open_XA), but these techniques are usually quite heavy and Kafka does not
-support them. There is also another technique
+support them any way. There is also another technique
 called [Transactional Outbox](https://microservices.io/patterns/data/transactional-outbox.html) pattern, which uses an
-event table to convert a distributed transaction into a local database transaction.
+event table in database to convert a distributed transaction into a local database transaction.
 
 ## Decision
 
@@ -25,7 +26,7 @@ there is hardly another easy and doable way for distributed transactions that co
 systems
 like Kafka.
 
-One caveat with the Transactional Outbox pattern is that it might result in duplicated events, which requires the
+One caveat with the Transactional Outbox pattern is that it might result in duplicated messages, which requires the
 consumer to be idempotent. But don't worry about this as we have solutions for such case, please
 refer to [event consuming](./009_event_consuming.md) for more detail.
 
@@ -45,7 +46,7 @@ refer to [event consuming](./009_event_consuming.md) for more detail.
 
 The following steps are already been implemented for you, but for illustration let's walk them through.
 
-- After `AggregateRoot.raiseEvent()` is called, the event is first stored inside the Aggregate Root object:
+- After `AggregateRoot.raiseEvent()` is called, the event is stored inside the Aggregate Root object:
 
 ```java
     protected final void raiseEvent(DomainEvent event) {
@@ -94,11 +95,12 @@ The following steps are already been implemented for you, but for illustration l
     }
 ```
 
-As the Domain Event is saved into the database along with Aggregate Root, we ensure that they either be saved together
-or rollback together in a single database transaction.
+As the Domain Event is saved into the database along with Aggregate Root in the same database transaction, we ensure
+that they either be saved together
+or rollback together.
 
 - Once the event is inserted into MongoDB collection,
-  MongoDB [Change Stream](https://www.mongodb.com/docs/manual/changestreams/) will be triggered automatically due to
+  MongoDB [Change Stream](https://www.mongodb.com/docs/manual/changestreams/) is triggered automatically due to
   configuration in `EventConfiguration`:
 
 ```java
@@ -152,5 +154,6 @@ publishing of Domain Events to Kafka.
 
 - Once the event is sent to Kafka, the event in the database will be marked as sent. This also creates a distributed
   transaction problem. Here we tolerate duplicated messages to address this distributed transaction problem, namely if
-  the sending of events succeeds but the marking of sent fails, the event will be retried again which results in
+  the sending of events succeeds but the marking of sent fails, the event will not be marked as sent and will be retried
+  again which results in
   duplicated messages. By making the event consumers idempotent we are able to fix the duplicated message problem.

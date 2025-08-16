@@ -11,7 +11,7 @@ In order to find a balance between simplicity and comprehensiveness, we choose t
 events:
 
 - Every event can be handled by multiple handlers, these handlers process the same event independently, exceptions from
-  one handler will not impact other handlers
+  one handler does not impact other handlers
 - For multiple handlers processing the same event, higher priority handler process the event earlier
 - Upon exceptions, the event will be retried 3 times within the same consuming thread, if retry exhausts, the
   event will be put into Dead Letter Topic(DLT), for simplicity there is no automatic listener on DLT hence human
@@ -52,13 +52,12 @@ events with type `EquipmentCreatedEvent`.
   may
   override the following methods:
     - `isIdempotent()`: Returns `true` if the handler itself is idempotent, if `false` is returned, the
-      `consuming-event`
-      table will be used to achieve idempotency.
+      `consuming-event` table will be used to achieve idempotency.
     - `isTransactional()`: Returns `true` to put the handler inside a transaction
-    - `priority()`: return a number indicates the priority of the handler, lower number means higher priority and
+    - `priority()`: return a number indicating the priority of the handler, lower number means higher priority and
       will be process earlier if multiple handlers consume the same event
 
-- The combination of `isIdempotent()` and `isTransactional()` works as below:
+- The combination of `isIdempotent()` and `isTransactional()` work as below:
     - If `isIdempotent()` return `false` and `isTransactional()` return `true`, the `consuming-event` table is used for
       idempotency, both the `consuming-event` table and the handler will be put inside the same transaction, this is the
       most common case
@@ -78,7 +77,7 @@ The below section explains how the event consuming infrastructure works.
 
 - [SpringKafkaEventListener](../src/main/java/deviceet/common/event/consume/infrastructure/SpringKafkaEventListener.java)
   is the entry point of the whole event consuming process, it's also the only place that Kafka is referenced
-- Multiple `@KafkaListener` methods can be added inside `SpringKafkaEventListener` to listen multiple categories of
+- Multiple `@KafkaListener` methods can be added inside `SpringKafkaEventListener` to listen to multiple categories of
   events
 
 ```java
@@ -102,7 +101,7 @@ public class SpringKafkaEventListener {
   to [EventConsumer](../src/main/java/deviceet/common/event/consume/EventConsumer.java). `EventConsumer` is agnostic to
   messaging middlewares and it manages all handlers. The below code uses `consumeDomainEvent(DomainEvent event)` to
   handle Domain Events. If you are also consuming other types of events from other external systems, you may add more
-  methods in addition to `consumeDomainEvent()` like `consumeXxxEvent(XxxEvent event)`
+  methods in addition to `consumeDomainEvent()`, like `consumeXxxEvent(XxxEvent event)`
 
 ```java
     public void consumeDomainEvent(DomainEvent event) { // This works for all sub-types of DomainEvent
@@ -116,11 +115,11 @@ public class SpringKafkaEventListener {
 - `EventConsumer` finds all handlers that can handle the event, and calls their `handle()` methods, the handlers'
   `priority`, `isTransactional()` and `isIdempotent()` are checked during this orchestration process
 - A wrapper class [ConsumingEvent](../src/main/java/deviceet/common/event/consume/ConsumingEvent.java) is created to
-  enable uniform handling of various types of events
+  enable uniform handling of various types of events, not only Domain Events
 - `EventConsumer` uses `ConsumingEventDao.markEventAsConsumedByHandler()` to implement idempotency if the handler is not
   idempotent by itself, under the
   hood [ConsumingEventDao](../src/main/java/deviceet/common/event/consume/ConsumingEventDao.java) uses a table named
-  `consuming-event` to achieve idempotency for a handler on a given event
+  `consuming-event` to achieve idempotency
 
 ```java
     // return true means this event has never been consumed before
@@ -142,7 +141,8 @@ public class SpringKafkaEventListener {
 ```
 
 - The `ConsumingEventDao` achieves idempotency based on the event's ID and the event handler's fully qualified class
-  name(FQCN) together, hence best not to rename or change package of event handler classes after their creation,
+  name(FQCN) together, hence best not to rename or change package location of event handler classes after their
+  creation,
   otherwise the idempotency mechanism might not work
 - A `DefaultErrorHandler` is configured
   in [EventConfiguration](../src/main/java/deviceet/common/event/EventConfiguration.java) to retry the event for at
