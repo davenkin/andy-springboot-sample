@@ -1,7 +1,8 @@
 # Common coding practices
 
 - Do not rely on database to generate IDs, instead, generate IDs within the code. This means when the object is created,
-  its ID should already been generated. Reason: This decouples our code from database implementations and also makes testing much easier.
+  its ID should already been generated. Reason: This decouples our code from database implementations and also makes
+  testing much easier.
 
     ```java
     public Equipment(String name, Principal principal) {
@@ -77,3 +78,66 @@ public class SpringBootWebApplication {
     }
 }
 ```
+
+- Use Lombok's `@FieldNameConstants` to access objects' field names. For example, when accessing MongoDB, filed names
+  are usually needed.
+
+```java
+@FieldNameConstants
+public class Equipment extends AggregateRoot {}
+```
+
+```java
+if (listEquipmentQuery.status() != null) {
+
+   // Use "Equipment.Fields.status" to access Equipment's "status" field
+   criteria.and(Equipment.Fields.status).is(listEquipmentQuery.status());
+}
+```
+
+- Do not
+  use [Spring Data Repository](https://docs.spring.io/spring-data/commons/reference/repositories/query-methods-details.html).
+  Reason: Spring Data's auto generated repository query methods name can be very long and hard to read, also it cannot
+  survive code refactoring. Instead, implement your own repository classes which
+  extends [AbstractMongoRepository](../src/main/java/deviceet/common/infrastructure/AbstractMongoRepository.java), this
+  gives you more freedom.
+
+```java
+@Repository
+@RequiredArgsConstructor
+public class MongoEquipmentRepository extends AbstractMongoRepository<Equipment> implements EquipmentRepository {}
+```
+
+- Use a single `ObjectMapper` across the whole application as much as possible. Reason: A single `ObjectMapper` behaves
+  the same for all scenarios. The single `ObejctMapper` is already configured
+  inside [CommonConfiguration](../src/main/java/deviceet/common/configuration/CommonConfiguration.java).
+
+```java
+    @Bean
+    public Jackson2ObjectMapperBuilderCustomizer jacksonObjectMapperCustomizer() {
+        return builder -> {
+            builder.visibility(ALL, ANY)// Make Jackson deal with fields directly without needing setter/getters
+                    .featuresToDisable(WRITE_DATES_AS_TIMESTAMPS,
+                            WRITE_DURATIONS_AS_TIMESTAMPS,
+                            FAIL_ON_UNKNOWN_PROPERTIES);
+        };
+    }
+```
+
+In this `ObjectMapper`, we use `builder.visibility(ALL, ANY)` to enable direct field access, which means no need to
+expose getters/setters.
+
+- Always enable transaction in CommandServices by using `@Transactional`.
+
+```java
+    @Transactional
+    public String createEquipment(CreateEquipmentCommand command, Principal principal) {
+        Equipment equipment = equipmentFactory.create(command.name(), principal);
+        equipmentRepository.save(equipment);
+        log.info("Created Equipment[{}].", equipment.getId());
+        return equipment.getId();
+    }
+```
+
+- If distributed lock is required, used
+  Shedlock's [LockingTaskExecutor](../src/main/java/deviceet/common/configuration/DistributedLockConfiguration.java).
