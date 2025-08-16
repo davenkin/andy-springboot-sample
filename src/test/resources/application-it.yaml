@@ -1,11 +1,15 @@
-de.flapdoodle.mongodb.embedded.version: 7.0.12  # Embedded Mongo
+# Enable flapdoodle Embedded MongoDB by specifying a version
+de.flapdoodle.mongodb.embedded.version: 7.0.12
+
+# Comment out the below line if you want to disable embedded MongoDB and use a real MongoDB server
+spring.autoconfigure.exclude: de.flapdoodle.embed.mongo.spring.autoconfigure.EmbeddedMongoAutoConfiguration
 
 mongock:
   enabled: false # Disable Mongock
 
 spring:
-  autoconfigure:
-    exclude: org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration # Disable Kafka
   data:
+    mongodb:
+      uri: mongodb://localhost:27123/deviceet-local
     redis:
       port: 6124 # embedded Redis, can be accessed via 127.0.0.1:6124

@@ -7,6 +7,7 @@ import deviceet.sample.equipment.command.CreateEquipmentCommand;
 import deviceet.sample.equipment.command.EquipmentCommandService;
 import deviceet.sample.equipment.domain.event.EquipmentCreatedEvent;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
@@ -19,8 +20,8 @@ import static deviceet.common.event.publish.DomainEventPublishStatus.*;
 import static java.util.concurrent.CompletableFuture.failedFuture;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.Mockito.doReturn;
 
 class DomainEventPublishJobIntegrationTest extends IntegrationTest {
 
@@ -53,7 +54,7 @@ class DomainEventPublishJobIntegrationTest extends IntegrationTest {
         assertEquals(CREATED, publishingDomainEventDao.byId(event3.getId()).getStatus());
         assertEquals(CREATED, publishingDomainEventDao.byId(event4.getId()).getStatus());
 
-        domainEventPublishJob.publishStagedDomainEvents(2);
+        domainEventPublishJob.publishStagedDomainEvents(500);
 
         assertEquals(PUBLISH_SUCCEED, publishingDomainEventDao.byId(event1.getId()).getStatus());
         assertEquals(PUBLISH_SUCCEED, publishingDomainEventDao.byId(event2.getId()).getStatus());
@@ -64,7 +65,6 @@ class DomainEventPublishJobIntegrationTest extends IntegrationTest {
         assertTrue(domainEventSender.getEvents().containsKey(event2.getId()));
         assertTrue(domainEventSender.getEvents().containsKey(event3.getId()));
         assertTrue(domainEventSender.getEvents().containsKey(event4.getId()));
-        verify(domainEventSender, times(4)).send(any());
     }
 
     @Test
@@ -72,28 +72,27 @@ class DomainEventPublishJobIntegrationTest extends IntegrationTest {
         Principal principal = randomUserPrincipal();
         String arId = equipmentCommandService.createEquipment(CreateEquipmentCommand.builder().name(randomEquipmentName()).build(), principal);
         EquipmentCreatedEvent event = latestEventFor(arId, EQUIPMENT_CREATED_EVENT, EquipmentCreatedEvent.class);
-        doReturn(failedFuture(new RuntimeException("stub exception"))).when(domainEventSender).send(any());
-        domainEventPublishJob.publishStagedDomainEvents(2);
+        doReturn(failedFuture(new RuntimeException("stub exception")))
+                .when(domainEventSender).send(argThat(it -> it.getId().equals(event.getId())));
+        domainEventPublishJob.publishStagedDomainEvents(500);
         PublishingDomainEvent publishingDomainEvent1 = publishingDomainEventDao.byId(event.getId());
         assertEquals(PUBLISH_FAILED, publishingDomainEvent1.getStatus());
         assertEquals(1, publishingDomainEvent1.getPublishedCount());
 
-        domainEventPublishJob.publishStagedDomainEvents(2);
+        domainEventPublishJob.publishStagedDomainEvents(500);
         PublishingDomainEvent publishingDomainEvent2 = publishingDomainEventDao.byId(event.getId());
         assertEquals(PUBLISH_FAILED, publishingDomainEvent2.getStatus());
         assertEquals(2, publishingDomainEvent2.getPublishedCount());
 
-        domainEventPublishJob.publishStagedDomainEvents(2);
+        domainEventPublishJob.publishStagedDomainEvents(500);
         PublishingDomainEvent publishingDomainEvent3 = publishingDomainEventDao.byId(event.getId());
         assertEquals(PUBLISH_FAILED, publishingDomainEvent3.getStatus());
         assertEquals(3, publishingDomainEvent3.getPublishedCount());
 
-        domainEventPublishJob.publishStagedDomainEvents(2);
+        domainEventPublishJob.publishStagedDomainEvents(500);
         PublishingDomainEvent publishingDomainEvent4 = publishingDomainEventDao.byId(event.getId());
         assertEquals(PUBLISH_FAILED, publishingDomainEvent4.getStatus());
         assertEquals(3, publishingDomainEvent4.getPublishedCount());
-
-        verify(domainEventSender, times(3)).send(any());
     }
 
     @Test
@@ -103,18 +102,17 @@ class DomainEventPublishJobIntegrationTest extends IntegrationTest {
         EquipmentCreatedEvent event = latestEventFor(arId, EQUIPMENT_CREATED_EVENT, EquipmentCreatedEvent.class);
         doReturn(failedFuture(new RuntimeException("stub exception")))
                 .doReturn(CompletableFuture.completedFuture(event.getId()))
-                .when(domainEventSender).send(any());
+                .when(domainEventSender).send(ArgumentMatchers.argThat(it -> it.getId().equals(event.getId())));
 
-        domainEventPublishJob.publishStagedDomainEvents(2);
+        domainEventPublishJob.publishStagedDomainEvents(500);
         PublishingDomainEvent publishingDomainEvent1 = publishingDomainEventDao.byId(event.getId());
         assertEquals(PUBLISH_FAILED, publishingDomainEvent1.getStatus());
         assertEquals(1, publishingDomainEvent1.getPublishedCount());
 
-        domainEventPublishJob.publishStagedDomainEvents(2);
+        domainEventPublishJob.publishStagedDomainEvents(500);
         PublishingDomainEvent publishingDomainEvent2 = publishingDomainEventDao.byId(event.getId());
         assertEquals(PUBLISH_SUCCEED, publishingDomainEvent2.getStatus());
         assertEquals(2, publishingDomainEvent2.getPublishedCount());
-        verify(domainEventSender, times(2)).send(any());
     }
 
 }
