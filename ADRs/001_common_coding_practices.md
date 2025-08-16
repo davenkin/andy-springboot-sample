@@ -168,3 +168,7 @@ The controller receives a `ListEquipmentQuery` object along with a `Pageable` ob
         return this.equipmentQueryService.listEquipments(query, pageable, principal);
     }
 ```
+
+- Make configuration files, e.g. `application.yaml` as simple as possible, prefer using constants in the code.
+- Do not create interface classes for services until really needed. The public methods on service classes already serve
+  as interfaces.

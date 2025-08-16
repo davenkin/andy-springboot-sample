@@ -2,7 +2,7 @@
 
 ## Context
 
-There are various types of objects in software, such as Controller, Domain Object, Factory, Repository, Value Object
+There are various types of objects in software, such as Controllers, Domain Objects, Factory, Repositories and Services,
 etc. Their responsibilities and characteristics differ, but the same type of object share something in common and it's
 important that we keep our coding practices consistent within the same type of objects.
 
@@ -33,21 +33,20 @@ For the same type of objects, we follow the same implementation patterns.
 - All Aggregate Roots should extend [AggregateRoot](../src/main/java/deviceet/common/model/AggregateRoot.java) base
   class
 - All changes to the internal state of Aggregate Roots should go via the public methods of Aggregate Roots
-- Every public methods in Aggregate Root should leave the Aggregate Root in valid state according to business rules
 - Aggregate Root should use meaningful constructors to create itself
 - For code consistency, always use Factory to create Aggregate Root, no matter how simple it is
 - Aggregate Root should not have builder method because builder method can easily results in invalid object
-- Aggregate Root should have a globally unique ID and this ID should be generate from the code but not database
+- Aggregate Root should have a globally unique ID and this ID should be generate by the code but not by database
 - Aggregate Root should have meaningful business methods for changing its own state. Every business method should ensure
   the object is always in valid state by applying business rules. Business methods might raise Domain Events after state
-  changed.
+  is changed.
 - Aggregate Root has the following class level annotations:
     - `@Slf4j`: for log
     - `@Getter`: for retrieving data (actually getters are quite bad as it violates information hiding principle, but
       for convenience let's keep them)
     - `@FieldNameConstants`: for access filed names in situations like accessing MongoDB
     - `@TypeAlias(EQUIPMENT_COLLECTION)`: use a explict type alias, otherwise the FQCN will be used by Spring Data
-      MongoDB which does not survive changing package locations
+      MongoDB which does not survive refactorings of changing package locations
     - `@Document(EQUIPMENT_COLLECTION)`: for MongoDB collection
     - `@NoArgsConstructor(access = PRIVATE)`: for Jackson deserialization
 - Aggregate Root should not be annotated with `@Setter`, `@Builder` or  `@Data`
@@ -92,8 +91,8 @@ public class Equipment extends AggregateRoot {
 ### Repository
 
 - Repository abstracts database interactions for accessing Aggregate Roots
-- Every Aggregate Root has its own Repository class
-- Repositories should first have an interface class and then a concrete implementation class
+- Every Aggregate Root class has its own Repository class
+- Repositories should firstly have an interface class and then a concrete implementation class
   Example for Repository
   interface [EquipmentRepository](../src/test/java/deviceet/sample/equipment/domain/EquipmentRepository.java):
 
@@ -158,7 +157,8 @@ public class CachedMongoEquipmentRepository extends AbstractMongoRepository<Equi
   data
 - Controller classes should be annotated with `@Validated` to enable request validation
 - Request objects in method parameters should be annotated with `@Valid` to enable request validation
-- Controller ensures a `Principal` is fetched/created from the reqeust and passed to CommandService or QueryService
+- Controller ensures a [Principal](../src/main/java/deviceet/common/model/principal/Principal.java) is fetched/created
+  from the reqeust and passed to CommandService or QueryService
 - Controller should follow REST principles on naming URLs and choosing HTTP methods
 
 Example [EquipmentController](../src/test/java/deviceet/sample/equipment/controller/EquipmentController.java):
@@ -185,12 +185,12 @@ public class EquipmentController {
 ### CommandService
 
 - CommandService serves as the facade for the domain model
-- Every public method in CommandService should represent a use case, and should be annotated with `@Transactional`
-- Methods in CommandService usually accepts a request Command class as parameter, as well as a `Principal`
+- Every public method in CommandService should represent a use case, and should be annotated with `@Transactional` if it
+  writes to database
+- Methods in CommandService usually accepts a Command object as parameter, as well as a `Principal` object
 - CommandService should not contain business logic
 - CommandService returns the Aggregate Root's ID for creating objects, and return `void` for updating or deleting
   Aggregate Roots
-- Please follow [requst process flow](./006_request_process_flow.md) on how to implement CommandServices
 
 Example [EquipmentCommandService](../src/test/java/deviceet/sample/equipment/command/EquipmentCommandService.java):
 
@@ -237,7 +237,7 @@ public record CreateMaintenanceRecordCommand(
 - DomainService is totally different from CommandService(or QueryService) in that DomainService is part of the domain
   model, but CommandService is the gate to domain model
 - DomainService holds domain logic
-- Normally we don't want DomainService, as domain logic should best be reside in Aggregate Roots, so DomainService is
+- Normally we don't want DomainService, as domain logic should best be reside in Aggregate Roots. DomainService is
   our last resort if the business logic is not suitable to be put inside Aggregate Roots.
 
 Example [EquipmentDomainService](../src/test/java/deviceet/sample/equipment/domain/EquipmentDomainService.java):
@@ -261,7 +261,8 @@ public class EquipmentDomainService {
 }
 ```
 
-In the above example, the business logic of checking duplicated equipment name falls outside the ability of `Equipment`
+In the above example, the business logic of "checking duplicated equipment name" falls outside the ability of
+`Equipment`
 itself, hence `EquipmentDomainService` is used instead.
 
 ### Domain Event
@@ -270,15 +271,16 @@ itself, hence `EquipmentDomainService` is used instead.
 - Domain Events should be immutable as it represent something already happened which cannot not be changed
 - Every Domain Event should register its own type
   inside [DomainEventType](../src/main/java/deviceet/common/event/DomainEventType.java)
-- Domain Event should hold enough context data about what happened, but not the whole Aggregate Root or unrelated data
-  for this event
+- Domain Event should hold enough context data about what happened, but not the whole Aggregate Root or non-relevant
+  data
 - Domain Event should not be annotated with `@Setter`, `@Builder` or  `@Data`
 - Domain Events are only raised from Aggregate Roots by using `AggregateRoot.raiseEvent()` method
 - Domain Event has the following class level annotations:
     - `@Getter`: for retrieving data (actually getters are quite bad as it violates information hiding principle, but
       for convenience let's keep them)
     - `@TypeAlias(MAINTENANCE_RECORD_CREATED_EVENT)`: use a explict type alias, otherwise the FQCN will be used by
-      Spring Data MongoDB which does not survive changing package locations. The value should be the same as the event's
+      Spring Data MongoDB which does not survive refactoring of changing package locations. The value should be the same
+      as the event's
       `DomainEventType` such as `MAINTENANCE_RECORD_CREATED_EVENT`
     - `@NoArgsConstructor(access = PRIVATE)`: for Jackson deserialization
 
@@ -309,8 +311,10 @@ public class MaintenanceRecordCreatedEvent extends DomainEvent {
 - An event can be handled by multiple EventHandlers, and they operate independently to each other
 - You may choose to override `AbstractEventHandler`'s `isIdempotent()`, `isTransactional()` and `priority()` for
   specific purposes, where:
-    - `isIdempotent()`: return `true` if the handler can be run repeatedly without any problem, default value is `false`
-    - `isTransactional()`: return `true` if the handler should be atomic, normally it should return `true` which is also
+    - `isIdempotent()`: returns `true` if the handler can be run repeatedly without any problem, default value is
+      `false`
+    - `isTransactional()`: returns `true` if the handler should be atomic, normally it should return `true`, which is
+      also
       the default value. It should return `false` for cases where the handlers does not involve database operations, or
       it handles large amount of database records that exceeds the MongoDB transaction limits.
     - `priority()`: used for multiple handlers with the same event, return the priority of the handler, smaller value
@@ -319,8 +323,7 @@ public class MaintenanceRecordCreatedEvent extends DomainEvent {
   software, and they both are facade which orchestrate other components to work but does not contain business logic by
   themselves
 - EventHandler can use `ExceptionSwallowRunner` to run multiple independent operations, in which exceptions raised in
-  one
-  operation does not affect later operations
+  one operation does not affect other operations
 
 Example [EquipmentDeletedEventEventHandler](../src/test/java/deviceet/sample/equipment/eventhandler/EquipmentDeletedEventEventHandler.java):
 
@@ -345,7 +348,7 @@ public class EquipmentDeletedEventEventHandler extends AbstractEventHandler<Equi
 
 ### Factory
 
-- Factory is used to create Aggregate Root
+- Factory is used to create Aggregate Roots
 - In Factories, before calling Aggregate Roots's constructors, there usually exists some business validations
 - If no business validation is required, the Factory can be as simple as just call Aggregate Roots's constructors, but
   for consistency, let's always use Factory to create Aggregate Roots.
@@ -422,7 +425,7 @@ public class RemoveOldMaintenanceRecordsJob {
 
 ### QueryService
 
-- QueryService and CommandService both belongs to ApplicationService
+- QueryService and CommandService both belong to ApplicationService
 - QueryService's only purpose is for querying data
 - QueryService exists to stand apart from CommandService, making the QueryService a separate concern
 - QueryService follows CQRS principle in that it can access database directly, bypassing the Domain Model which

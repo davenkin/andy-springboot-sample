@@ -17,7 +17,9 @@ There are mainly 3 ways to interact with the software:
 - Scheduled jobs triggered by timers
 - Consuming events from Kafka
 
-For HTTP requests, they can be further split into multiple sub-categories, giving us the following process flows:
+For HTTP requests, they can be further split into multiple sub-categories.
+
+Given above, we have the following process flows:
 
 - [HTTP request for creating data](#http-request-for-creating-data)
 - [HTTP request for updating data](#http-request-for-updating-data)
@@ -96,9 +98,9 @@ public interface EquipmentRepository {
 
 Updating data has 3 major steps: (1)Load the Aggregate Root; (2)Call Aggregate Root's business method; (3) Save it back
 to
-database. Take updating `Equipment`'s holder name as an example.
+database. Take "updating `Equipment`'s holder name" as an example.
 
-1. The request first arrived at `EquipmentController.updateEquipmentHolder()`:
+1. The request first arrives at `EquipmentController.updateEquipmentHolder()`:
 
 ```java
     @PutMapping("/{equipmentId}/holder")
@@ -145,7 +147,7 @@ database. Take updating `Equipment`'s holder name as an example.
 7. No need to return anything from `EquipmentCommandService.updateEquipmentHolder()`.
 
 Sometimes, the whole business logic is not suitable to be put inside Aggregate Root like `Equipment.updateHolder()`. For
-such case, we can use a DomainService. For example, when updating `Equipment`'s name, we need to check if the name is
+such cases, we can use DomainServices. For example, when updating `Equipment`'s name, we need to check if the name is
 already been occupied, which cannot be fulfilled by `Equipment` itself. Instead of calling `Equipment.updateName()`
 directly from `EquipmentCommandService`, `EquipmentDomainService.updateEquipmentName()` is called from
 `EquipmentCommandService`:
@@ -180,7 +182,7 @@ update `Equipment`'s name:
 
 For deleting data, first load the `AggregateRoot` and then delete it. For example, for deleting an `Equipment`
 
-1. Request arrived at `EquipmentController`:
+1. Request arrives at `EquipmentController`:
 
 ```java
     @DeleteMapping("/{equipmentId}")
@@ -224,7 +226,7 @@ For deleting data, first load the `AggregateRoot` and then delete it. For exampl
 As we are using [CQRS](./004_use_cqrs.md), querying data can bypass the domain models and talk to database directly. For
 example, when querying a list of `Equipment`s:
 
-1. The request hit `EquipmentController`, which further calls `EquipmentQueryService.listEquipments()`:
+1. The request hits `EquipmentController`, which further calls `EquipmentQueryService.listEquipments()`:
 
 ```java
     @PostMapping("/list")
@@ -241,7 +243,7 @@ Here Spring's `Pageable` and `Page` should be used for pagination. `EquipmentQue
 `EquipmentCommandService`, they both are under the category of `ApplicationService`.
 
 2. `EquipmentQueryService.listEquipments()` uses `MongoTemplate` to query data from database directly, and uses its own
-   data model class `QListedEquipment`:
+   query model `QListedEquipment`:
 
 ```java
     public Page<QListedEquipment> listEquipments(ListEquipmentQuery listEquipmentQuery, Pageable pageable, Principal principal) {
@@ -298,7 +300,7 @@ public class MaintenanceReminderJob {
 ```
 
 The job class serves the same purpose as `CommandService`, which orchestrates various other components such as
-`Repository`, `AggreateRoot` and `Factory` to accomplish a certain process. Hence the job itself should not
+`Repository`, `AggreateRoot` and `Factory`. Hence the job itself should not
 contain business logic.
 
 ### Consuming events from Kafka
@@ -341,5 +343,5 @@ public class EquipmentCreatedEventHandler extends AbstractEventHandler<Equipment
 ```
 
 The `EventHandler` serves the same purpose as `CommandService`, which orchestrates various other components such as
-`Repository`, `AggreateRoot` and `Factory` to accomplish a certain process. Hence the `EventHandler` itself should not
+`Repository`, `AggreateRoot` and `Factory`. Hence the `EventHandler` itself should not
 contain business logic.
