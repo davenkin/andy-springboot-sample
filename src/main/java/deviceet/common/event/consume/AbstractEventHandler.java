@@ -15,7 +15,7 @@ public abstract class AbstractEventHandler<T> {
     }
 
     public boolean isTransactional() {
-        return true; // By default, all handlers are assumed to be transactional, we should make as many handlers as possible to be transactional
+        return true; // By default, all handlers are assumed to be transactional, we should make handlers to be transactional as much as possible
     }
 
     public int priority() {

@@ -14,7 +14,7 @@ import static deviceet.common.util.Constants.PUBLISHING_EVENT_COLLECTION;
 import static java.util.Objects.requireNonNull;
 import static lombok.AccessLevel.PRIVATE;
 
-// DomainEvent wrapper for publishing, added status and publishCount to track the publishing process
+// Wrapper of DomainEvent for publishing, added "status" and "publishCount" to track the publishing process
 @Getter
 @FieldNameConstants
 @NoArgsConstructor(access = PRIVATE)

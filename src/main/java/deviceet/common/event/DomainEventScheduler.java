@@ -17,13 +17,15 @@ public class DomainEventScheduler {
     private final DomainEventPublishJob domainEventPublishJob;
     private final DomainEventHouseKeepingJob domainEventHouseKeepingJob;
 
-    //This job should not use @SchedulerLock as DomainEventPublisher.publishStagedDomainEvents() already uses an internal distributed lock
+    // Runs every 5 minutes to publish staged domain events in case the real time publishing mechanism fails
+    // This job should not use @SchedulerLock as DomainEventPublisher.publishStagedDomainEvents() already uses an internal distributed lock
     @Scheduled(cron = "0 */5 * * * ?")
     public void houseKeepPublishStagedDomainEvents() {
         log.debug("Start house keep publish domain events.");
         domainEventPublishJob.publishStagedDomainEvents(100);
     }
 
+    // PublishingDomainEvent and ConsumingEvent are temporary and should be removed regularly
     @Scheduled(cron = "0 10 2 1 * ?")
     @SchedulerLock(name = "removeOldDomainEvents", lockAtMostFor = "PT60M", lockAtLeastFor = "PT1M")
     public void removeOldDomainEvents() {

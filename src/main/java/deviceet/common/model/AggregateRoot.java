@@ -17,10 +17,9 @@ import static java.util.Objects.requireNonNull;
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
 
-// Base class for all entities
+// Base class for all aggregate root objects
 @Getter
 @FieldNameConstants
-// The no arg constructor is used by Jackson and Spring Data etc. to create objects
 @NoArgsConstructor(access = PROTECTED)
 public abstract class AggregateRoot {
     private String id;
@@ -60,8 +59,8 @@ public abstract class AggregateRoot {
         this.createdBy = principal.getId();
     }
 
-    // raiseEvent() only stores events in aggregate root temporarily, the events will then be persisted into DB by Repository within the same transaction of saving entities
-    // The actual sending of events to messaging middleware is handled by DomainEventPublisher
+    // raiseEvent() only stores events in aggregate root temporarily, the events will then be persisted into DB by Repository within the same transaction that saves the aggregate root object
+    // The actual sending of events to messaging middleware is handled by DomainEventPublishJob
     protected final void raiseEvent(DomainEvent event) {
         requireNonNull(event, "event must not be null.");
         requireNonNull(event.getType(), "event's type must not be null.");

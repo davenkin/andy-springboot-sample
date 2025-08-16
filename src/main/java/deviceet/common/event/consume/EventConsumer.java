@@ -13,6 +13,7 @@ import java.util.Set;
 import static java.util.Comparator.comparingInt;
 import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 
+// This class is the main place where events consuming orchestration happens
 @Slf4j
 @Component
 public class EventConsumer {

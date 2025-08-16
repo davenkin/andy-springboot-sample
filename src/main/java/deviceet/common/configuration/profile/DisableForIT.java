@@ -7,7 +7,7 @@ import java.lang.annotation.RetentionPolicy;
 
 import static deviceet.common.util.Constants.NON_IT_PROFILE;
 
-//Disable for integration test
+//Disable for integration tests
 @Retention(RetentionPolicy.RUNTIME)
 @Profile(NON_IT_PROFILE)
 public @interface DisableForIT {

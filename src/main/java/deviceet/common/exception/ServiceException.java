@@ -9,6 +9,8 @@ import static deviceet.common.exception.ErrorCode.*;
 import static org.apache.commons.collections4.MapUtils.isNotEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
+// This is the only exception that you should throw as we follow a flat exception model
+// When throw, pass in an ErrorCode that categorize the error
 @Getter
 public final class ServiceException extends RuntimeException {
     private final ErrorCode code;

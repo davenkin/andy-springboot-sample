@@ -14,7 +14,7 @@ import static java.util.Objects.requireNonNull;
 import static lombok.AccessLevel.PRIVATE;
 
 // Wrapper for event when consuming
-// Can add more information(such as if the event is redelivered etc.) if required, but should not be coupled to a specific messaging middleware
+// You may add more information(such as if the event is redelivered etc.) if required, but should not be coupled to a specific messaging middleware
 @Getter
 @FieldNameConstants
 @NoArgsConstructor(access = PRIVATE)

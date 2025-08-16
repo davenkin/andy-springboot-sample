@@ -12,14 +12,14 @@ import static deviceet.common.event.consume.ConsumingEvent.Fields.*;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
 
-// Upon consuming, record the event in DB to avoid duplicated event consuming
+// Upon consuming, save the event in DB to avoid duplicated event consuming
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class ConsumingEventDao {
     private final MongoTemplate mongoTemplate;
 
-    // return true means this event has never been consumed before
+    // return "true" means this event has never been consumed before
     public boolean markEventAsConsumedByHandler(ConsumingEvent consumingEvent, AbstractEventHandler<?> handler) {
         Query query = query(where(eventId).is(consumingEvent.getEventId()).and(ConsumingEvent.Fields.handler).is(handler.getName()));
 

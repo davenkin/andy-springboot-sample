@@ -33,7 +33,7 @@ public class CommonConfiguration {
         return executor;
     }
 
-
+    // A single instance of ObjectMapper should be used across the whole application
     @Bean
     public Jackson2ObjectMapperBuilderCustomizer jacksonObjectMapperCustomizer() {
         return builder -> {

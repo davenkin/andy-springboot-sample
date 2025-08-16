@@ -21,7 +21,7 @@ import static java.time.Instant.now;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 
-// Publishes all staged domain events
+// Publishes all staged domain events to the messaging middleware
 @Slf4j
 @Component
 @RequiredArgsConstructor

@@ -6,10 +6,9 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 /**
- * SnowFlake id generator, inspired by Twitter.
+ * SnowFlake id generator
  *
  * @link <a href="https://developer.twitter.com/en/docs/basics/twitter-ids">twitter-ids</a>
- * This class should be plain java class, and not depends on any framework or other package.
  * <p>
  * 64 bits long type in java
  * |-- 1 bit not use --|-- 41 bits timestamp in milliseconds --|-- 12 bits worker id --|-- 10 bits sequence --|
