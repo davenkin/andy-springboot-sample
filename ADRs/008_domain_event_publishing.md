@@ -2,7 +2,7 @@
 
 ## Context
 
-Publishing domain events can be as easy as calling `kafkaTemplate.send()` whenever you want. But doing so has a big
+Publishing Domain Events can be as easy as calling `kafkaTemplate.send()` whenever you want. But doing so has a big
 problem:
 
 - In normal use cases we will first write to database and then send events to Kafka, yet these two operations cannot be
@@ -18,7 +18,7 @@ event table to convert a distributed transaction into a local database transacti
 
 ## Decision
 
-We choose to use the **Transactional Outbox** pattern for sending domain events to Kafka because it's proven to be
+We choose to use the **Transactional Outbox** pattern for sending Domain Events to Kafka because it's proven to be
 working,
 and
 there is hardly another easy and doable way for distributed transactions that covers both databases and messaging
@@ -31,7 +31,7 @@ refer to [event consuming](./009_event_consuming.md) for more detail.
 
 ## Implementation
 
-- For sending a domain event, the only action that you need is to call `raiseEvent()` from an Aggregate Root:
+- For sending a Domain Event, the only action that you need is to call `raiseEvent()` from an Aggregate Root:
 
 ```java
     public void updateName(String newName) {
@@ -94,7 +94,7 @@ The following steps are already been implemented for you, but for illustration l
     }
 ```
 
-As the domain event is saved into the database along with Aggregate Root, we ensure that they either be saved together
+As the Domain Event is saved into the database along with Aggregate Root, we ensure that they either be saved together
 or rollback together in a single database transaction.
 
 - Once the event is inserted into MongoDB collection,
@@ -109,7 +109,7 @@ or rollback together in a single database transaction.
                                                                            DomainEventPublishJob domainEventPublishJob) {
         MessageListenerContainer container = new DefaultMessageListenerContainer(mongoTemplate, taskExecutor);
 
-        // Get notification on DomainEvent insertion in MongoDB, then publish staged domain events to messaging middleware such as Kafka
+        // Get notification on DomainEvent insertion in MongoDB, then publish staged Domain Events to messaging middleware such as Kafka
         container.register(ChangeStreamRequest.builder(
                         (MessageListener<ChangeStreamDocument<Document>, PublishingDomainEvent>) message -> {
                             domainEventPublishJob.publishStagedDomainEvents(100);
@@ -125,7 +125,7 @@ or rollback together in a single database transaction.
 Upon receiving MongoDB Change Streams on event insertion, we are not sending the currently inserted event into Kafka
 directly, instead we
 treat this change merely as a trigger, which calls `DomainEventPublishJob.publishStagedDomainEvents()` to start the
-publishing of domain events to Kafka.
+publishing of Domain Events to Kafka.
 
 - The `DomainEventPublishJob.publishStagedDomainEvents()` method loads un-published events from the `publishing-event`
   collection and send them to Kafka:

@@ -86,7 +86,7 @@ assist you testing.
 - As Kafka is disabled, you will need to call EventHandlers' `handle()` methods explicitly to ensure the processing of
   events.
 - As [Transactional Outbox](https://microservices.io/patterns/data/transactional-outbox.html) pattern is used, the
-  domain events will firstly be stored into database and then publish, you may use `IntegrationTest.latestEventFor()` to
+  Domain Events will firstly be stored into database and then publish, you may use `IntegrationTest.latestEventFor()` to
   verify the existence of events:
 
 ```java
@@ -101,7 +101,7 @@ assist you testing.
         assertEquals(createEquipmentCommand.name(), equipment.getName());
         assertEquals(principal.getOrgId(), equipment.getOrgId());
 
-        // Verify the existence of domain events in database
+        // Verify the existence of Domain Events in database
         EquipmentCreatedEvent equipmentCreatedEvent = latestEventFor(equipmentId, EQUIPMENT_CREATED_EVENT, EquipmentCreatedEvent.class);
         assertEquals(equipmentId, equipmentCreatedEvent.getEquipmentId());
     }

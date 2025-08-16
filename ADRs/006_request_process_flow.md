@@ -2,8 +2,8 @@
 
 ## Context
 
-We know that AggregateRoot is the most important concepts in domain model. Nearly all operations in the software are
-centered around AggregateRoots. Different types of operations might have their own process flows.
+We know that Aggregate Root is the most important concepts in domain model. Nearly all operations in the software are
+centered around Aggregate Roots. Different types of operations might have their own process flows.
 
 ## Decision
 
@@ -56,7 +56,7 @@ flow is:
 ```
 
 3. `EquipmentFactory` is used to create the `Equipment` object. Remember: for code consistency, always use Factory to
-   create AggregateRoots:
+   create Aggregate Roots:
 
 ```java
 public class EquipmentFactory {
@@ -94,7 +94,8 @@ public interface EquipmentRepository {
 
 ### HTTP request for updating data
 
-Updating data has 3 major steps: (1)Load the AggregateRoot; (2)Call AggregateRoot's business method; (3) Save it back to
+Updating data has 3 major steps: (1)Load the Aggregate Root; (2)Call Aggregate Root's business method; (3) Save it back
+to
 database. Take updating `Equipment`'s holder name as an example.
 
 1. The request first arrived at `EquipmentController.updateEquipmentHolder()`:
@@ -134,7 +135,7 @@ database. Take updating `Equipment`'s holder name as an example.
         equipment.updateHolder(command.name());
 ```
 
-5. Inside the business method, domain event can be raised according to requirements.
+5. Inside the business method, Domain Event can be raised according to requirements.
 6. Save the updated `Equipment` back into database:
 
 ```java
@@ -143,7 +144,7 @@ database. Take updating `Equipment`'s holder name as an example.
 
 7. No need to return anything from `EquipmentCommandService.updateEquipmentHolder()`.
 
-Sometimes, the whole business logic is not suitable to be put inside AggregateRoot like `Equipment.updateHolder()`. For
+Sometimes, the whole business logic is not suitable to be put inside Aggregate Root like `Equipment.updateHolder()`. For
 such case, we can use a DomainService. For example, when updating `Equipment`'s name, we need to check if the name is
 already been occupied, which cannot be fulfilled by `Equipment` itself. Instead of calling `Equipment.updateName()`
 directly from `EquipmentCommandService`, `EquipmentDomainService.updateEquipmentName()` is called from
@@ -206,7 +207,7 @@ For deleting data, first load the `AggregateRoot` and then delete it. For exampl
 3. `EquipmentCommandService` loads the `Equipment`, then call `EquipmentRepository.delete()` to delete it. You might be
    wondering, why we need to first load the `Equipment` into memory then do the deletion. Will it be much simpler to
    directly delete by ID? The reason is that, before deletion, there might be some validations that need to happen, and
-   also it might raise domain events. So, in order to ensure such possibilities, the whole `Equipment` object is loaded
+   also it might raise Domain Events. So, in order to ensure such possibilities, the whole `Equipment` object is loaded
    into the memory.
 4. When `EquipmentRepository.delete()` is called, it automatically calls `AggregateRoot.onDelete()` which is implemented
    by `Equipment` to raise `EquipmentDeletedEvent`:

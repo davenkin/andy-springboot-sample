@@ -23,13 +23,13 @@ by a simple glimpse at the business packages.
 
 ## Implementation
 
-When implementing, keep the folder structure as flat as possible. The aggregate root is at the highest level under
+When implementing, keep the folder structure as flat as possible. The Aggregate Root is at the highest level under
 `business` package, then followed by other
 technical layers, use the following structure:
 
 The `1` in `(class:1)` indicates there can be only one class, `(class:N)` for multiple.
 
-- `Aggregate Root`(folder:1): The top level package, an aggregate root represents a major business entity(e.g.
+- `Aggregate Root`(folder:1): The top level package, an Aggregate Root represents a major business entity(e.g.
   `equipment`).
     - `command`(folder:1): For sending commands to the application, "command" represents the "C"
       in [CQRS](https://microservices.io/patterns/data/cqrs.html).
@@ -44,35 +44,35 @@ The `1` in `(class:1)` indicates there can be only one class, `(class:N)` for mu
           with "Command".
           Example: [CreateEquipmentCommand](../src/test/java/deviceet/sample/equipment/command/CreateEquipmentCommand.java).
     - `controller`(folder:1): For HTTP controllers
-        - `XxxController`(class:1): The controller class, should end with "Controller". Controllers should be very thin,
-          they call CommandServices and QueryServices upon receiving request.
+        - `XxxController`(class:1): The controller class should end with "Controller". Controllers should be very thin,
+          they call CommandServices or QueryServices upon receiving request.
           Example: [EquipmentController](../src/test/java/deviceet/sample/equipment/controller/EquipmentController.java).
     - `domain`(folder:1): Contains all the domain models.
         - `Xxx`(class:N): Domain objects hold business logic, they are why your application exists.
           Example: [Equipment](../src/test/java/deviceet/sample/equipment/domain/Equipment.java)
           and [EquipmentStatus](../src/test/java/deviceet/sample/equipment/domain/EquipmentStatus.java).
-        - `XxxRepository`(class:1): Repositories are for retrieving and persisting aggregate root, should end with "
+        - `XxxRepository`(class:1): Repositories are for retrieving and persisting Aggregate Roots, should end with "
           Repository",
           it's implementation
-          classes are located in `infrastructure` folder. Please be noted that repository is per aggregate root, namely
+          classes are located in `infrastructure` folder. Please be noted that repository is per Aggregate Root, namely
           only
-          aggregate root can have
+          Aggregate Root can have
           repositories, but not all domain objects.
           Example: [EquipmentRepository](../src/test/java/deviceet/sample/equipment/domain/EquipmentRepository.java).
-        - `XxxFactory`(class:1): Factory class for creating the aggregate root, should end with "Factory". The creation
-          of aggregate roots
-          should be explicit, so always use factories to create them but not use constructors directly. Normally the
-          factory first do some
-          business validations then call aggregate root's constructor to create object. Example: `EquipmentFactory`.
+        - `XxxFactory`(class:1): Factory class for creating the Aggregate Roots, should end with "Factory". The creation
+          of Aggregate Roots
+          should be explicit, so always use factories to create them. Normally the
+          factory firstly do some
+          business validations and then call Aggregate Root's constructor to create object. Example: `EquipmentFactory`.
         - `XxxDomainService`(class:N): A [domain service](https://ddd-practitioners.com/home/glossary/domain-service/)
           class, like other domain objects, holds business logic. But, it should be your last resort when business logic
           cannot fit into other
           domain objects. Domain services usually end with "DomainService", but you can use other meaningful suffixes as
           well such as "XxxChecker" or "XxxProvider".
           Example: [EquipmentDomainService](../src/test/java/deviceet/sample/equipment/domain/EquipmentDomainService.java).
-        - `event`(folder:1): This folder contains all the domain event classes that are raised by the aggregate root.
+        - `event`(folder:1): This folder contains all the Domain Event classes that are raised by the Aggregate Root.
             - XxxEvent(class:N): Domain event class, should end with "Event", it represents a significant change in
-              aggregate root. The naming convention
+              Aggregate Root. The naming convention
               is `[Aggregate Root Name] + [Passive form of verbs] + Event`.
               Example: [EquipmentCreatedEvent](../src/test/java/deviceet/sample/equipment/domain/event/EquipmentCreatedEvent.java).
         - `task`(folder:1): Contains various tasks.
@@ -82,10 +82,10 @@ The `1` in `(class:1)` indicates there can be only one class, `(class:N)` for mu
     - `eventhandler`(folder:1): Contains all the event handler classes.
         - `XxxEventHandler`(class): Event handler class, should end with "EventHandler". Example:
           [EquipmentCreatedEventHandler](../src/test/java/deviceet/sample/equipment/eventhandler/EquipmentCreatedEventHandler.java).
-    - `infrastructure`(folder:1): Contains the infrastructure code that is related to the aggregate root.
+    - `infrastructure`(folder:1): Contains the infrastructure code that is related to the Aggregate Root.
         - `MongoXxxRepository`(class:N): The repository implementations, should end with "Repository".
           Example: [MongoEquipmentRepository](../src/test/java/deviceet/sample/equipment/infrastructure/MongoEquipmentRepository.java).
-    - `job`(folder:1):Contains background jobs that are related to the aggregate root.
+    - `job`(folder:1):Contains background jobs that are related to the Aggregate Root.
         - XxxScheduler(class:N): Scheduling configuration, should end with "Scheduler".
           Example: [EquipmentScheduler](../src/test/java/deviceet/sample/equipment/job/EquipmentScheduler.java).
         - XxxJob(class:N): Represents a background job, should end with "Job". A job might run multiple tasks. Example:

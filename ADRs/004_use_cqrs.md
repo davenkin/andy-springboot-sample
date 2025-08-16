@@ -24,13 +24,13 @@ simpler than full scale CQRS.
 ## Decision
 
 We choose to use **lightweight CQRS**. Because we believe that the command side and query side are essentially very
-different and we also want it simple to implement. In command side, business rules should be strictly validated and the
+different. In command side, business rules should be strictly validated and the
 business logic should be modeled
 according to commonly accepted principles like [SOLID](https://en.wikipedia.org/wiki/SOLID)
 and [GRASP](https://en.wikipedia.org/wiki/GRASP_(object-oriented_design)). In query side, the restrictions are much more
 loosen and we can use whatever means to hit the database for fast and high performant queries.
 
-Also we think CQRS should not be a heavyweight undertaking that scares developers away, but should be just enough to
+Also we think CQRS should not be a heavyweight architecture that scares developers away, but should be just enough to
 fulfil its job.
 
 Based on the above, the **lightweight CQRS** approach meets our needs and is our way to go.
@@ -40,9 +40,10 @@ Based on the above, the **lightweight CQRS** approach meets our needs and is our
 There are 2 main points regarding lightweight CQRS implementation.
 
 - The first one is that apart from CommandServices, we create standalone QueryServices to implement the query side. In
-  QueryService, we use `MongoTemplate` to query database directly, bypassing the domain models, and also we use separate
+  QueryService, we use `MongoTemplate` to query database directly, bypassing the domain models, and also we use a
+  separate
   set of query objects other than domain objects. For example, in `EquipmentQueryService.listEquipments()`, we don't use
-  the domain object of `Equipment`, instead a query model `QListedEquipment` is created and `MongoTemplate` is used to
+  the domain object `Equipment`, instead a query model `QListedEquipment` is created and `MongoTemplate` is used to
   hit the database directly.
 
 ```java

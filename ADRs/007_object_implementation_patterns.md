@@ -39,7 +39,7 @@ For the same type of objects, we follow the same implementation patterns.
 - Aggregate Root should not have builder method because builder method can easily results in invalid object
 - Aggregate Root should have a globally unique ID and this ID should be generate from the code but not database
 - Aggregate Root should have meaningful business methods for changing its own state. Every business method should ensure
-  the object is always in valid state by applying business rules. Business methods might raise domain events after state
+  the object is always in valid state by applying business rules. Business methods might raise Domain Events after state
   changed.
 - Aggregate Root has the following class level annotations:
     - `@Slf4j`: for log
@@ -72,7 +72,7 @@ public class Equipment extends AggregateRoot {
     public Equipment(String name, Principal principal) { // Explict contructors
         super(newEquipmentId(), principal);
         this.name = name;
-        raiseEvent(new EquipmentCreatedEvent(this)); // Raise domain event
+        raiseEvent(new EquipmentCreatedEvent(this)); // Raise Domain Event
     }
 
     public static String newEquipmentId() {
@@ -188,8 +188,8 @@ public class EquipmentController {
 - Every public method in CommandService should represent a use case, and should be annotated with `@Transactional`
 - Methods in CommandService usually accepts a request Command class as parameter, as well as a `Principal`
 - CommandService should not contain business logic
-- CommandService returns the AggregateRoot's ID for creating objects, and return `void` for updating or deleting
-  AggregateRoots
+- CommandService returns the Aggregate Root's ID for creating objects, and return `void` for updating or deleting
+  Aggregate Roots
 - Please follow [requst process flow](./006_request_process_flow.md) on how to implement CommandServices
 
 Example [EquipmentCommandService](../src/test/java/deviceet/sample/equipment/command/EquipmentCommandService.java):

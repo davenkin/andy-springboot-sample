@@ -30,8 +30,9 @@ This is an ADR but not a lecture on DDD, so here we only list some common DDD pr
 - Remember, the sole reason that your software exists is to solve a specific business problem. This business
   problem is the first letter `D` in `DDD`.
 - Make a clear separation between domain code and technical code, this is why we have the concept of `Domain Model`.
-- In domain model, the most important concept is **AggregateRoot**s. You may roughly think of them as the major business
-  entity classes in you code. Aggregate roots are the major places where your business logic happens.
+- In domain model, the most important concept is **Aggregate Root**s. You may roughly think of them as the major
+  business
+  entity classes in you code. Aggregate Roots are the major places where your business logic happens.
 
 Example Aggregate Root [Equipment](../src/test/java/deviceet/sample/equipment/domain/Equipment.java):
 
@@ -51,7 +52,7 @@ public class Equipment extends AggregateRoot {
 
 - Sometimes, the business logic is not suitable for residing in Aggregate Root, so **DomainService**s can be created to
   hold such business logic. But please pay attention that DomainServices are the last place you should resort to, most
-  of the time you should put business logic code inside your AggregateRoots.
+  of the time you should put business logic code inside your Aggregate Roots.
 
 Example
 DomainService [EquipmentDomainService](../src/test/java/deviceet/sample/equipment/domain/EquipmentDomainService.java):
@@ -75,9 +76,9 @@ public class EquipmentDomainService {
 }
 ```
 
-- AggregateRoots represent the business logic, but not the use case, in order to bridge the use case and the business
+- Aggregate Roots represent the business logic, but not the use case, in order to bridge the use case and the business
   logic, DDD introduced **ApplicationService**. ApplicationService orchestrates the process flow from use case
-  entrypoint to AggregateRoots. ApplicationService should not contain business logic.
+  entrypoint to Aggregate Roots. ApplicationService should not contain business logic.
 - Together with **CQRS**, ApplicationService can be further categorised into **CommandService** and **QueryService**.
   CommandService deals with the write side and QueryService handles the read side.
 
@@ -126,9 +127,10 @@ public class EquipmentQueryService {
 
 - In DDD, we have both ApplicationService and DomainService and they serves differently purposes. When you are creating
   a service class, you should know which kind of services you are creating.
-- When retrieving and persisting AggregateRoots, use **Repository**. Compared with Data Access Object(DAO), Repositories
-  have a restriction that only AggregateRoot can have its Repository, other classes in the domain model should not have
-  Repository. Also, Repository handles the whole AggregateRoot, but not partially.
+- When retrieving and persisting Aggregate Roots, use **Repository**. Compared with Data Access Object(DAO),
+  Repositories
+  have a restriction that only Aggregate Root can have its Repository, other classes in the domain model should not have
+  Repository. Also, Repository handles the whole Aggregate Root, but not partially.
 
 Example
 Repository [MongoEquipmentRepository](../src/test/java/deviceet/sample/equipment/infrastructure/MongoEquipmentRepository.java):

@@ -45,7 +45,8 @@ public class EquipmentCreatedEventHandler extends AbstractEventHandler<Equipment
 ```
 
 By declaring `EquipmentCreatedEventHandler` as above, the event consuming
-infrastructure([EventConsumer](../src/main/java/deviceet/common/event/consume/EventConsumer.java)) knows that it handles events with type `EquipmentCreatedEvent`.
+infrastructure([EventConsumer](../src/main/java/deviceet/common/event/consume/EventConsumer.java)) knows that it handles
+events with type `EquipmentCreatedEvent`.
 
 - When extending [AbstractEventHandler](../src/main/java/deviceet/common/event/consume/AbstractEventHandler.java), you
   may
@@ -100,7 +101,7 @@ public class SpringKafkaEventListener {
 - `SpringKafkaEventListener` passes the event
   to [EventConsumer](../src/main/java/deviceet/common/event/consume/EventConsumer.java). `EventConsumer` is agnostic to
   messaging middlewares and it manages all handlers. The below code uses `consumeDomainEvent(DomainEvent event)` to
-  handle domain events. If you are also consuming other types of events from other external systems, you may add more
+  handle Domain Events. If you are also consuming other types of events from other external systems, you may add more
   methods in addition to `consumeDomainEvent()` like `consumeXxxEvent(XxxEvent event)`
 
 ```java
