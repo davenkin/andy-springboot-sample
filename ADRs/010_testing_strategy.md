@@ -2,41 +2,154 @@
 
 ## Context
 
-Backend developers usually write both unit tests and integration tests. According to testing pyramid, unit tests constitute the base of the
-pyramid, while integration tests are at a level higher. The goal is to have a large number of unit tests and a smaller number of integration
-tests. But in our case, we find that unit tests can be too fragile and require frequent updates when the code changes, so we prefer
-integration tests.
+Backend developers usually write both unit tests and integration tests. According
+to [Testing Pyramid](https://martinfowler.com/bliki/TestPyramid.html), unit tests
+constitute the base of the pyramid, while integration tests are at a level higher. The goal is to have a large number of
+unit tests and a smaller number of integration tests. But in our case, we find that unit tests can be too fragile and
+require frequent updates when the code changes, and it gives us less confidence then integration tests, more detail can
+be found [here](https://web.dev/articles/ta-strategies).
 
 ## Decision
 
-We choose to **only write integration tests** as unit tests are subject to change when the code changes, which can lead to a lot of
-maintenance work. Integration tests are more stable.
+We choose to focus more on integration tests than unit tests.
 
-Also, we choose to majorly test the following types of classes:
+We write integration tests for:
 
-- CommandService
-- DomainEventHandler
-- Job
+- CommandService,
+  e.g. [EquipmentCommandServiceIntegrationTest](../src/test/java/deviceet/sample/equipment/command/EquipmentCommandServiceIntegrationTest.java)
+- QueryService,
+  e.g. [EquipmentQueryServiceIntegrationTest](../src/test/java/deviceet/sample/equipment/query/EquipmentQueryServiceIntegrationTest.java)
+- DomainEventHandler,
+  e.g. [EquipmentDeletedEventEventHandlerIntegrationTest](../src/test/java/deviceet/sample/equipment/eventhandler/EquipmentDeletedEventEventHandlerIntegrationTest.java)
+- Job,
+  e.g. [RemoveOldMaintenanceRecordsJobIntegrationTest](../src/test/java/deviceet/sample/maintenance/job/RemoveOldMaintenanceRecordsJobIntegrationTest.java)
+
+We write unit tests for:
+
+- Aggregate Roots, e.g. [EquipmentTest](../src/test/java/deviceet/sample/equipment/domain/EquipmentTest.java)
+- Other domain models under `domain` package,
+  e.g. [EquipmentDomainServiceTest](../src/test/java/deviceet/sample/equipment/domain/EquipmentDomainServiceTest.java)
+- Actually these objects are already covered in integration tests, but integration tests can be quite heavy, so the plan
+  is to let integration tests cover the main flow and unit tests cover other corner cases
+
+We don't write tests for:
+
+- Controller: controllers are very thin but requires a heavy set up for testing
+- Repository: repositories talks to database, better to cover it in integration tests
 
 ## Implementation
 
-When writing integration tests, follow the below guidelines:
+#### Integration Tests
 
-- Use `@SpringBootTest` annotation to load the entire application context, this is already been done in `BaseTest`, so you only need to
-  extend `BaseTest` and no need to annotate you testing class with `@SpringBootTest` again.
-- Use `@Autowire` to get an instance of the class under test and then call its methods directly.
-- No need to mock dependencies as the whole application context is up running, except for accessing external APIs.
-- Domain events are configured to not be published to Kafka as asynchronous testing can be unstable. In order to verify the publishing of
-  domain events, you can just verify the
-  event exists in database(we are using the [transactional outbox pattern](https://microservices.io/patterns/data/transactional-outbox.html)
-  so domain events will firstly be persisted into database then publish to Kafka using another thread).
-- Authentication related testing is not covered in integration tests, let's cover that in manual testing.
-- All tests are integration tests:
-  - Kafka: we don't test any Kafka related code, neither event publishing nore event consumer
-  - Redis: 
-  - Mongo:
-  - Keycloak:
-  - All external HTTP services: Needs to be mocked
-- Every test uses a IDs for the entities under test
-- CiProfile and NonCiProfile
-- Scheduling(`SchedulingConfiguration`) is disabled, which means no background jobs will be triggering
+- All integration tests should extend [IntegrationTest](../src/test/java/deviceet/IntegrationTest.java):
+
+```java
+@Slf4j
+@ActiveProfiles(IT_PROFILE)
+@SpringBootTest(webEnvironment = RANDOM_PORT)
+public abstract class IntegrationTest {
+    private static RedisServer redisServer;
+}
+```
+
+The `IntegrationTest` is annotated with `@SpringBootTest`, instructing the test to load the whole Spring application
+context, hence creating an integration test environment.
+
+It's also annotated with `@ActiveProfiles(IT_PROFILE)` which
+uses [application-it.yaml](../src/test/resources/application-it.yaml) for Spring configuration.
+
+- When write your own integration test class, you only need to extend `IntegrationTest`:
+
+```java
+class EquipmentCommandServiceIntegrationTest extends IntegrationTest {
+    @Autowired
+    private EquipmentCommandService equipmentCommandService;
+
+    @Autowired
+    private EquipmentRepository equipmentRepository;
+
+    @Test
+    void should_create_equipment() {}
+}
+```
+
+You can use `@Autowire` to get an instance of the bean that should be tested, or whatever beans that you require to
+assist you testing.
+
+- We want developers to run the tests without any local setup, hence:
+    - Kafka is disabled because it's asynchronous and hard to manage
+    - Embedded Redis server is used: `com.github.codemonstur:embedded-redis`
+    - Embedded MongoDB server is used: ``de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring3x``
+    - All external HTTP services should be mocked
+    - Scheduled jobs are disabled
+
+- As Kafka is disabled, you will need to call EventHandlers' `handle()` methods explicitly to ensure the processing of
+  events.
+- As [Transactional Outbox](https://microservices.io/patterns/data/transactional-outbox.html) pattern is used, the
+  domain events will firstly be stored into database and then publish, you may use `IntegrationTest.latestEventFor()` to
+  verify the existence of events:
+
+```java
+    @Test
+    void should_create_equipment() {
+        Principal principal = randomUserPrincipal();
+
+        CreateEquipmentCommand createEquipmentCommand = randomCreateEquipmentCommand();
+        String equipmentId = equipmentCommandService.createEquipment(createEquipmentCommand, principal);
+
+        Equipment equipment = equipmentRepository.byId(equipmentId);
+        assertEquals(createEquipmentCommand.name(), equipment.getName());
+        assertEquals(principal.getOrgId(), equipment.getOrgId());
+
+        // Verify the existence of domain events in database
+        EquipmentCreatedEvent equipmentCreatedEvent = latestEventFor(equipmentId, EQUIPMENT_CREATED_EVENT, EquipmentCreatedEvent.class);
+        assertEquals(equipmentId, equipmentCreatedEvent.getEquipmentId());
+    }
+```
+
+- In order to [enhance testing performance](https://www.baeldung.com/spring-tests), please use as less mocks as possible
+
+### Unit Tests
+
+- For unit tests without mocks, it's quite straight forward. Unit tests for Aggregate Roots fall under this category.
+
+```java
+class EquipmentTest {
+    @Test
+    void shouldCreateEquipment() {
+        Principal principal = RandomTestUtils.randomUserPrincipal();
+        Equipment equipment = new Equipment("name", principal);
+        assertEquals("name", equipment.getName());
+        assertEquals(1, equipment.getEvents().size());
+        assertTrue(equipment.getEvents().stream()
+                .anyMatch(domainEvent -> domainEvent.getType() == EQUIPMENT_CREATED_EVENT));
+    }
+}
+```
+
+- For unit tests with mocks, use `@Mock` and `@InjectMocks`, together with `@ExtendWith(MockitoExtension.class)`, to
+  simplify the mocking setup:
+
+```java
+@ExtendWith(MockitoExtension.class)
+class EquipmentDomainServiceTest {
+
+    @Mock
+    private EquipmentRepository equipmentRepository;
+
+    @InjectMocks
+    private EquipmentDomainService equipmentDomainService;
+
+    @Test
+    void shouldUpdateName() {
+        Mockito.when(equipmentRepository.existsByName(Mockito.anyString(), Mockito.anyString())).thenReturn(false);
+        Equipment equipment = new Equipment("name", randomUserPrincipal());
+
+        equipmentDomainService.updateEquipmentName(equipment, "newName");
+
+        assertEquals("newName", equipment.getName());
+    }
+}
+```
+
+

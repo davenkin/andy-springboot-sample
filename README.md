@@ -22,14 +22,14 @@
     - `Keycloak`: [http://localhost:7123](http://localhost:7123)
     - `Redis`: localhost:6123
 - Run the application in one of the following ways:
-    - Run `./run-local.sh`: this starts the application with debug port on 5005, assuming that docker-compose is already
+    - `./run-local.sh`: this starts the application with debug port on 5005, assuming that docker-compose is already
       up running.
-    - Run `./clear-and-run-local.sh`: this starts the application with debug port on 5005, it also automatically starts
-      docker-compose by first removing existing docker contains if any, and also deletes all their data.
+    - `./clear-and-run-local.sh`: this starts the application with debug port on 5005, it also automatically starts
+      docker-compose by first removing existing containers and their data if any.
     - Run `main` in  `SpringBootWebApplication`, assuming that docker-compose is already up running.
-- After that open [http://localhost:5123/about](http://localhost:5123/about) to check if the application runs
+- Open [http://localhost:5123/about](http://localhost:5123/about) to check if the application runs
   successfully.
-- To stop local docker compose and delete data volume, run `./stop-docker-compose.sh`.
+- To stop docker-compose and delete data, run `./stop-docker-compose.sh`.
 
 ## How to build
 
@@ -37,34 +37,9 @@
 
 ## How to run tests
 
+- We do both integration testing and unit testing, but we prefer integration testing
 - To run tests, locate them inside IDE and run them directly from there.
-- We do both unit testing and integration testing.
-- For unit testing, we mainly test classes under `domain` package.
-- For integration testing, the following types of classes are tested:
-    - CommandService (
-      e.g. [EquipmentCommandServiceIntegrationTest](src/test/java/deviceet/sample/equipment/command/EquipmentCommandServiceIntegrationTest.java))
-    - QueryService (
-      e.g. [EquipmentQueryServiceIntegrationTest](src/test/java/deviceet/sample/equipment/query/EquipmentQueryServiceIntegrationTest.java))
-    - EventHandler (
-      e.g. [EquipmentDeletedEventEventHandlerIntegrationTest](src/test/java/deviceet/sample/equipment/eventhandler/EquipmentDeletedEventEventHandlerIntegrationTest.java))
-    - Job (
-      e.g. [RemoveOldMaintenanceRecordsJobIntegrationTest](src/test/java/deviceet/sample/maintenance/job/RemoveOldMaintenanceRecordsJobIntegrationTest.java))
-- For integration testing, the following types of classes are NOT tested:
-    - Repository: they are already covered in other types of integration tests
-    - Controller: Controllers are very thin but requires a heavy set up for testing, so we decided not to test
-- Integration test uses a Spring profile named `it`([application-it.yaml](src/test/resources/application-it.yaml)) for
-  its own configuration. Integration tests
-  do
-  not use local
-  docker-compose infrastructures as we don't want to rely on docker for running tests. Instead, we want to ensure
-  developers to
-  clone the code and the tests
-  just work without any extra setup. In order to achieve this, we have the following setup for integration tests:
-    - `MongoDB`: uses in memory Mongo provided by `de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring3x`.
-    - `Kafka`: disabled as we don't cover event publishing nor event consumer in our tests.
-    - `Redis`: uses an embedded redis server `com.github.codemonstur:embedded-redis`.
-    - `Keycloak`: disabled as we don't cover authentication in our tests.
-    - All consumed external HTTP services are mocked.
+- We have a [Testing Strategy](./ADRs/010_testing_strategy.md), please read it before writing any tests
 
 ## Architecture Decision Records (ADRs)
 
@@ -72,10 +47,10 @@ This project uses [Architecture Decision Records (ADRs)](https://adr.github.io/)
 decisions. Each ADR is stored in the `ADRs` directory and follows a specific format. Please refer
 to [What is ADR](ADRs/000_what_is_adr.md) for more detail.
 
-## Sample code for consistent coding practices
+## Sample implementation code
 
 - The `src/test/java/deviceet/sample` folder contains various common coding practices that should be followed when
-  implementing your own features. Please refer
+  writing your own code. Please refer
   to [sample code introduction](src/test/java/deviceet/sample/sample-code-introduction.md) for more detail.
 
 ## Top level business entities
