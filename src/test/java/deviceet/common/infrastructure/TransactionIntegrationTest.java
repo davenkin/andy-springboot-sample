@@ -6,7 +6,6 @@ import deviceet.common.event.publish.PublishingDomainEventDao;
 import deviceet.common.model.principal.Principal;
 import deviceet.sample.equipment.command.CreateEquipmentCommand;
 import deviceet.sample.equipment.command.EquipmentCommandService;
-import deviceet.sample.equipment.domain.EquipmentFactory;
 import deviceet.sample.equipment.domain.EquipmentRepository;
 import deviceet.sample.equipment.domain.event.EquipmentNameUpdatedEvent;
 import org.junit.jupiter.api.Test;
@@ -19,9 +18,6 @@ import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.doThrow;
 
 class TransactionIntegrationTest extends IntegrationTest {
-
-    @Autowired
-    private EquipmentFactory equipmentFactory;
 
     @Autowired
     private EquipmentRepository equipmentRepository;

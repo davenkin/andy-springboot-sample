@@ -8,8 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
@@ -32,9 +30,6 @@ import static org.springframework.data.mongodb.core.query.Query.query;
 @Slf4j
 @ActiveProfiles(IT_PROFILE)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-@EnableAutoConfiguration(exclude = {
-        KafkaAutoConfiguration.class, // Disable Kafka
-})
 public abstract class IntegrationTest {
     private static RedisServer redisServer;
 
