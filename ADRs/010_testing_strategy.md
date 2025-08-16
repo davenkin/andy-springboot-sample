@@ -6,7 +6,7 @@ Backend developers usually write both unit tests and integration tests. Accordin
 to [Testing Pyramid](https://martinfowler.com/bliki/TestPyramid.html), unit tests
 constitute the base of the pyramid, while integration tests are at a level higher. The goal is to have a large number of
 unit tests and a smaller number of integration tests. But in our case, we find that unit tests can be too fragile and
-require frequent updates when the code changes, and it gives us less confidence then integration tests, more detail can
+require frequent updates when the code changes, and it gives us less confidence than integration tests, more detail can
 be found [here](https://web.dev/articles/ta-strategies).
 
 ## Decision
@@ -32,10 +32,10 @@ We write unit tests for:
 - Actually these objects are already covered in integration tests, but integration tests can be quite heavy, so the plan
   is to let integration tests cover the main flow and unit tests cover other corner cases
 
-We don't write tests for:
+No need to write tests for:
 
 - Controller: controllers are very thin but requires a heavy set up for testing
-- Repository: repositories talks to database, better to cover it in integration tests
+- Repository: repositories are usually already covered in integration tests implicitly
 
 ## Implementation
 
@@ -76,18 +76,19 @@ class EquipmentCommandServiceIntegrationTest extends IntegrationTest {
 You can use `@Autowire` to get an instance of the bean that should be tested, or whatever beans that you require to
 assist you testing.
 
-- We want developers to run the tests without any local setup, hence:
-    - Kafka is disabled because it's asynchronous and hard to manage
+- We want developers to run the tests without any local setup, hence for integration tests we have the following
+  configuration:
+    - Kafka is disabled because it's asynchronous and hard to manage when it comes to testing
     - Embedded Redis server is used: `com.github.codemonstur:embedded-redis`
     - Embedded MongoDB server is used: ``de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring3x``
     - All external HTTP services should be mocked
-    - Scheduled jobs are disabled
+    - Job schedulers are disabled
 
 - As Kafka is disabled, you will need to call EventHandlers' `handle()` methods explicitly to ensure the processing of
   events.
 - As [Transactional Outbox](https://microservices.io/patterns/data/transactional-outbox.html) pattern is used, the
   Domain Events will firstly be stored into database and then publish, you may use `IntegrationTest.latestEventFor()` to
-  verify the existence of events:
+  verify the existence of domain events:
 
 ```java
     @Test
