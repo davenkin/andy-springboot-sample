@@ -2,7 +2,7 @@
 de.flapdoodle.mongodb.embedded.version: 7.0.12
 
 # Comment out the below line if you want to disable embedded MongoDB and use a real MongoDB server
-spring.autoconfigure.exclude: de.flapdoodle.embed.mongo.spring.autoconfigure.EmbeddedMongoAutoConfiguration
+#spring.autoconfigure.exclude: de.flapdoodle.embed.mongo.spring.autoconfigure.EmbeddedMongoAutoConfiguration
 
 mongock:
   enabled: false # Disable Mongock
