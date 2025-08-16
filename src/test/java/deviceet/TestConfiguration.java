@@ -11,7 +11,7 @@ public class TestConfiguration {
     @Bean
     MongodArguments mongodArguments() {
         return MongodArguments.builder()
-                .replication(Storage.of("rs0", 10000))
+                .replication(Storage.of("rs0", 1000))
                 .build();
     }
 

@@ -37,15 +37,14 @@
 
 ## How to run tests
 
-- We do both integration testing and unit testing, but we prefer integration testing
+- We do both integration testing and unit testing with a preference on integration testing
 - To run tests, locate them inside IDE and run them directly from there.
 - We have a [Testing Strategy](./ADRs/010_testing_strategy.md), please read it before writing any tests
 
 ## Architecture Decision Records (ADRs)
 
 This project uses [Architecture Decision Records (ADRs)](https://adr.github.io/) to document important architectural
-decisions. Each ADR is stored in the `ADRs` directory and follows a specific format. Please refer
-to [What is ADR](ADRs/000_what_is_adr.md) for more detail.
+decisions. Each ADR is stored in the `ADRs` directory and follows a [specific format](ADRs/000_what_is_adr.md).
 
 ## Sample implementation code
 
@@ -55,8 +54,8 @@ to [What is ADR](ADRs/000_what_is_adr.md) for more detail.
 
 ## Top level business entities
 
-| Business Entity   | Chinese | Abbreviation | Description                                                                                                                          |
-|-------------------|---------|--------------|--------------------------------------------------------------------------------------------------------------------------------------|
-| Equipment         | 装备      |              | Sample top level business entity that serves as a reference for consitent coding practice. An Equipment has many MaintenanceRecords. |
-| MaintenanceRecord | 装备维护记录  |              | Another sample top level business entity. Multiple MaintenanceRecords can be created for a single  Equipment.                        |
+| Business Entity   | Chinese | Abbreviation | Description                                                                                                                           |
+|-------------------|---------|--------------|---------------------------------------------------------------------------------------------------------------------------------------|
+| Equipment         | 装备      |              | Sample top level business entity that serves as a reference for consistent coding practice. An Equipment has many MaintenanceRecords. |
+| MaintenanceRecord | 装备维护记录  |              | Another sample top level business entity. Multiple MaintenanceRecords can be created for a single  Equipment.                         |
 
