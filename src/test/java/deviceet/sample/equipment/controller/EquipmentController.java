@@ -11,6 +11,9 @@ import deviceet.sample.equipment.query.EquipmentQueryService;
 import deviceet.sample.equipment.query.ListEquipmentQuery;
 import deviceet.sample.equipment.query.QDetailedEquipment;
 import deviceet.sample.equipment.query.QListedEquipment;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +26,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import static deviceet.sample.SampleFixture.SAMPLE_USER_PRINCIPAL;
+import static org.springframework.http.HttpStatus.CREATED;
 
+@Tag(name = "EquipmentController", description = "Equipment management APIs")
 @Validated
 @RestController
 @RequiredArgsConstructor
@@ -33,6 +38,8 @@ public class EquipmentController {
     private final EquipmentQueryService equipmentQueryService;
 
     @PostMapping
+    @ResponseStatus(CREATED)
+    @Operation(description = "Create an equipment")
     public ResponseId createEquipment(@RequestBody @Valid CreateEquipmentCommand command) {
         // In real situations, principal is normally created from the current user in context, such as Spring Security's SecurityContextHolder
         Principal principal = SAMPLE_USER_PRINCIPAL;
@@ -40,8 +47,11 @@ public class EquipmentController {
         return new ResponseId(this.equipmentCommandService.createEquipment(command, principal));
     }
 
+    @Operation(description = "Update an equipment's name")
     @PutMapping("/{equipmentId}/name")
-    public void updateEquipmentName(@PathVariable("equipmentId") @NotBlank String equipmentId,
+    public void updateEquipmentName(@PathVariable("equipmentId") @NotBlank
+                                    @Parameter(description = "Equipment ID")
+                                    String equipmentId,
                                     @RequestBody @Valid UpdateEquipmentNameCommand updateEquipmentNameCommand) {
         // In real situations, principal is normally created from the current user in context, such as Spring Security's SecurityContextHolder
         Principal principal = SAMPLE_USER_PRINCIPAL;
@@ -49,8 +59,11 @@ public class EquipmentController {
         this.equipmentCommandService.updateEquipmentName(equipmentId, updateEquipmentNameCommand, principal);
     }
 
+    @Operation(description = "Update an equipment's holder")
     @PutMapping("/{equipmentId}/holder")
-    public void updateEquipmentHolder(@PathVariable("equipmentId") @NotBlank String equipmentId,
+    public void updateEquipmentHolder(@PathVariable("equipmentId") @NotBlank
+                                      @Parameter(description = "Equipment ID")
+                                      String equipmentId,
                                       @RequestBody @Valid UpdateEquipmentHolderCommand command) {
         // In real situations, principal is normally created from the current user in context, such as Spring Security's SecurityContextHolder
         Principal principal = SAMPLE_USER_PRINCIPAL;
@@ -58,8 +71,11 @@ public class EquipmentController {
         this.equipmentCommandService.updateEquipmentHolder(equipmentId, command, principal);
     }
 
+    @Operation(description = "Delete an equipment")
     @DeleteMapping("/{equipmentId}")
-    public void deleteEquipment(@PathVariable("equipmentId") @NotBlank String equipmentId) {
+    public void deleteEquipment(@PathVariable("equipmentId") @NotBlank
+                                @Parameter(description = "Equipment ID")
+                                String equipmentId) {
         // In real situations, principal is normally created from the current user in context, such as Spring Security's SecurityContextHolder
         Principal principal = SAMPLE_USER_PRINCIPAL;
 

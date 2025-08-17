@@ -33,7 +33,7 @@ public class GlobalExceptionHandler {
 
     @ResponseBody
     @ExceptionHandler(ServiceException.class)
-    public ResponseEntity<?> handleServiceException(ServiceException ex, HttpServletRequest request) {
+    public ResponseEntity<QErrorResponse> handleServiceException(ServiceException ex, HttpServletRequest request) {
         log.error("Error happened while access[{}]: {}", request.getRequestURI(), ex.getMessage(), ex);
         return createErrorResponse(ex, request.getRequestURI());
     }

@@ -1,6 +1,7 @@
 package deviceet.common.exception;
 
 import deviceet.common.tracing.TracingService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.web.servlet.error.AbstractErrorController;
@@ -17,6 +18,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.springframework.boot.web.error.ErrorAttributeOptions.Include.values;
 import static org.springframework.boot.web.error.ErrorAttributeOptions.defaults;
 
+@Tag(name = "Error Controller", description = "Internal use only")
 @Slf4j
 @RestController
 public class RestErrorController extends AbstractErrorController {
@@ -43,7 +45,7 @@ public class RestErrorController extends AbstractErrorController {
     }
 
     @RequestMapping("${server.error.path:${error.path:/error}}")
-    public ResponseEntity<?> handleError(HttpServletRequest webRequest) {
+    public ResponseEntity<QErrorResponse> handleError(HttpServletRequest webRequest) {
         HttpStatus status = getStatus(webRequest);
         ErrorCode errorCode = getErrorCode(status);
         Map<String, Object> errorAttributes = getErrorAttributes(webRequest, defaults().including(values()));
