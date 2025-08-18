@@ -9,7 +9,7 @@ import java.util.Set;
 import static deviceet.common.model.Role.PLATFORM;
 import static lombok.AccessLevel.PRIVATE;
 
-// Represents a non-human operator, used in non-human interaction scenarios like EventHandlers and background Jobs
+// Represents a non-human operator, used in non-human interaction scenarios such as EventHandlers and background Jobs
 
 @EqualsAndHashCode
 @NoArgsConstructor(access = PRIVATE)
