@@ -4,7 +4,6 @@ import deviceet.common.event.DomainEvent;
 import deviceet.common.event.publish.PublishingDomainEventDao;
 import deviceet.common.exception.ServiceException;
 import deviceet.common.model.AggregateRoot;
-import deviceet.common.operator.CurrentOperator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -40,9 +39,6 @@ public abstract class AbstractMongoRepository<AR extends AggregateRoot> {
     @Autowired
     private PublishingDomainEventDao publishingDomainEventDao;
 
-    @Autowired
-    private CurrentOperator currentOperator;
-
     private final Class<?> arClass;
 
     protected AbstractMongoRepository() {
@@ -54,7 +50,7 @@ public abstract class AbstractMongoRepository<AR extends AggregateRoot> {
         requireNonNull(ar, arType() + " must not be null.");
         requireNonBlank(ar.getId(), arType() + " ID must not be blank.");
 
-        ar.onModify(currentOperator.id());
+        ar.onModify(this.currentOperatorId());
         mongoTemplate.save(ar);
         stageEvents(ar.getEvents());
         ar.clearEvents();
@@ -71,7 +67,7 @@ public abstract class AbstractMongoRepository<AR extends AggregateRoot> {
             if (isNotEmpty(ar.getEvents())) {
                 events.addAll(ar.getEvents());
             }
-            ar.onModify(currentOperator.id());
+            ar.onModify(this.currentOperatorId());
             mongoTemplate.save(ar);
             ar.clearEvents();
         });
@@ -172,8 +168,7 @@ public abstract class AbstractMongoRepository<AR extends AggregateRoot> {
     private void stageEvents(List<DomainEvent> events) {
         if (isNotEmpty(events)) {
             List<DomainEvent> orderedEvents = events.stream().sorted(comparing(DomainEvent::getRaisedAt)).toList();
-            String raisedBy = currentOperator.id();
-            orderedEvents.forEach(event -> event.raisedBy(raisedBy));
+            orderedEvents.forEach(event -> event.raisedBy(this.currentOperatorId()));
             publishingDomainEventDao.stage(orderedEvents);
         }
     }
@@ -184,5 +179,10 @@ public abstract class AbstractMongoRepository<AR extends AggregateRoot> {
             Set<String> allArIds = ars.stream().map(AggregateRoot::getId).collect(toImmutableSet());
             throw new ServiceException(NOT_SAME_ORG, "All ARs should belong to the same organization.", "arIds", allArIds);
         }
+    }
+
+    // Here currentOperatorId() is only used for audit purpose, and should not used as business data
+    private String currentOperatorId() {
+        return null;// todo: impl, get current operator id from e.g. SpringSecurityContext
     }
 }
