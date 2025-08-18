@@ -1,11 +1,12 @@
 package deviceet.common.model.principal;
 
+import deviceet.common.model.Role;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.util.Set;
 
-import static deviceet.common.model.principal.Role.PLATFORM;
+import static deviceet.common.model.Role.PLATFORM;
 import static lombok.AccessLevel.PRIVATE;
 
 // Represents a non-human operator, used in non-human interaction scenarios like EventHandlers and background Jobs

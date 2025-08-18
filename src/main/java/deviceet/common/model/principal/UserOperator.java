@@ -1,5 +1,6 @@
 package deviceet.common.model.principal;
 
+import deviceet.common.model.Role;
 import lombok.EqualsAndHashCode;
 
 import java.util.Set;

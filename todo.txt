@@ -1,3 +1,4 @@
 - 用新的pagination类以及文档
 - sample下的springdoc重新梳理，要全面
 - 去除掉currentoperator，以及将principle重名为operator后，需要全面重新审视文档
+- ADR加上swagger的讲解

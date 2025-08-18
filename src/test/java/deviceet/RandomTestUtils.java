@@ -1,6 +1,6 @@
 package deviceet;
 
-import deviceet.common.model.principal.Role;
+import deviceet.common.model.Role;
 import deviceet.common.model.principal.UserOperator;
 import deviceet.sample.equipment.command.CreateEquipmentCommand;
 import deviceet.sample.equipment.command.UpdateEquipmentNameCommand;

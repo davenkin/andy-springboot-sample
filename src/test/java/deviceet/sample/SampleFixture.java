@@ -3,7 +3,7 @@ package deviceet.sample;
 import deviceet.common.model.principal.Operator;
 import deviceet.common.model.principal.UserOperator;
 
-import static deviceet.common.model.principal.Role.ORG_ADMIN;
+import static deviceet.common.model.Role.ORG_ADMIN;
 
 public class SampleFixture {
     public static final String SAMPLE_USER_ID = "sampleUserId";

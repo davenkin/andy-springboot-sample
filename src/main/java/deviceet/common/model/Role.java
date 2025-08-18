@@ -1,4 +1,4 @@
-package deviceet.common.model.principal;
+package deviceet.common.model;
 
 public enum Role {
     ORG_IT_ADMIN,

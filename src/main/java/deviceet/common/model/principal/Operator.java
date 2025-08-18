@@ -1,5 +1,7 @@
 package deviceet.common.model.principal;
 
+import deviceet.common.model.Role;
+
 import java.util.Set;
 
 // Operator should contain enough context data of the current user
