@@ -15,7 +15,7 @@ import static lombok.AccessLevel.PRIVATE;
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor(access = PRIVATE)
-public class ListEquipmentQuery extends PageableRequest {
+public class ListEquipmentsQuery extends PageableRequest {
     @Schema(description = "Search text")
     @Max(50)
     private String search;

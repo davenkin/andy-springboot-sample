@@ -113,11 +113,11 @@ public class EquipmentQueryService {
     private final MongoTemplate mongoTemplate;
     private final EquipmentRepository equipmentRepository;
 
-    public Page<QListedEquipment> listEquipments(ListEquipmentQuery listEquipmentQuery, Pageable pageable, Operator operator) {
+    public Page<QListedEquipment> listEquipments(ListEquipmentsQuery listEquipmentsQuery, Pageable pageable, Operator operator) {
         Criteria criteria = where(AggregateRoot.Fields.orgId).is(operator.getOrgId());
 
-        if (isNotBlank(listEquipmentQuery.search())) {
-            criteria.and(Equipment.Fields.name).regex(listEquipmentQuery.search());
+        if (isNotBlank(listEquipmentsQuery.search())) {
+            criteria.and(Equipment.Fields.name).regex(listEquipmentsQuery.search());
         }
         
         // code omitted

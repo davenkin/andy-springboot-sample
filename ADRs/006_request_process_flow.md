@@ -230,7 +230,7 @@ example, when querying a list of `Equipment`s:
 
 ```java
     @PostMapping("/list")
-    public Page<QListedEquipment> listEquipments(@RequestBody @Valid ListEquipmentQuery query,
+    public Page<QListedEquipment> listEquipments(@RequestBody @Valid ListEquipmentsQuery query,
                                                  @PageableDefault Pageable pageable) {
         // In real situations, operator is normally created from the current user in context, such as Spring Security's SecurityContextHolder
         Operator operator = SAMPLE_USER_OPERATOR;
@@ -246,11 +246,11 @@ Here Spring's `Pageable` and `Page` should be used for pagination. `EquipmentQue
    query model `QListedEquipment`:
 
 ```java
-    public Page<QListedEquipment> listEquipments(ListEquipmentQuery listEquipmentQuery, Pageable pageable, Operator operator) {
+    public Page<QListedEquipment> listEquipments(ListEquipmentsQuery listEquipmentsQuery, Pageable pageable, Operator operator) {
         Criteria criteria = where(AggregateRoot.Fields.orgId).is(operator.getOrgId());
 
-        if (isNotBlank(listEquipmentQuery.search())) {
-            criteria.and(Equipment.Fields.name).regex(listEquipmentQuery.search());
+        if (isNotBlank(listEquipmentsQuery.search())) {
+            criteria.and(Equipment.Fields.name).regex(listEquipmentsQuery.search());
         }
         
         //more code omitted

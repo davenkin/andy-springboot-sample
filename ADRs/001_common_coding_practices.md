@@ -57,7 +57,7 @@
   Example with `Pageable` and `Page`(always use `@PageableDefault` as well):
   ```java
     @PostMapping("/list")
-    public Page<QListedEquipment> listEquipments(@RequestBody @Valid ListEquipmentQuery query,
+    public Page<QListedEquipment> listEquipments(@RequestBody @Valid ListEquipmentsQuery query,
                                                  @PageableDefault Pageable pageable) {
         // In real situations, operator is normally created from the current user in context, such as Spring Security's SecurityContextHolder
         Operator operator = SAMPLE_USER_OPERATOR;
@@ -90,10 +90,10 @@ public class Equipment extends AggregateRoot {}
 ```
 
 ```java
-if (listEquipmentQuery.status() != null) {
+if (listEquipmentsQuery.status() != null) {
 
    // Use "Equipment.Fields.status" to access Equipment's "status" field
-   criteria.and(Equipment.Fields.status).is(listEquipmentQuery.status());
+   criteria.and(Equipment.Fields.status).is(listEquipmentsQuery.status());
 }
 ```
 
@@ -147,20 +147,20 @@ expose getters/setters.
   Shedlock's [LockingTaskExecutor](../src/main/java/deviceet/common/configuration/DistributedLockConfiguration.java).
 - Use HTTP POST for controller methods that return a list of objects, and put all query fields into a `Query` object
   even if there is only one field. Reason: a `Query` object wraps multiple fields together that's easy to pass around.
-  Example: use [ListEquipmentQuery](../src/test/java/deviceet/sample/equipment/query/ListEquipmentQuery.java) to query
+  Example: use [ListEquipmentsQuery](../src/test/java/deviceet/sample/equipment/query/ListEquipmentsQuery.java) to query
   multiple equipments.
 
 ```java
 @Builder
-public record ListEquipmentQuery(String search, EquipmentStatus status) {
+public record ListEquipmentsQuery(String search, EquipmentStatus status) {
 }
 ```
 
-The controller receives a `ListEquipmentQuery` object along with a `Pageable` object:
+The controller receives a `ListEquipmentsQuery` object along with a `Pageable` object:
 
 ```java
     @PostMapping("/list")
-    public Page<QListedEquipment> listEquipments(@RequestBody @Valid ListEquipmentQuery query,
+    public Page<QListedEquipment> listEquipments(@RequestBody @Valid ListEquipmentsQuery query,
                                                  @PageableDefault Pageable pageable) {
         // In real situations, operator is normally created from the current user in context, such as Spring Security's SecurityContextHolder
         Operator operator = SAMPLE_USER_OPERATOR;

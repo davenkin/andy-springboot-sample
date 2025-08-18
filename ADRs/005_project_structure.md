@@ -100,6 +100,6 @@ The `1` in `(class:1)` indicates there can be only one class, `(class:N)` for mu
           calling other classes.
           Example: [EquipmentQueryService](../src/test/java/deviceet/sample/equipment/query/EquipmentQueryService.java).
         - `XxxQuery`(class:N): Request class of a query, should end with "Query".
-          Example: [ListEquipmentQuery](../src/test/java/deviceet/sample/equipment/query/ListEquipmentQuery.java).
+          Example: [ListEquipmentsQuery](../src/test/java/deviceet/sample/equipment/query/ListEquipmentsQuery.java).
         - `QXxx`(class:N): Response class of a query, should start with the letter "Q".
           Example: [QListedEquipment](../src/test/java/deviceet/sample/equipment/query/QListedEquipment.java).

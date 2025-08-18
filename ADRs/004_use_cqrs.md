@@ -57,7 +57,7 @@ Based on the above, the **lightweight CQRS** approach meets our needs and is our
   used to hit the database directly.
 
 ```java
-    public Page<QListedEquipment> listEquipments(ListEquipmentQuery listEquipmentQuery, Pageable pageable, Operator operator) {
+    public Page<QListedEquipment> listEquipments(ListEquipmentsQuery listEquipmentsQuery, Pageable pageable, Operator operator) {
         Criteria criteria = where(AggregateRoot.Fields.orgId).is(operator.getOrgId());
 
         // more code omitted

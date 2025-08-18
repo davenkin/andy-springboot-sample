@@ -443,11 +443,11 @@ public class EquipmentQueryService {
     private final MongoTemplate mongoTemplate;
     private final EquipmentRepository equipmentRepository;
 
-    public Page<QListedEquipment> listEquipments(ListEquipmentQuery listEquipmentQuery, Pageable pageable, Operator operator) {
+    public Page<QListedEquipment> listEquipments(ListEquipmentsQuery listEquipmentsQuery, Pageable pageable, Operator operator) {
         Criteria criteria = where(AggregateRoot.Fields.orgId).is(operator.getOrgId());
 
-        if (isNotBlank(listEquipmentQuery.search())) {
-            criteria.and(Equipment.Fields.name).regex(listEquipmentQuery.search());
+        if (isNotBlank(listEquipmentsQuery.search())) {
+            criteria.and(Equipment.Fields.name).regex(listEquipmentsQuery.search());
         }
         
         // more code ommited
@@ -462,10 +462,10 @@ public class EquipmentQueryService {
 - Query objects can be annotated with `@Builder` for testing purpose
 - Query objects should use JSR-303 annotations  (such as `@NotNull`, `@Max` and `@Pattern`) for data validation
 
-Example [ListEquipmentQuery](../src/test/java/deviceet/sample/equipment/query/ListEquipmentQuery.java):
+Example [ListEquipmentsQuery](../src/test/java/deviceet/sample/equipment/query/ListEquipmentsQuery.java):
 
 ```java
 @Builder
-public record ListEquipmentQuery(String search, EquipmentStatus status) {
+public record ListEquipmentsQuery(String search, EquipmentStatus status) {
 }
 ```
