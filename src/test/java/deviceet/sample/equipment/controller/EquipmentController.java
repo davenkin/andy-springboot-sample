@@ -13,6 +13,7 @@ import deviceet.sample.equipment.query.ListEquipmentsQuery;
 import deviceet.sample.equipment.query.QDetailedEquipment;
 import deviceet.sample.equipment.query.QListedEquipment;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -46,7 +47,9 @@ public class EquipmentController {
 
     @Operation(summary = "Update an equipment's name")
     @PutMapping("/{equipmentId}/name")
-    public void updateEquipmentName(@PathVariable("equipmentId") @NotBlank String equipmentId,
+    public void updateEquipmentName(@PathVariable("equipmentId") @NotBlank
+                                    @Parameter(description = "Id of the equipment")
+                                    String equipmentId,
                                     @RequestBody @Valid UpdateEquipmentNameCommand updateEquipmentNameCommand) {
         // In real situations, operator is normally created from the current user in context, such as Spring Security's SecurityContextHolder
         Operator operator = SAMPLE_USER_OPERATOR;
