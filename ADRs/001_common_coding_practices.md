@@ -7,7 +7,7 @@
   testing much easier.
 
     ```java
-    public Equipment(String name, Principal operator) {
+    public Equipment(String name, Operator operator) {
         super(newEquipmentId(), operator);
         this.name = name;
         raiseEvent(new EquipmentCreatedEvent(this));
@@ -60,7 +60,7 @@
     public Page<QListedEquipment> listEquipments(@RequestBody @Valid ListEquipmentQuery query,
                                                  @PageableDefault Pageable pageable) {
         // In real situations, operator is normally created from the current user in context, such as Spring Security's SecurityContextHolder
-        Principal operator = SAMPLE_USER_PRINCIPAL;
+        Operator operator = SAMPLE_USER_OPERATOR;
 
         return this.equipmentQueryService.listEquipments(query, pageable, operator);
     }
@@ -135,7 +135,7 @@ expose getters/setters.
 
 ```java
     @Transactional
-    public String createEquipment(CreateEquipmentCommand command, Principal operator) {
+    public String createEquipment(CreateEquipmentCommand command, Operator operator) {
         Equipment equipment = equipmentFactory.create(command.name(), operator);
         equipmentRepository.save(equipment);
         log.info("Created Equipment[{}].", equipment.getId());
@@ -163,7 +163,7 @@ The controller receives a `ListEquipmentQuery` object along with a `Pageable` ob
     public Page<QListedEquipment> listEquipments(@RequestBody @Valid ListEquipmentQuery query,
                                                  @PageableDefault Pageable pageable) {
         // In real situations, operator is normally created from the current user in context, such as Spring Security's SecurityContextHolder
-        Principal operator = SAMPLE_USER_PRINCIPAL;
+        Operator operator = SAMPLE_USER_OPERATOR;
 
         return this.equipmentQueryService.listEquipments(query, pageable, operator);
     }

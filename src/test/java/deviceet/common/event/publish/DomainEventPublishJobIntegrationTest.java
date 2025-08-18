@@ -14,7 +14,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import java.util.concurrent.CompletableFuture;
 
 import static deviceet.RandomTestUtils.randomEquipmentName;
-import static deviceet.RandomTestUtils.randomUserPrincipal;
+import static deviceet.RandomTestUtils.randomUserOperator;
 import static deviceet.common.event.DomainEventType.EQUIPMENT_CREATED_EVENT;
 import static deviceet.common.event.publish.DomainEventPublishStatus.*;
 import static java.util.concurrent.CompletableFuture.failedFuture;
@@ -39,7 +39,7 @@ class DomainEventPublishJobIntegrationTest extends IntegrationTest {
 
     @Test
     void should_publish_domain_events() {
-        Operator operator = randomUserPrincipal();
+        Operator operator = randomUserOperator();
         String arId1 = equipmentCommandService.createEquipment(CreateEquipmentCommand.builder().name(randomEquipmentName()).build(), operator);
         String arId2 = equipmentCommandService.createEquipment(CreateEquipmentCommand.builder().name(randomEquipmentName()).build(), operator);
         String arId3 = equipmentCommandService.createEquipment(CreateEquipmentCommand.builder().name(randomEquipmentName()).build(), operator);
@@ -69,7 +69,7 @@ class DomainEventPublishJobIntegrationTest extends IntegrationTest {
 
     @Test
     void should_fail_publish_domain_events_with_max_of_3_attempts() {
-        Operator operator = randomUserPrincipal();
+        Operator operator = randomUserOperator();
         String arId = equipmentCommandService.createEquipment(CreateEquipmentCommand.builder().name(randomEquipmentName()).build(), operator);
         EquipmentCreatedEvent event = latestEventFor(arId, EQUIPMENT_CREATED_EVENT, EquipmentCreatedEvent.class);
         doReturn(failedFuture(new RuntimeException("stub exception")))
@@ -97,7 +97,7 @@ class DomainEventPublishJobIntegrationTest extends IntegrationTest {
 
     @Test
     void should_publish_successfully_if_sender_recovered() {
-        Operator operator = randomUserPrincipal();
+        Operator operator = randomUserOperator();
         String arId = equipmentCommandService.createEquipment(CreateEquipmentCommand.builder().name(randomEquipmentName()).build(), operator);
         EquipmentCreatedEvent event = latestEventFor(arId, EQUIPMENT_CREATED_EVENT, EquipmentCreatedEvent.class);
         doReturn(failedFuture(new RuntimeException("stub exception")))

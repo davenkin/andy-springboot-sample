@@ -30,7 +30,7 @@ class TransactionIntegrationTest extends IntegrationTest {
 
     @Test
     void transaction_should_work() {
-        Operator operator = randomUserPrincipal();
+        Operator operator = randomUserOperator();
         CreateEquipmentCommand createEquipmentCommand = randomCreateEquipmentCommand();
         String equipmentId = equipmentCommandService.createEquipment(createEquipmentCommand, operator);
         doThrow(new RuntimeException("stub exception")).when(publishingDomainEventDao).stage(anyList());

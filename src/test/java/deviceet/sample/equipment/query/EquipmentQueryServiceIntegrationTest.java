@@ -11,7 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import java.util.stream.IntStream;
 
 import static deviceet.RandomTestUtils.randomCreateEquipmentCommand;
-import static deviceet.RandomTestUtils.randomUserPrincipal;
+import static deviceet.RandomTestUtils.randomUserOperator;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class EquipmentQueryServiceIntegrationTest extends IntegrationTest {
@@ -23,7 +23,7 @@ class EquipmentQueryServiceIntegrationTest extends IntegrationTest {
 
     @Test
     void should_list_equipments() {
-        Operator operator = randomUserPrincipal();
+        Operator operator = randomUserOperator();
         IntStream.range(0, 20).forEach(i -> {
             equipmentCommandService.createEquipment(randomCreateEquipmentCommand(), operator);
         });

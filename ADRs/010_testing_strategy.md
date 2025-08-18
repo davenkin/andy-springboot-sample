@@ -93,7 +93,7 @@ assist you testing.
 ```java
     @Test
     void should_create_equipment() {
-        Principal operator = randomUserPrincipal();
+        Operator operator = randomUserOperator();
 
         CreateEquipmentCommand createEquipmentCommand = randomCreateEquipmentCommand();
         String equipmentId = equipmentCommandService.createEquipment(createEquipmentCommand, operator);
@@ -118,7 +118,7 @@ assist you testing.
 class EquipmentTest {
     @Test
     void shouldCreateEquipment() {
-        Principal operator = RandomTestUtils.randomUserPrincipal();
+        Operator operator = RandomTestUtils.randomUserOperator();
         Equipment equipment = new Equipment("name", operator);
         assertEquals("name", equipment.getName());
         assertEquals(1, equipment.getEvents().size());
@@ -144,7 +144,7 @@ class EquipmentDomainServiceTest {
     @Test
     void shouldUpdateName() {
         Mockito.when(equipmentRepository.existsByName(Mockito.anyString(), Mockito.anyString())).thenReturn(false);
-        Equipment equipment = new Equipment("name", randomUserPrincipal());
+        Equipment equipment = new Equipment("name", randomUserOperator());
 
         equipmentDomainService.updateEquipmentName(equipment, "newName");
 

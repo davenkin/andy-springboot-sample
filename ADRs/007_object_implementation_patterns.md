@@ -68,7 +68,7 @@ public class Equipment extends AggregateRoot {
     private String holder;
     private long maintenanceRecordCount;
 
-    public Equipment(String name, Principal operator) { // Explict contructors
+    public Equipment(String name, Operator operator) { // Explict contructors
         super(newEquipmentId(), operator);
         this.name = name;
         raiseEvent(new EquipmentCreatedEvent(this)); // Raise Domain Event
@@ -157,7 +157,7 @@ public class CachedMongoEquipmentRepository extends AbstractMongoRepository<Equi
   data
 - Controller classes should be annotated with `@Validated` to enable request validation
 - Request objects in method parameters should be annotated with `@Valid` to enable request validation
-- Controller ensures a [Principal](../src/main/java/deviceet/common/model/operator/Principal.java) is fetched/created
+- Controller ensures an [Operator](../src/main/java/deviceet/common/model/operator/Operator.java) is fetched/created
   from the reqeust and passed to CommandService or QueryService
 - Controller should follow REST principles on naming URLs and choosing HTTP methods
 
@@ -175,7 +175,7 @@ public class EquipmentController {
     @PostMapping
     public ResponseId createEquipment(@RequestBody @Valid CreateEquipmentCommand command) {
         // In real situations, operator is normally created from the current user in context, such as Spring Security's SecurityContextHolder
-        Principal operator = SAMPLE_USER_PRINCIPAL;
+        Operator operator = SAMPLE_USER_OPERATOR;
 
         return new ResponseId(this.equipmentCommandService.createEquipment(command, operator));
     }
@@ -187,7 +187,7 @@ public class EquipmentController {
 - CommandService serves as the facade for the domain model
 - Every public method in CommandService should represent a use case, and should be annotated with `@Transactional` if it
   writes to database
-- Methods in CommandService usually accepts a Command object as parameter, as well as a `Principal` object
+- Methods in CommandService usually accepts a Command object as parameter, as well as a `Operator` object
 - CommandService should not contain business logic
 - CommandService returns the Aggregate Root's ID for creating objects, and return `void` for updating or deleting
   Aggregate Roots
@@ -204,7 +204,7 @@ public class EquipmentCommandService {
     private final EquipmentDomainService equipmentDomainService;
 
     @Transactional
-    public String createEquipment(CreateEquipmentCommand command, Principal operator) {
+    public String createEquipment(CreateEquipmentCommand command, Operator operator) {
         Equipment equipment = equipmentFactory.create(command.name(), operator);
         equipmentRepository.save(equipment);
         log.info("Created Equipment[{}].", equipment.getId());
@@ -365,7 +365,7 @@ public class MaintenanceRecordFactory {
     public MaintenanceRecord create(Equipment equipment,
                                     EquipmentStatus status,
                                     String description,
-                                    Principal operator) {
+                                    Operator operator) {
         return new MaintenanceRecord(equipment.getId(), equipment.getName(), status, description, operator);
     }
 }
@@ -443,7 +443,7 @@ public class EquipmentQueryService {
     private final MongoTemplate mongoTemplate;
     private final EquipmentRepository equipmentRepository;
 
-    public Page<QListedEquipment> listEquipments(ListEquipmentQuery listEquipmentQuery, Pageable pageable, Principal operator) {
+    public Page<QListedEquipment> listEquipments(ListEquipmentQuery listEquipmentQuery, Pageable pageable, Operator operator) {
         Criteria criteria = where(AggregateRoot.Fields.orgId).is(operator.getOrgId());
 
         if (isNotBlank(listEquipmentQuery.search())) {

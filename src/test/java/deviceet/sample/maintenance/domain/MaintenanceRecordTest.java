@@ -10,13 +10,13 @@ class MaintenanceRecordTest {
 
     @Test
     void should_create_maintenance_record() {
-        UserOperator principal = randomUserPrincipal();
+        UserOperator operator = randomUserOperator();
 
         MaintenanceRecord maintenanceRecord = new MaintenanceRecord("equipment",
                 "name",
                 randomEquipmentStatus(),
                 randomDescription(),
-                principal);
+                operator);
 
         assertNotNull(maintenanceRecord.getId());
     }

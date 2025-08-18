@@ -56,7 +56,7 @@ public class RandomTestUtils {
         return randomEnum(Role.class);
     }
 
-    public static UserOperator randomUserPrincipal() {
+    public static UserOperator randomUserOperator() {
         return UserOperator.of(randomUserId(), randomUserName(), randomRole(), randomOrgId());
     }
 

@@ -39,7 +39,7 @@ flow is:
     @PostMapping
     public ResponseId createEquipment(@RequestBody @Valid CreateEquipmentCommand command) {
         // In real situations, operator is normally created from the current user in context, such as Spring Security's SecurityContextHolder
-        Principal operator = SAMPLE_USER_PRINCIPAL;
+        Operator operator = SAMPLE_USER_OPERATOR;
 
         return new ResponseId(this.equipmentCommandService.createEquipment(command, operator));
     }
@@ -49,7 +49,7 @@ flow is:
 
 ```java
     @Transactional
-    public String createEquipment(CreateEquipmentCommand command, Principal operator) {
+    public String createEquipment(CreateEquipmentCommand command, Operator operator) {
         Equipment equipment = equipmentFactory.create(command.name(), operator);
         equipmentRepository.save(equipment);
         log.info("Created Equipment[{}].", equipment.getId());
@@ -62,7 +62,7 @@ flow is:
 
 ```java
 public class EquipmentFactory {
-    public Equipment create(String name, Principal operator) {
+    public Equipment create(String name, Operator operator) {
         return new Equipment(name, operator);
     }
 }
@@ -73,7 +73,7 @@ public class EquipmentFactory {
    automatically by the event infrastructure and no further actions are required from your side:
 
 ```java
-    public Equipment(String name, Principal operator) {
+    public Equipment(String name, Operator operator) {
         super(newEquipmentId(), operator);
         this.name = name;
         raiseEvent(new EquipmentCreatedEvent(this));
@@ -107,7 +107,7 @@ database. Take "updating `Equipment`'s holder name" as an example.
     public void updateEquipmentHolder(@PathVariable("equipmentId") @NotBlank String equipmentId,
                                       @RequestBody @Valid UpdateEquipmentHolderCommand command) {
         // In real situations, operator is normally created from the current user in context, such as Spring Security's SecurityContextHolder
-        Principal operator = SAMPLE_USER_PRINCIPAL;
+        Operator operator = SAMPLE_USER_OPERATOR;
 
         this.equipmentCommandService.updateEquipmentHolder(equipmentId, command, operator);
     }
@@ -117,7 +117,7 @@ database. Take "updating `Equipment`'s holder name" as an example.
 
 ```java
     @Transactional
-    public void updateEquipmentHolder(String id, UpdateEquipmentHolderCommand command, Principal operator) {
+    public void updateEquipmentHolder(String id, UpdateEquipmentHolderCommand command, Operator operator) {
         Equipment equipment = equipmentRepository.byId(id, operator.getOrgId());
         equipment.updateHolder(command.name());
         equipmentRepository.save(equipment);
@@ -154,7 +154,7 @@ directly from `EquipmentCommandService`, `EquipmentDomainService.updateEquipment
 
 ```java
     @Transactional
-    public void updateEquipmentName(String id, UpdateEquipmentNameCommand command, Principal operator) {
+    public void updateEquipmentName(String id, UpdateEquipmentNameCommand command, Operator operator) {
         Equipment equipment = equipmentRepository.byId(id, operator.getOrgId());
         equipmentDomainService.updateEquipmentName(equipment, command.name());
         equipmentRepository.save(equipment);
@@ -188,7 +188,7 @@ For deleting data, first load the `AggregateRoot` and then delete it. For exampl
     @DeleteMapping("/{equipmentId}")
     public void deleteEquipment(@PathVariable("equipmentId") @NotBlank String equipmentId) {
         // In real situations, operator is normally created from the current user in context, such as Spring Security's SecurityContextHolder
-        Principal operator = SAMPLE_USER_PRINCIPAL;
+        Operator operator = SAMPLE_USER_OPERATOR;
 
         this.equipmentCommandService.deleteEquipment(equipmentId, operator);
     }
@@ -199,7 +199,7 @@ For deleting data, first load the `AggregateRoot` and then delete it. For exampl
 
 ```java
     @Transactional
-    public void deleteEquipment(String equipmentId, Principal operator) {
+    public void deleteEquipment(String equipmentId, Operator operator) {
         Equipment equipment = equipmentRepository.byId(equipmentId, operator.getOrgId());
         equipmentRepository.delete(equipment);
         log.info("Deleted Equipment[{}].", equipmentId);
@@ -233,7 +233,7 @@ example, when querying a list of `Equipment`s:
     public Page<QListedEquipment> listEquipments(@RequestBody @Valid ListEquipmentQuery query,
                                                  @PageableDefault Pageable pageable) {
         // In real situations, operator is normally created from the current user in context, such as Spring Security's SecurityContextHolder
-        Principal operator = SAMPLE_USER_PRINCIPAL;
+        Operator operator = SAMPLE_USER_OPERATOR;
 
         return this.equipmentQueryService.listEquipments(query, pageable, operator);
     }
@@ -246,7 +246,7 @@ Here Spring's `Pageable` and `Page` should be used for pagination. `EquipmentQue
    query model `QListedEquipment`:
 
 ```java
-    public Page<QListedEquipment> listEquipments(ListEquipmentQuery listEquipmentQuery, Pageable pageable, Principal operator) {
+    public Page<QListedEquipment> listEquipments(ListEquipmentQuery listEquipmentQuery, Pageable pageable, Operator operator) {
         Criteria criteria = where(AggregateRoot.Fields.orgId).is(operator.getOrgId());
 
         if (isNotBlank(listEquipmentQuery.search())) {

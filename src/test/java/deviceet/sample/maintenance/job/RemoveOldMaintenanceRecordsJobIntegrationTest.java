@@ -38,7 +38,7 @@ class RemoveOldMaintenanceRecordsJobIntegrationTest extends IntegrationTest {
 
     @Test
     void should_remove_old_maintenance_records() {
-        Operator operator = randomUserPrincipal();
+        Operator operator = randomUserOperator();
         CreateEquipmentCommand createEquipmentCommand = randomCreateEquipmentCommand();
         String equipmentId = equipmentCommandService.createEquipment(createEquipmentCommand, operator);
 

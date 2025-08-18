@@ -23,7 +23,7 @@ class EquipmentCommandServiceIntegrationTest extends IntegrationTest {
 
     @Test
     void should_create_equipment() {
-        Operator operator = randomUserPrincipal();
+        Operator operator = randomUserOperator();
 
         CreateEquipmentCommand createEquipmentCommand = randomCreateEquipmentCommand();
         String equipmentId = equipmentCommandService.createEquipment(createEquipmentCommand, operator);
@@ -40,7 +40,7 @@ class EquipmentCommandServiceIntegrationTest extends IntegrationTest {
 
     @Test
     void should_update_equipment_name() {
-        Operator operator = randomUserPrincipal();
+        Operator operator = randomUserOperator();
 
         CreateEquipmentCommand createEquipmentCommand = randomCreateEquipmentCommand();
         String equipmentId = equipmentCommandService.createEquipment(createEquipmentCommand, operator);

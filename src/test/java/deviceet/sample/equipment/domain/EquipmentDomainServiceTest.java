@@ -7,7 +7,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static deviceet.RandomTestUtils.randomUserPrincipal;
+import static deviceet.RandomTestUtils.randomUserOperator;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
@@ -22,7 +22,7 @@ class EquipmentDomainServiceTest {
     @Test
     void shouldUpdateName() {
         Mockito.when(equipmentRepository.existsByName(Mockito.anyString(), Mockito.anyString())).thenReturn(false);
-        Equipment equipment = new Equipment("name", randomUserPrincipal());
+        Equipment equipment = new Equipment("name", randomUserOperator());
 
         equipmentDomainService.updateEquipmentName(equipment, "newName");
 

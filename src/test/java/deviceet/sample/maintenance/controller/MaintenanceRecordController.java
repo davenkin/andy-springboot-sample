@@ -35,7 +35,7 @@ public class MaintenanceRecordController {
     @ResponseStatus(CREATED)
     @PostMapping
     public ResponseId createMaintenanceRecord(@RequestBody @Valid CreateMaintenanceRecordCommand command) {
-        // In real situations, principal is normally created from the current user in context, such as Spring Security's SecurityContextHolder
+        // In real situations, operator is normally created from the current user in context, such as Spring Security's SecurityContextHolder
         Operator operator = SAMPLE_USER_OPERATOR;
 
         return new ResponseId(maintenanceRecordCommandService.createMaintenanceRecord(command, operator));
@@ -44,7 +44,7 @@ public class MaintenanceRecordController {
     @Operation(summary = "Delete a maintenance record")
     @DeleteMapping("/{maintenanceRecordId}")
     public void deleteMaintenanceRecord(@PathVariable("maintenanceRecordId") @NotBlank String maintenanceRecordId) {
-        // In real situations, principal is normally created from the current user in context, such as Spring Security's SecurityContextHolder
+        // In real situations, operator is normally created from the current user in context, such as Spring Security's SecurityContextHolder
         Operator operator = SAMPLE_USER_OPERATOR;
 
         this.maintenanceRecordCommandService.deleteMaintenanceRecord(maintenanceRecordId, operator);
@@ -54,7 +54,7 @@ public class MaintenanceRecordController {
     @PostMapping("/list")
     public Page<QListedMaintenanceRecord> listMaintenanceRecords(@RequestBody @Valid ListMaintenanceRecordsQuery query,
                                                                  @PageableDefault Pageable pageable) {
-        // In real situations, principal is normally created from the current user in context, such as Spring Security's SecurityContextHolder
+        // In real situations, operator is normally created from the current user in context, such as Spring Security's SecurityContextHolder
         Operator operator = SAMPLE_USER_OPERATOR;
 
         return maintenanceRecordQueryService.listMaintenanceRecords(query, pageable, operator);
@@ -63,7 +63,7 @@ public class MaintenanceRecordController {
     @Operation(summary = "Get maintenance record detail")
     @GetMapping("/{maintenanceRecordId}")
     public QDetailedMaintenanceRecord getMaintenanceRecordDetail(@PathVariable("maintenanceRecordId") @NotBlank String maintenanceRecordId) {
-        // In real situations, principal is normally created from the current user in context, such as Spring Security's SecurityContextHolder
+        // In real situations, operator is normally created from the current user in context, such as Spring Security's SecurityContextHolder
         Operator operator = SAMPLE_USER_OPERATOR;
 
         return maintenanceRecordQueryService.getMaintenanceRecordDetail(maintenanceRecordId, operator);

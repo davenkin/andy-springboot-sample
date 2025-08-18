@@ -8,7 +8,7 @@ import java.util.Set;
 import static deviceet.common.util.CommonUtils.requireNonBlank;
 import static java.util.Objects.requireNonNull;
 
-// Represents a human user principal, used by CommandService and QueryService for human user interaction
+// Represents a human operator, used by CommandService and QueryService for human user interaction
 @EqualsAndHashCode
 public class UserOperator implements Operator {
     private final String userId;

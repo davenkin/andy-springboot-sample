@@ -29,7 +29,7 @@ class EquipmentCreatedEventHandlerIntegrationTest extends IntegrationTest {
 
     @Test
     void should_evict_org_equipment_summaries_cache() {
-        Operator operator = RandomTestUtils.randomUserPrincipal();
+        Operator operator = RandomTestUtils.randomUserOperator();
         CreateEquipmentCommand createEquipmentCommand = new CreateEquipmentCommand(RandomTestUtils.randomEquipmentName());
         String equipmentId = equipmentCommandService.createEquipment(createEquipmentCommand, operator);
         String cacheKey = "Cache:ORG_EQUIPMENTS::" + operator.getOrgId();

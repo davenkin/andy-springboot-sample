@@ -42,7 +42,7 @@ Based on the above, the **lightweight CQRS** approach meets our needs and is our
 
 ```java
     @Transactional
-    public void updateEquipmentName(String id, UpdateEquipmentNameCommand command, Principal operator) {
+    public void updateEquipmentName(String id, UpdateEquipmentNameCommand command, Operator operator) {
         Equipment equipment = equipmentRepository.byId(id, operator.getOrgId());
         equipmentDomainService.updateEquipmentName(equipment, command.name());
         equipmentRepository.save(equipment);
@@ -57,7 +57,7 @@ Based on the above, the **lightweight CQRS** approach meets our needs and is our
   used to hit the database directly.
 
 ```java
-    public Page<QListedEquipment> listEquipments(ListEquipmentQuery listEquipmentQuery, Pageable pageable, Principal operator) {
+    public Page<QListedEquipment> listEquipments(ListEquipmentQuery listEquipmentQuery, Pageable pageable, Operator operator) {
         Criteria criteria = where(AggregateRoot.Fields.orgId).is(operator.getOrgId());
 
         // more code omitted

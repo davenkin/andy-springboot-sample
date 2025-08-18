@@ -27,7 +27,7 @@ class MaintenanceRecordQueryServiceIntegrationTest extends IntegrationTest {
 
     @Test
     void should_list_maintenance_records() {
-        Operator operator = randomUserPrincipal();
+        Operator operator = randomUserOperator();
         CreateEquipmentCommand createEquipmentCommand = randomCreateEquipmentCommand();
         String equipmentId = equipmentCommandService.createEquipment(createEquipmentCommand, operator);
         IntStream.range(0, 20).forEach(i -> {
