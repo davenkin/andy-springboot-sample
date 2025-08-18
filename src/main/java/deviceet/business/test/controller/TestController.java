@@ -40,7 +40,7 @@ public class TestController {
 
     }
 
-    @Operation(description = "Get list")
+    @Operation(summary = "Get list")
     @PostMapping("/list")
     public Page<QListedEquipment> listEquipments(@RequestBody
                                                  @Valid

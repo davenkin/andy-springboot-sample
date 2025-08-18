@@ -28,7 +28,7 @@ public class OpenApiConfiguration {
                     responses.putIfAbsent("403", new ApiResponse().description("Access denied, same error structure as 400"));
                     responses.putIfAbsent("404", new ApiResponse().description("Not found, same error structure as 400"));
                     responses.putIfAbsent("409", new ApiResponse().description("Business rule check failed, same error structure as 400"));
-                    responses.putIfAbsent("500", new ApiResponse().description("Internal error, same error structure as 400"));
+                    responses.putIfAbsent("500", new ApiResponse().description("Internal server error, same error structure as 400"));
                 });
             });
         };

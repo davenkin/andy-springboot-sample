@@ -20,3 +20,6 @@ mongock:
   transactional: true
   lock-repository-name: mongock-lock
   migration-repository-name: mongock-migration
+
+springdoc:
+  default-produces-media-type: application/json
