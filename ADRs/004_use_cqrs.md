@@ -37,14 +37,24 @@ Based on the above, the **lightweight CQRS** approach meets our needs and is our
 
 ## Implementation
 
-There are 2 main points regarding lightweight CQRS implementation.
+- For the command side, use CommandService orchestrate the writing process, normally Repository is used for access
+  Aggregate Roots, and the Aggregate Roots contains the domain logic.
 
-- The first one is that apart from CommandServices, we create standalone QueryServices to implement the query side. In
+```java
+    @Transactional
+    public void updateEquipmentName(String id, UpdateEquipmentNameCommand command, Principal principal) {
+        Equipment equipment = equipmentRepository.byId(id, principal.getOrgId());
+        equipmentDomainService.updateEquipmentName(equipment, command.name());
+        equipmentRepository.save(equipment);
+        log.info("Updated name for Equipment[{}].", equipment.getId());
+    }
+```
+
+- Apart from CommandServices, we create standalone QueryServices to implement the query side. In
   QueryService, we use `MongoTemplate` to query database directly, bypassing the domain models, and also we use a
-  separate
-  set of query objects other than domain objects. For example, in `EquipmentQueryService.listEquipments()`, we don't use
-  the domain object `Equipment`, instead a query model `QListedEquipment` is created and `MongoTemplate` is used to
-  hit the database directly.
+  separate set of query objects other than domain objects. For example, in `EquipmentQueryService.listEquipments()`, we
+  don't use the domain object `Equipment`, instead a query model `QListedEquipment` is created and `MongoTemplate` is
+  used to hit the database directly.
 
 ```java
     public Page<QListedEquipment> listEquipments(ListEquipmentQuery listEquipmentQuery, Pageable pageable, Principal principal) {
@@ -60,7 +70,7 @@ There are 2 main points regarding lightweight CQRS implementation.
     }
 ```
 
-- The second point is that the database table serves as a container for both command side data and query side data. For
+- Database table serves as a container for both command side data and query side data. For
   example, in `Equipment`, besides its own coherent business fields, the `maintenanceRecordCount` is added for the query
   side.
 
