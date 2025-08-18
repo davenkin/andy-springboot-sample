@@ -1,7 +1,7 @@
 package deviceet.sample.maintenance.domain;
 
 import deviceet.common.model.AggregateRoot;
-import deviceet.common.model.principal.Principal;
+import deviceet.common.model.principal.Operator;
 import deviceet.sample.equipment.domain.EquipmentStatus;
 import deviceet.sample.maintenance.domain.event.MaintenanceRecordCreatedEvent;
 import deviceet.sample.maintenance.domain.event.MaintenanceRecordDeletedEvent;
@@ -34,8 +34,8 @@ public class MaintenanceRecord extends AggregateRoot {
                              String equipmentName,
                              EquipmentStatus status,
                              String description,
-                             Principal principal) {
-        super(newMaintenanceRecordId(), principal);
+                             Operator operator) {
+        super(newMaintenanceRecordId(), operator);
         this.equipmentId = equipmentId;
         this.equipmentName = equipmentName;
         this.status = status;

@@ -1,7 +1,7 @@
 package deviceet.sample.equipment.command;
 
 import deviceet.IntegrationTest;
-import deviceet.common.model.principal.Principal;
+import deviceet.common.model.principal.Operator;
 import deviceet.sample.equipment.domain.Equipment;
 import deviceet.sample.equipment.domain.EquipmentRepository;
 import deviceet.sample.equipment.domain.event.EquipmentCreatedEvent;
@@ -23,14 +23,14 @@ class EquipmentCommandServiceIntegrationTest extends IntegrationTest {
 
     @Test
     void should_create_equipment() {
-        Principal principal = randomUserPrincipal();
+        Operator operator = randomUserPrincipal();
 
         CreateEquipmentCommand createEquipmentCommand = randomCreateEquipmentCommand();
-        String equipmentId = equipmentCommandService.createEquipment(createEquipmentCommand, principal);
+        String equipmentId = equipmentCommandService.createEquipment(createEquipmentCommand, operator);
 
         Equipment equipment = equipmentRepository.byId(equipmentId);
         assertEquals(createEquipmentCommand.name(), equipment.getName());
-        assertEquals(principal.getOrgId(), equipment.getOrgId());
+        assertEquals(operator.getOrgId(), equipment.getOrgId());
 
         // Only need to check the existence of domain event in database,
         // no need to further test event handler as that will be addressed in event handlers' own tests
@@ -40,13 +40,13 @@ class EquipmentCommandServiceIntegrationTest extends IntegrationTest {
 
     @Test
     void should_update_equipment_name() {
-        Principal principal = randomUserPrincipal();
+        Operator operator = randomUserPrincipal();
 
         CreateEquipmentCommand createEquipmentCommand = randomCreateEquipmentCommand();
-        String equipmentId = equipmentCommandService.createEquipment(createEquipmentCommand, principal);
+        String equipmentId = equipmentCommandService.createEquipment(createEquipmentCommand, operator);
 
         UpdateEquipmentNameCommand updateEquipmentNameCommand = randomUpdateEquipmentNameCommand();
-        equipmentCommandService.updateEquipmentName(equipmentId, updateEquipmentNameCommand, principal);
+        equipmentCommandService.updateEquipmentName(equipmentId, updateEquipmentNameCommand, operator);
 
         Equipment equipment = equipmentRepository.byId(equipmentId);
         assertEquals(updateEquipmentNameCommand.name(), equipment.getName());

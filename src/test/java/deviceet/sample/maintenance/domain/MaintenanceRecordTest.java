@@ -1,6 +1,6 @@
 package deviceet.sample.maintenance.domain;
 
-import deviceet.common.model.principal.UserPrincipal;
+import deviceet.common.model.principal.UserOperator;
 import org.junit.jupiter.api.Test;
 
 import static deviceet.RandomTestUtils.*;
@@ -10,7 +10,7 @@ class MaintenanceRecordTest {
 
     @Test
     void should_create_maintenance_record() {
-        UserPrincipal principal = randomUserPrincipal();
+        UserOperator principal = randomUserPrincipal();
 
         MaintenanceRecord maintenanceRecord = new MaintenanceRecord("equipment",
                 "name",

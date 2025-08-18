@@ -8,12 +8,12 @@ import java.util.Set;
 import static deviceet.common.model.principal.Role.PLATFORM;
 import static lombok.AccessLevel.PRIVATE;
 
-// Represents a non human principal, used in non human interaction scenarios like EventHandlers and background Jobs
+// Represents a non-human operator, used in non-human interaction scenarios like EventHandlers and background Jobs
 
 @EqualsAndHashCode
 @NoArgsConstructor(access = PRIVATE)
-public class PlatformPrincipal implements Principal {
-    public static final PlatformPrincipal PLATFORM_PRINCIPAL = new PlatformPrincipal();
+public class PlatformOperator implements Operator {
+    public static final PlatformOperator PLATFORM_OPERATOR = new PlatformOperator();
     public static final String PLATFORM_ID = "PLATFORM001";
     public static final String PLATFORM_NAME = "PLATFORM";
 
@@ -34,6 +34,6 @@ public class PlatformPrincipal implements Principal {
 
     @Override
     public String getOrgId() {
-        throw new IllegalArgumentException("PlatformPrincipal does not support getOrgId().");
+        throw new IllegalArgumentException("PlatformOperator does not support getOrgId().");
     }
 }

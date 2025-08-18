@@ -1,7 +1,7 @@
 package deviceet.sample.maintenance.query;
 
 import deviceet.IntegrationTest;
-import deviceet.common.model.principal.Principal;
+import deviceet.common.model.principal.Operator;
 import deviceet.sample.equipment.command.CreateEquipmentCommand;
 import deviceet.sample.equipment.command.EquipmentCommandService;
 import deviceet.sample.maintenance.command.MaintenanceRecordCommandService;
@@ -27,15 +27,15 @@ class MaintenanceRecordQueryServiceIntegrationTest extends IntegrationTest {
 
     @Test
     void should_list_maintenance_records() {
-        Principal principal = randomUserPrincipal();
+        Operator operator = randomUserPrincipal();
         CreateEquipmentCommand createEquipmentCommand = randomCreateEquipmentCommand();
-        String equipmentId = equipmentCommandService.createEquipment(createEquipmentCommand, principal);
+        String equipmentId = equipmentCommandService.createEquipment(createEquipmentCommand, operator);
         IntStream.range(0, 20).forEach(i -> {
-            maintenanceRecordCommandService.createMaintenanceRecord(randomCreateMaintenanceRecordCommand(equipmentId), principal);
+            maintenanceRecordCommandService.createMaintenanceRecord(randomCreateMaintenanceRecordCommand(equipmentId), operator);
         });
 
         ListMaintenanceRecordsQuery query = ListMaintenanceRecordsQuery.builder().build();
-        Page<QListedMaintenanceRecord> records = maintenanceRecordQueryService.listMaintenanceRecords(query, PageRequest.of(0, 12), principal);
+        Page<QListedMaintenanceRecord> records = maintenanceRecordQueryService.listMaintenanceRecords(query, PageRequest.of(0, 12), operator);
 
         assertEquals(12, records.getContent().size());
     }

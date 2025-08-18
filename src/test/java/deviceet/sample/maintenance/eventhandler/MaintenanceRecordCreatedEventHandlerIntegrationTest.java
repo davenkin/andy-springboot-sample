@@ -1,7 +1,7 @@
 package deviceet.sample.maintenance.eventhandler;
 
 import deviceet.IntegrationTest;
-import deviceet.common.model.principal.Principal;
+import deviceet.common.model.principal.Operator;
 import deviceet.sample.equipment.command.CreateEquipmentCommand;
 import deviceet.sample.equipment.command.EquipmentCommandService;
 import deviceet.sample.equipment.domain.Equipment;
@@ -31,12 +31,12 @@ class MaintenanceRecordCreatedEventHandlerIntegrationTest extends IntegrationTes
 
     @Test
     void should_count_maintenance_records_for_equipment() {
-        Principal principal = randomUserPrincipal();
+        Operator operator = randomUserPrincipal();
         CreateEquipmentCommand createEquipmentCommand = randomCreateEquipmentCommand();
-        String equipmentId = equipmentCommandService.createEquipment(createEquipmentCommand, principal);
+        String equipmentId = equipmentCommandService.createEquipment(createEquipmentCommand, operator);
         CreateMaintenanceRecordCommand createMaintenanceRecordCommand = randomCreateMaintenanceRecordCommand(equipmentId);
-        String maintenanceRecordId = maintenanceRecordCommandService.createMaintenanceRecord(createMaintenanceRecordCommand, principal);
-        String maintenanceRecordId2 = maintenanceRecordCommandService.createMaintenanceRecord(createMaintenanceRecordCommand, principal);
+        String maintenanceRecordId = maintenanceRecordCommandService.createMaintenanceRecord(createMaintenanceRecordCommand, operator);
+        String maintenanceRecordId2 = maintenanceRecordCommandService.createMaintenanceRecord(createMaintenanceRecordCommand, operator);
         MaintenanceRecordCreatedEvent createdEvent = latestEventFor(maintenanceRecordId, MAINTENANCE_RECORD_CREATED_EVENT, MaintenanceRecordCreatedEvent.class);
         MaintenanceRecordCreatedEvent createdEvent2 = latestEventFor(maintenanceRecordId2, MAINTENANCE_RECORD_CREATED_EVENT, MaintenanceRecordCreatedEvent.class);
 
@@ -48,11 +48,11 @@ class MaintenanceRecordCreatedEventHandlerIntegrationTest extends IntegrationTes
 
     @Test
     void should_update_status_for_equipment_using_maintenance_record_status() {
-        Principal principal = randomUserPrincipal();
+        Operator operator = randomUserPrincipal();
         CreateEquipmentCommand createEquipmentCommand = randomCreateEquipmentCommand();
-        String equipmentId = equipmentCommandService.createEquipment(createEquipmentCommand, principal);
+        String equipmentId = equipmentCommandService.createEquipment(createEquipmentCommand, operator);
         CreateMaintenanceRecordCommand createMaintenanceRecordCommand = randomCreateMaintenanceRecordCommand(equipmentId);
-        String maintenanceRecordId = maintenanceRecordCommandService.createMaintenanceRecord(createMaintenanceRecordCommand, principal);
+        String maintenanceRecordId = maintenanceRecordCommandService.createMaintenanceRecord(createMaintenanceRecordCommand, operator);
 
         MaintenanceRecordCreatedEvent createdEvent = latestEventFor(maintenanceRecordId, MAINTENANCE_RECORD_CREATED_EVENT, MaintenanceRecordCreatedEvent.class);
         maintenanceRecordCreatedEventHandler.handle(createdEvent);

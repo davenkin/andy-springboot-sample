@@ -2,7 +2,7 @@ package deviceet.sample.maintenance.job;
 
 import deviceet.IntegrationTest;
 import deviceet.common.model.AggregateRoot;
-import deviceet.common.model.principal.Principal;
+import deviceet.common.model.principal.Operator;
 import deviceet.sample.equipment.command.CreateEquipmentCommand;
 import deviceet.sample.equipment.command.EquipmentCommandService;
 import deviceet.sample.maintenance.command.CreateMaintenanceRecordCommand;
@@ -38,13 +38,13 @@ class RemoveOldMaintenanceRecordsJobIntegrationTest extends IntegrationTest {
 
     @Test
     void should_remove_old_maintenance_records() {
-        Principal principal = randomUserPrincipal();
+        Operator operator = randomUserPrincipal();
         CreateEquipmentCommand createEquipmentCommand = randomCreateEquipmentCommand();
-        String equipmentId = equipmentCommandService.createEquipment(createEquipmentCommand, principal);
+        String equipmentId = equipmentCommandService.createEquipment(createEquipmentCommand, operator);
 
         CreateMaintenanceRecordCommand createMaintenanceRecordCommand = randomCreateMaintenanceRecordCommand(equipmentId);
-        String maintenanceRecordId = maintenanceRecordCommandService.createMaintenanceRecord(createMaintenanceRecordCommand, principal);
-        String oldMaintenanceRecordId = maintenanceRecordCommandService.createMaintenanceRecord(createMaintenanceRecordCommand, principal);
+        String maintenanceRecordId = maintenanceRecordCommandService.createMaintenanceRecord(createMaintenanceRecordCommand, operator);
+        String oldMaintenanceRecordId = maintenanceRecordCommandService.createMaintenanceRecord(createMaintenanceRecordCommand, operator);
 
         Query query = Query.query(where(MONGO_ID).is(oldMaintenanceRecordId));
         Update update = new Update().set(AggregateRoot.Fields.createdAt, Instant.now().minus(500, DAYS));

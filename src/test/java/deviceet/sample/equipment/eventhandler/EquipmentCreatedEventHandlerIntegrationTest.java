@@ -2,7 +2,7 @@ package deviceet.sample.equipment.eventhandler;
 
 import deviceet.IntegrationTest;
 import deviceet.RandomTestUtils;
-import deviceet.common.model.principal.Principal;
+import deviceet.common.model.principal.Operator;
 import deviceet.sample.equipment.command.CreateEquipmentCommand;
 import deviceet.sample.equipment.command.EquipmentCommandService;
 import deviceet.sample.equipment.domain.EquipmentRepository;
@@ -29,12 +29,12 @@ class EquipmentCreatedEventHandlerIntegrationTest extends IntegrationTest {
 
     @Test
     void should_evict_org_equipment_summaries_cache() {
-        Principal principal = RandomTestUtils.randomUserPrincipal();
+        Operator operator = RandomTestUtils.randomUserPrincipal();
         CreateEquipmentCommand createEquipmentCommand = new CreateEquipmentCommand(RandomTestUtils.randomEquipmentName());
-        String equipmentId = equipmentCommandService.createEquipment(createEquipmentCommand, principal);
-        String cacheKey = "Cache:ORG_EQUIPMENTS::" + principal.getOrgId();
+        String equipmentId = equipmentCommandService.createEquipment(createEquipmentCommand, operator);
+        String cacheKey = "Cache:ORG_EQUIPMENTS::" + operator.getOrgId();
         assertFalse(stringRedisTemplate.hasKey(cacheKey));
-        List<EquipmentSummary> equipmentSummaries = equipmentRepository.cachedEquipmentSummaries(principal.getOrgId());
+        List<EquipmentSummary> equipmentSummaries = equipmentRepository.cachedEquipmentSummaries(operator.getOrgId());
         assertTrue(stringRedisTemplate.hasKey(cacheKey));
         EquipmentCreatedEvent equipmentCreatedEvent = latestEventFor(equipmentId, EQUIPMENT_CREATED_EVENT, EquipmentCreatedEvent.class);
 

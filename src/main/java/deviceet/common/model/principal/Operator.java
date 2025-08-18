@@ -2,9 +2,9 @@ package deviceet.common.model.principal;
 
 import java.util.Set;
 
-// Principal should contain enough context data of the current user, feel free to modify according to your own needs
+// Operator should contain enough context data of the current user
 
-public interface Principal {
+public interface Operator {
     String getId();
 
     String getName();

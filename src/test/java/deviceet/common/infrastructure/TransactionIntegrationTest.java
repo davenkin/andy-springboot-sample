@@ -3,7 +3,7 @@ package deviceet.common.infrastructure;
 import deviceet.IntegrationTest;
 import deviceet.common.event.DomainEventType;
 import deviceet.common.event.publish.PublishingDomainEventDao;
-import deviceet.common.model.principal.Principal;
+import deviceet.common.model.principal.Operator;
 import deviceet.sample.equipment.command.CreateEquipmentCommand;
 import deviceet.sample.equipment.command.EquipmentCommandService;
 import deviceet.sample.equipment.domain.EquipmentRepository;
@@ -30,12 +30,12 @@ class TransactionIntegrationTest extends IntegrationTest {
 
     @Test
     void transaction_should_work() {
-        Principal principal = randomUserPrincipal();
+        Operator operator = randomUserPrincipal();
         CreateEquipmentCommand createEquipmentCommand = randomCreateEquipmentCommand();
-        String equipmentId = equipmentCommandService.createEquipment(createEquipmentCommand, principal);
+        String equipmentId = equipmentCommandService.createEquipment(createEquipmentCommand, operator);
         doThrow(new RuntimeException("stub exception")).when(publishingDomainEventDao).stage(anyList());
 
-        assertThrows(RuntimeException.class, () -> equipmentCommandService.updateEquipmentName(equipmentId, randomUpdateEquipmentNameCommand(), principal));
+        assertThrows(RuntimeException.class, () -> equipmentCommandService.updateEquipmentName(equipmentId, randomUpdateEquipmentNameCommand(), operator));
 
         assertEquals(createEquipmentCommand.name(), equipmentRepository.byId(equipmentId).getName());
         assertNull(latestEventFor(equipmentId, DomainEventType.EQUIPMENT_NAME_UPDATED_EVENT, EquipmentNameUpdatedEvent.class));

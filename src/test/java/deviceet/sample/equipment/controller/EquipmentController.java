@@ -1,6 +1,6 @@
 package deviceet.sample.equipment.controller;
 
-import deviceet.common.model.principal.Principal;
+import deviceet.common.model.principal.Operator;
 import deviceet.common.util.ResponseId;
 import deviceet.sample.equipment.command.CreateEquipmentCommand;
 import deviceet.sample.equipment.command.EquipmentCommandService;
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static deviceet.sample.SampleFixture.SAMPLE_USER_PRINCIPAL;
+import static deviceet.sample.SampleFixture.SAMPLE_USER_OPERATOR;
 import static org.springframework.http.HttpStatus.CREATED;
 
 @Tag(name = "EquipmentController", description = "Equipment management APIs")
@@ -41,9 +41,9 @@ public class EquipmentController {
     @Operation(summary = "Create an equipment")
     public ResponseId createEquipment(@RequestBody @Valid CreateEquipmentCommand command) {
         // In real situations, principal is normally created from the current user in context, such as Spring Security's SecurityContextHolder
-        Principal principal = SAMPLE_USER_PRINCIPAL;
+        Operator operator = SAMPLE_USER_OPERATOR;
 
-        return new ResponseId(this.equipmentCommandService.createEquipment(command, principal));
+        return new ResponseId(this.equipmentCommandService.createEquipment(command, operator));
     }
 
     @Operation(summary = "Update an equipment's name")
@@ -51,9 +51,9 @@ public class EquipmentController {
     public void updateEquipmentName(@PathVariable("equipmentId") @NotBlank String equipmentId,
                                     @RequestBody @Valid UpdateEquipmentNameCommand updateEquipmentNameCommand) {
         // In real situations, principal is normally created from the current user in context, such as Spring Security's SecurityContextHolder
-        Principal principal = SAMPLE_USER_PRINCIPAL;
+        Operator operator = SAMPLE_USER_OPERATOR;
 
-        this.equipmentCommandService.updateEquipmentName(equipmentId, updateEquipmentNameCommand, principal);
+        this.equipmentCommandService.updateEquipmentName(equipmentId, updateEquipmentNameCommand, operator);
     }
 
     @Operation(summary = "Update an equipment's holder")
@@ -61,18 +61,18 @@ public class EquipmentController {
     public void updateEquipmentHolder(@PathVariable("equipmentId") @NotBlank String equipmentId,
                                       @RequestBody @Valid UpdateEquipmentHolderCommand command) {
         // In real situations, principal is normally created from the current user in context, such as Spring Security's SecurityContextHolder
-        Principal principal = SAMPLE_USER_PRINCIPAL;
+        Operator operator = SAMPLE_USER_OPERATOR;
 
-        this.equipmentCommandService.updateEquipmentHolder(equipmentId, command, principal);
+        this.equipmentCommandService.updateEquipmentHolder(equipmentId, command, operator);
     }
 
     @Operation(summary = "Delete an equipment")
     @DeleteMapping("/{equipmentId}")
     public void deleteEquipment(@PathVariable("equipmentId") @NotBlank String equipmentId) {
         // In real situations, principal is normally created from the current user in context, such as Spring Security's SecurityContextHolder
-        Principal principal = SAMPLE_USER_PRINCIPAL;
+        Operator operator = SAMPLE_USER_OPERATOR;
 
-        this.equipmentCommandService.deleteEquipment(equipmentId, principal);
+        this.equipmentCommandService.deleteEquipment(equipmentId, operator);
     }
 
     @Operation(summary = "Query equipments")
@@ -80,27 +80,27 @@ public class EquipmentController {
     public Page<QListedEquipment> listEquipments(@RequestBody @Valid ListEquipmentQuery query,
                                                  @PageableDefault Pageable pageable) {
         // In real situations, principal is normally created from the current user in context, such as Spring Security's SecurityContextHolder
-        Principal principal = SAMPLE_USER_PRINCIPAL;
+        Operator operator = SAMPLE_USER_OPERATOR;
 
-        return this.equipmentQueryService.listEquipments(query, pageable, principal);
+        return this.equipmentQueryService.listEquipments(query, pageable, operator);
     }
 
     @Operation(summary = "Get equipment detail")
     @GetMapping("/{equipmentId}")
     public QDetailedEquipment getEquipmentDetail(@PathVariable("equipmentId") @NotBlank String equipmentId) {
         // In real situations, principal is normally created from the current user in context, such as Spring Security's SecurityContextHolder
-        Principal principal = SAMPLE_USER_PRINCIPAL;
+        Operator operator = SAMPLE_USER_OPERATOR;
 
-        return this.equipmentQueryService.getEquipmentDetail(equipmentId, principal);
+        return this.equipmentQueryService.getEquipmentDetail(equipmentId, operator);
     }
 
     @Operation(summary = "Get all equipment summaries for an organization")
     @GetMapping("/summaries")
     public List<EquipmentSummary> getAllEquipmentSummaries() {
         // In real situations, principal is normally created from the current user in context, such as Spring Security's SecurityContextHolder
-        Principal principal = SAMPLE_USER_PRINCIPAL;
+        Operator operator = SAMPLE_USER_OPERATOR;
 
-        return this.equipmentQueryService.getAllEquipmentSummaries(principal);
+        return this.equipmentQueryService.getAllEquipmentSummaries(operator);
     }
 
 }

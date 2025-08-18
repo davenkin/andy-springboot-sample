@@ -4,7 +4,7 @@ import deviceet.IntegrationTest;
 import deviceet.common.event.consume.ConsumingEvent;
 import deviceet.common.event.consume.ConsumingEventDao;
 import deviceet.common.event.publish.PublishingDomainEventDao;
-import deviceet.common.model.principal.Principal;
+import deviceet.common.model.principal.Operator;
 import deviceet.sample.equipment.domain.Equipment;
 import deviceet.sample.equipment.domain.event.EquipmentCreatedEvent;
 import deviceet.sample.equipment.eventhandler.EquipmentCreatedEventHandler;
@@ -35,9 +35,9 @@ class DomainEventHouseKeepingJobIntegrationTest extends IntegrationTest {
 
     @Test
     void should_remove_old_publishing_domain_events_from_mongo() {
-        Principal principal = randomUserPrincipal();
-        EquipmentCreatedEvent event1 = new EquipmentCreatedEvent(new Equipment(randomEquipmentName(), principal));
-        EquipmentCreatedEvent event2 = new EquipmentCreatedEvent(new Equipment(randomEquipmentName(), principal));
+        Operator operator = randomUserPrincipal();
+        EquipmentCreatedEvent event1 = new EquipmentCreatedEvent(new Equipment(randomEquipmentName(), operator));
+        EquipmentCreatedEvent event2 = new EquipmentCreatedEvent(new Equipment(randomEquipmentName(), operator));
         ReflectionTestUtils.setField(event1, DomainEvent.Fields.raisedAt, now().minus(110, DAYS));
         ReflectionTestUtils.setField(event2, DomainEvent.Fields.raisedAt, now().minus(90, DAYS));
         publishingDomainEventDao.stage(List.of(event1, event2));
@@ -52,9 +52,9 @@ class DomainEventHouseKeepingJobIntegrationTest extends IntegrationTest {
 
     @Test
     void should_remove_old_consuming_domain_events_from_mongo() {
-        Principal principal = randomUserPrincipal();
-        EquipmentCreatedEvent event1 = new EquipmentCreatedEvent(new Equipment(randomEquipmentName(), principal));
-        EquipmentCreatedEvent event2 = new EquipmentCreatedEvent(new Equipment(randomEquipmentName(), principal));
+        Operator operator = randomUserPrincipal();
+        EquipmentCreatedEvent event1 = new EquipmentCreatedEvent(new Equipment(randomEquipmentName(), operator));
+        EquipmentCreatedEvent event2 = new EquipmentCreatedEvent(new Equipment(randomEquipmentName(), operator));
         ConsumingEvent consumingEvent1 = new ConsumingEvent(event1.getId(), event1);
         ConsumingEvent consumingEvent2 = new ConsumingEvent(event2.getId(), event1);
         ReflectionTestUtils.setField(consumingEvent1, ConsumingEvent.Fields.consumedAt, now().minus(110, DAYS));

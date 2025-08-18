@@ -1,7 +1,7 @@
 package deviceet.sample.maintenance.command;
 
 
-import deviceet.common.model.principal.Principal;
+import deviceet.common.model.principal.Operator;
 import deviceet.sample.equipment.domain.Equipment;
 import deviceet.sample.equipment.domain.EquipmentRepository;
 import deviceet.sample.maintenance.domain.MaintenanceRecord;
@@ -21,20 +21,20 @@ public class MaintenanceRecordCommandService {
     private final EquipmentRepository equipmentRepository;
 
     @Transactional
-    public String createMaintenanceRecord(CreateMaintenanceRecordCommand command, Principal principal) {
-        Equipment equipment = equipmentRepository.byId(command.equipmentId(), principal.getOrgId());
+    public String createMaintenanceRecord(CreateMaintenanceRecordCommand command, Operator operator) {
+        Equipment equipment = equipmentRepository.byId(command.equipmentId(), operator.getOrgId());
         MaintenanceRecord record = maintenanceRecordFactory.create(equipment,
                 command.status(),
                 command.description(),
-                principal);
+                operator);
         maintenanceRecordRepository.save(record);
         log.info("Created MaintenanceRecord[{}].", record.getId());
         return record.getId();
     }
 
     @Transactional
-    public void deleteMaintenanceRecord(String maintenanceRecordId, Principal principal) {
-        MaintenanceRecord maintenanceRecord = maintenanceRecordRepository.byId(maintenanceRecordId, principal.getOrgId());
+    public void deleteMaintenanceRecord(String maintenanceRecordId, Operator operator) {
+        MaintenanceRecord maintenanceRecord = maintenanceRecordRepository.byId(maintenanceRecordId, operator.getOrgId());
         maintenanceRecordRepository.delete(maintenanceRecord);
         log.info("Deleted MaintenanceRecord[{}].", maintenanceRecordId);
     }

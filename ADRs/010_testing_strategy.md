@@ -93,14 +93,14 @@ assist you testing.
 ```java
     @Test
     void should_create_equipment() {
-        Principal principal = randomUserPrincipal();
+        Principal operator = randomUserPrincipal();
 
         CreateEquipmentCommand createEquipmentCommand = randomCreateEquipmentCommand();
-        String equipmentId = equipmentCommandService.createEquipment(createEquipmentCommand, principal);
+        String equipmentId = equipmentCommandService.createEquipment(createEquipmentCommand, operator);
 
         Equipment equipment = equipmentRepository.byId(equipmentId);
         assertEquals(createEquipmentCommand.name(), equipment.getName());
-        assertEquals(principal.getOrgId(), equipment.getOrgId());
+        assertEquals(operator.getOrgId(), equipment.getOrgId());
 
         // Verify the existence of Domain Events in database
         EquipmentCreatedEvent equipmentCreatedEvent = latestEventFor(equipmentId, EQUIPMENT_CREATED_EVENT, EquipmentCreatedEvent.class);
@@ -118,8 +118,8 @@ assist you testing.
 class EquipmentTest {
     @Test
     void shouldCreateEquipment() {
-        Principal principal = RandomTestUtils.randomUserPrincipal();
-        Equipment equipment = new Equipment("name", principal);
+        Principal operator = RandomTestUtils.randomUserPrincipal();
+        Equipment equipment = new Equipment("name", operator);
         assertEquals("name", equipment.getName());
         assertEquals(1, equipment.getEvents().size());
         assertTrue(equipment.getEvents().stream()

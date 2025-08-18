@@ -1,7 +1,7 @@
 package deviceet;
 
 import deviceet.common.model.principal.Role;
-import deviceet.common.model.principal.UserPrincipal;
+import deviceet.common.model.principal.UserOperator;
 import deviceet.sample.equipment.command.CreateEquipmentCommand;
 import deviceet.sample.equipment.command.UpdateEquipmentNameCommand;
 import deviceet.sample.equipment.domain.EquipmentStatus;
@@ -56,8 +56,8 @@ public class RandomTestUtils {
         return randomEnum(Role.class);
     }
 
-    public static UserPrincipal randomUserPrincipal() {
-        return UserPrincipal.of(randomUserId(), randomUserName(), randomRole(), randomOrgId());
+    public static UserOperator randomUserPrincipal() {
+        return UserOperator.of(randomUserId(), randomUserName(), randomRole(), randomOrgId());
     }
 
     public static <T extends Enum<T>> T randomEnum(Class<T> enumClass) {

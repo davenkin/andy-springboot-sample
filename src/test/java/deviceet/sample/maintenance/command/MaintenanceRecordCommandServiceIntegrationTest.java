@@ -1,7 +1,7 @@
 package deviceet.sample.maintenance.command;
 
 import deviceet.IntegrationTest;
-import deviceet.common.model.principal.Principal;
+import deviceet.common.model.principal.Operator;
 import deviceet.sample.equipment.command.CreateEquipmentCommand;
 import deviceet.sample.equipment.command.EquipmentCommandService;
 import deviceet.sample.maintenance.domain.MaintenanceRecord;
@@ -25,12 +25,12 @@ class MaintenanceRecordCommandServiceIntegrationTest extends IntegrationTest {
 
     @Test
     void should_create_maintenance_record() {
-        Principal principal = randomUserPrincipal();
+        Operator operator = randomUserPrincipal();
         CreateEquipmentCommand createEquipmentCommand = randomCreateEquipmentCommand();
-        String equipmentId = equipmentCommandService.createEquipment(createEquipmentCommand, principal);
+        String equipmentId = equipmentCommandService.createEquipment(createEquipmentCommand, operator);
 
         CreateMaintenanceRecordCommand createMaintenanceRecordCommand = randomCreateMaintenanceRecordCommand(equipmentId);
-        String maintenanceRecordId = maintenanceRecordCommandService.createMaintenanceRecord(createMaintenanceRecordCommand, principal);
+        String maintenanceRecordId = maintenanceRecordCommandService.createMaintenanceRecord(createMaintenanceRecordCommand, operator);
 
         MaintenanceRecord maintenanceRecord = maintenanceRecordRepository.byId(maintenanceRecordId);
         assertEquals(equipmentId, maintenanceRecord.getEquipmentId());

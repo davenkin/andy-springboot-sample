@@ -9,13 +9,13 @@ import static java.util.Objects.requireNonNull;
 
 // Represents a human user principal, used by CommandService and QueryService for human user interaction
 @EqualsAndHashCode
-public class UserPrincipal implements Principal {
+public class UserOperator implements Operator {
     private final String userId;
     private final String userName;
     private final Set<Role> roles;
     private final String orgId;
 
-    private UserPrincipal(String userId, String userName, Role role, String orgId) {
+    private UserOperator(String userId, String userName, Role role, String orgId) {
         requireNonBlank(userId, "userId must not be blank.");
         requireNonBlank(userName, "userName must not be blank.");
         requireNonNull(role, "role must not be null.");
@@ -27,8 +27,8 @@ public class UserPrincipal implements Principal {
         this.roles = Set.of(role);
     }
 
-    public static UserPrincipal of(String id, String name, Role role, String orgId) {
-        return new UserPrincipal(id, name, role, orgId);
+    public static UserOperator of(String id, String name, Role role, String orgId) {
+        return new UserOperator(id, name, role, orgId);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package deviceet.sample.equipment.domain;
 
 import deviceet.common.model.AggregateRoot;
-import deviceet.common.model.principal.Principal;
+import deviceet.common.model.principal.Operator;
 import deviceet.sample.equipment.domain.event.EquipmentCreatedEvent;
 import deviceet.sample.equipment.domain.event.EquipmentDeletedEvent;
 import deviceet.sample.equipment.domain.event.EquipmentNameUpdatedEvent;
@@ -32,8 +32,8 @@ public class Equipment extends AggregateRoot {
     private String holder;
     private long maintenanceRecordCount;
 
-    public Equipment(String name, Principal principal) {
-        super(newEquipmentId(), principal);
+    public Equipment(String name, Operator operator) {
+        super(newEquipmentId(), operator);
         this.name = name;
         raiseEvent(new EquipmentCreatedEvent(this));
     }

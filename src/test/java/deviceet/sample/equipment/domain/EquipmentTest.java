@@ -1,7 +1,7 @@
 package deviceet.sample.equipment.domain;
 
 import deviceet.RandomTestUtils;
-import deviceet.common.model.principal.Principal;
+import deviceet.common.model.principal.Operator;
 import org.junit.jupiter.api.Test;
 
 import static deviceet.common.event.DomainEventType.EQUIPMENT_CREATED_EVENT;
@@ -11,8 +11,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class EquipmentTest {
     @Test
     void shouldCreateEquipment() {
-        Principal principal = RandomTestUtils.randomUserPrincipal();
-        Equipment equipment = new Equipment("name", principal);
+        Operator operator = RandomTestUtils.randomUserPrincipal();
+        Equipment equipment = new Equipment("name", operator);
         assertEquals("name", equipment.getName());
         assertEquals(1, equipment.getEvents().size());
         assertTrue(equipment.getEvents().stream()

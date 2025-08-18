@@ -42,8 +42,8 @@ Based on the above, the **lightweight CQRS** approach meets our needs and is our
 
 ```java
     @Transactional
-    public void updateEquipmentName(String id, UpdateEquipmentNameCommand command, Principal principal) {
-        Equipment equipment = equipmentRepository.byId(id, principal.getOrgId());
+    public void updateEquipmentName(String id, UpdateEquipmentNameCommand command, Principal operator) {
+        Equipment equipment = equipmentRepository.byId(id, operator.getOrgId());
         equipmentDomainService.updateEquipmentName(equipment, command.name());
         equipmentRepository.save(equipment);
         log.info("Updated name for Equipment[{}].", equipment.getId());
@@ -57,8 +57,8 @@ Based on the above, the **lightweight CQRS** approach meets our needs and is our
   used to hit the database directly.
 
 ```java
-    public Page<QListedEquipment> listEquipments(ListEquipmentQuery listEquipmentQuery, Pageable pageable, Principal principal) {
-        Criteria criteria = where(AggregateRoot.Fields.orgId).is(principal.getOrgId());
+    public Page<QListedEquipment> listEquipments(ListEquipmentQuery listEquipmentQuery, Pageable pageable, Principal operator) {
+        Criteria criteria = where(AggregateRoot.Fields.orgId).is(operator.getOrgId());
 
         // more code omitted
         

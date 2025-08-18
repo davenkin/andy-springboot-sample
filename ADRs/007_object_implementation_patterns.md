@@ -68,8 +68,8 @@ public class Equipment extends AggregateRoot {
     private String holder;
     private long maintenanceRecordCount;
 
-    public Equipment(String name, Principal principal) { // Explict contructors
-        super(newEquipmentId(), principal);
+    public Equipment(String name, Principal operator) { // Explict contructors
+        super(newEquipmentId(), operator);
         this.name = name;
         raiseEvent(new EquipmentCreatedEvent(this)); // Raise Domain Event
     }
@@ -157,7 +157,7 @@ public class CachedMongoEquipmentRepository extends AbstractMongoRepository<Equi
   data
 - Controller classes should be annotated with `@Validated` to enable request validation
 - Request objects in method parameters should be annotated with `@Valid` to enable request validation
-- Controller ensures a [Principal](../src/main/java/deviceet/common/model/principal/Principal.java) is fetched/created
+- Controller ensures a [Principal](../src/main/java/deviceet/common/model/operator/Principal.java) is fetched/created
   from the reqeust and passed to CommandService or QueryService
 - Controller should follow REST principles on naming URLs and choosing HTTP methods
 
@@ -174,10 +174,10 @@ public class EquipmentController {
 
     @PostMapping
     public ResponseId createEquipment(@RequestBody @Valid CreateEquipmentCommand command) {
-        // In real situations, principal is normally created from the current user in context, such as Spring Security's SecurityContextHolder
-        Principal principal = SAMPLE_USER_PRINCIPAL;
+        // In real situations, operator is normally created from the current user in context, such as Spring Security's SecurityContextHolder
+        Principal operator = SAMPLE_USER_PRINCIPAL;
 
-        return new ResponseId(this.equipmentCommandService.createEquipment(command, principal));
+        return new ResponseId(this.equipmentCommandService.createEquipment(command, operator));
     }
 }
 ```
@@ -204,8 +204,8 @@ public class EquipmentCommandService {
     private final EquipmentDomainService equipmentDomainService;
 
     @Transactional
-    public String createEquipment(CreateEquipmentCommand command, Principal principal) {
-        Equipment equipment = equipmentFactory.create(command.name(), principal);
+    public String createEquipment(CreateEquipmentCommand command, Principal operator) {
+        Equipment equipment = equipmentFactory.create(command.name(), operator);
         equipmentRepository.save(equipment);
         log.info("Created Equipment[{}].", equipment.getId());
         return equipment.getId();
@@ -365,8 +365,8 @@ public class MaintenanceRecordFactory {
     public MaintenanceRecord create(Equipment equipment,
                                     EquipmentStatus status,
                                     String description,
-                                    Principal principal) {
-        return new MaintenanceRecord(equipment.getId(), equipment.getName(), status, description, principal);
+                                    Principal operator) {
+        return new MaintenanceRecord(equipment.getId(), equipment.getName(), status, description, operator);
     }
 }
 ```
@@ -443,8 +443,8 @@ public class EquipmentQueryService {
     private final MongoTemplate mongoTemplate;
     private final EquipmentRepository equipmentRepository;
 
-    public Page<QListedEquipment> listEquipments(ListEquipmentQuery listEquipmentQuery, Pageable pageable, Principal principal) {
-        Criteria criteria = where(AggregateRoot.Fields.orgId).is(principal.getOrgId());
+    public Page<QListedEquipment> listEquipments(ListEquipmentQuery listEquipmentQuery, Pageable pageable, Principal operator) {
+        Criteria criteria = where(AggregateRoot.Fields.orgId).is(operator.getOrgId());
 
         if (isNotBlank(listEquipmentQuery.search())) {
             criteria.and(Equipment.Fields.name).regex(listEquipmentQuery.search());

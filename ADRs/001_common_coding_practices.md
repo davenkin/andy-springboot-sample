@@ -7,8 +7,8 @@
   testing much easier.
 
     ```java
-    public Equipment(String name, Principal principal) {
-        super(newEquipmentId(), principal);
+    public Equipment(String name, Principal operator) {
+        super(newEquipmentId(), operator);
         this.name = name;
         raiseEvent(new EquipmentCreatedEvent(this));
     }
@@ -59,10 +59,10 @@
     @PostMapping("/list")
     public Page<QListedEquipment> listEquipments(@RequestBody @Valid ListEquipmentQuery query,
                                                  @PageableDefault Pageable pageable) {
-        // In real situations, principal is normally created from the current user in context, such as Spring Security's SecurityContextHolder
-        Principal principal = SAMPLE_USER_PRINCIPAL;
+        // In real situations, operator is normally created from the current user in context, such as Spring Security's SecurityContextHolder
+        Principal operator = SAMPLE_USER_PRINCIPAL;
 
-        return this.equipmentQueryService.listEquipments(query, pageable, principal);
+        return this.equipmentQueryService.listEquipments(query, pageable, operator);
     }
   ```
 
@@ -135,8 +135,8 @@ expose getters/setters.
 
 ```java
     @Transactional
-    public String createEquipment(CreateEquipmentCommand command, Principal principal) {
-        Equipment equipment = equipmentFactory.create(command.name(), principal);
+    public String createEquipment(CreateEquipmentCommand command, Principal operator) {
+        Equipment equipment = equipmentFactory.create(command.name(), operator);
         equipmentRepository.save(equipment);
         log.info("Created Equipment[{}].", equipment.getId());
         return equipment.getId();
@@ -162,10 +162,10 @@ The controller receives a `ListEquipmentQuery` object along with a `Pageable` ob
     @PostMapping("/list")
     public Page<QListedEquipment> listEquipments(@RequestBody @Valid ListEquipmentQuery query,
                                                  @PageableDefault Pageable pageable) {
-        // In real situations, principal is normally created from the current user in context, such as Spring Security's SecurityContextHolder
-        Principal principal = SAMPLE_USER_PRINCIPAL;
+        // In real situations, operator is normally created from the current user in context, such as Spring Security's SecurityContextHolder
+        Principal operator = SAMPLE_USER_PRINCIPAL;
 
-        return this.equipmentQueryService.listEquipments(query, pageable, principal);
+        return this.equipmentQueryService.listEquipments(query, pageable, operator);
     }
 ```
 

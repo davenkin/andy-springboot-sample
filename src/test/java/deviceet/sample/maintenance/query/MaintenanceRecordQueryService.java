@@ -2,7 +2,7 @@ package deviceet.sample.maintenance.query;
 
 import deviceet.common.exception.ServiceException;
 import deviceet.common.model.AggregateRoot;
-import deviceet.common.model.principal.Principal;
+import deviceet.common.model.principal.Operator;
 import deviceet.sample.maintenance.domain.MaintenanceRecord;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -29,8 +29,8 @@ public class MaintenanceRecordQueryService {
 
     public Page<QListedMaintenanceRecord> listMaintenanceRecords(ListMaintenanceRecordsQuery listQuery,
                                                                  Pageable pageable,
-                                                                 Principal principal) {
-        Criteria criteria = where(AggregateRoot.Fields.orgId).is(principal.getOrgId());
+                                                                 Operator operator) {
+        Criteria criteria = where(AggregateRoot.Fields.orgId).is(operator.getOrgId());
 
         if (isNotBlank(listQuery.search())) {
             criteria.orOperator(where(MaintenanceRecord.Fields.equipmentName).regex(listQuery.search()),
@@ -59,8 +59,8 @@ public class MaintenanceRecordQueryService {
         return new PageImpl<>(devices, pageable, count);
     }
 
-    public QDetailedMaintenanceRecord getMaintenanceRecordDetail(String maintenanceRecordId, Principal principal) {
-        Query query = Query.query(where(MONGO_ID).is(maintenanceRecordId).and(ORG_ID).is(principal.getOrgId()));
+    public QDetailedMaintenanceRecord getMaintenanceRecordDetail(String maintenanceRecordId, Operator operator) {
+        Query query = Query.query(where(MONGO_ID).is(maintenanceRecordId).and(ORG_ID).is(operator.getOrgId()));
 
         query.fields().include(
                 MaintenanceRecord.Fields.equipmentId,

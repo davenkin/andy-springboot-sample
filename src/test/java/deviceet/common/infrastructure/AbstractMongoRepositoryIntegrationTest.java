@@ -2,7 +2,7 @@ package deviceet.common.infrastructure;
 
 import deviceet.IntegrationTest;
 import deviceet.common.exception.ServiceException;
-import deviceet.common.model.principal.Principal;
+import deviceet.common.model.principal.Operator;
 import deviceet.sample.equipment.domain.Equipment;
 import deviceet.sample.equipment.domain.EquipmentFactory;
 import deviceet.sample.equipment.domain.EquipmentRepository;
@@ -32,8 +32,8 @@ class AbstractMongoRepositoryIntegrationTest extends IntegrationTest {
 
     @Test
     void should_save_ar() {
-        Principal principal = randomUserPrincipal();
-        Equipment equipment = equipmentFactory.create(randomEquipmentName(), principal);
+        Operator operator = randomUserPrincipal();
+        Equipment equipment = equipmentFactory.create(randomEquipmentName(), operator);
         assertEquals(1, equipment.getEvents().size());
         assertInstanceOf(EquipmentCreatedEvent.class, equipment.getEvents().get(0));
         equipmentRepository.save(equipment);
@@ -48,9 +48,9 @@ class AbstractMongoRepositoryIntegrationTest extends IntegrationTest {
 
     @Test
     void should_save_ars() {
-        Principal principal = randomUserPrincipal();
-        Equipment equipment1 = equipmentFactory.create(randomEquipmentName(), principal);
-        Equipment equipment2 = equipmentFactory.create(randomEquipmentName(), principal);
+        Operator operator = randomUserPrincipal();
+        Equipment equipment1 = equipmentFactory.create(randomEquipmentName(), operator);
+        Equipment equipment2 = equipmentFactory.create(randomEquipmentName(), operator);
 
         equipmentRepository.save(List.of(equipment1, equipment2));
 
@@ -73,8 +73,8 @@ class AbstractMongoRepositoryIntegrationTest extends IntegrationTest {
 
     @Test
     void should_delete_ar() {
-        Principal principal = randomUserPrincipal();
-        Equipment equipment = equipmentFactory.create(randomEquipmentName(), principal);
+        Operator operator = randomUserPrincipal();
+        Equipment equipment = equipmentFactory.create(randomEquipmentName(), operator);
 
         equipmentRepository.save(equipment);
         assertTrue(equipmentRepository.byIdOptional(equipment.getId()).isPresent());
@@ -88,9 +88,9 @@ class AbstractMongoRepositoryIntegrationTest extends IntegrationTest {
 
     @Test
     void should_delete_ars() {
-        Principal principal = randomUserPrincipal();
-        Equipment equipment1 = equipmentFactory.create(randomEquipmentName(), principal);
-        Equipment equipment2 = equipmentFactory.create(randomEquipmentName(), principal);
+        Operator operator = randomUserPrincipal();
+        Equipment equipment1 = equipmentFactory.create(randomEquipmentName(), operator);
+        Equipment equipment2 = equipmentFactory.create(randomEquipmentName(), operator);
 
         equipmentRepository.save(List.of(equipment1, equipment2));
 
@@ -120,17 +120,17 @@ class AbstractMongoRepositoryIntegrationTest extends IntegrationTest {
 
     @Test
     void should_fetch_ar_by_id() {
-        Principal principal = randomUserPrincipal();
-        Equipment equipment = equipmentFactory.create(randomEquipmentName(), principal);
-        assertFalse(equipmentRepository.exists(equipment.getId(), principal.getOrgId()));
+        Operator operator = randomUserPrincipal();
+        Equipment equipment = equipmentFactory.create(randomEquipmentName(), operator);
+        assertFalse(equipmentRepository.exists(equipment.getId(), operator.getOrgId()));
 
         equipmentRepository.save(equipment);
 
         assertEquals(equipment.getId(), equipmentRepository.byId(equipment.getId()).getId());
-        assertEquals(equipment.getId(), equipmentRepository.byId(equipment.getId(), principal.getOrgId()).getId());
-        assertEquals(equipment.getId(), equipmentRepository.byIdOptional(equipment.getId(), principal.getOrgId()).get().getId());
+        assertEquals(equipment.getId(), equipmentRepository.byId(equipment.getId(), operator.getOrgId()).getId());
+        assertEquals(equipment.getId(), equipmentRepository.byIdOptional(equipment.getId(), operator.getOrgId()).get().getId());
         assertEquals(equipment.getId(), equipmentRepository.byIdOptional(equipment.getId()).get().getId());
-        assertTrue(equipmentRepository.exists(equipment.getId(), principal.getOrgId()));
+        assertTrue(equipmentRepository.exists(equipment.getId(), operator.getOrgId()));
 
         assertEquals(AR_NOT_FOUND, assertThrows(ServiceException.class, () -> equipmentRepository.byId(secure().nextAlphanumeric(5), secure().nextAlphanumeric(5))).getCode());
         assertEquals(AR_NOT_FOUND, assertThrows(ServiceException.class, () -> equipmentRepository.byId(secure().nextAlphanumeric(5))).getCode());

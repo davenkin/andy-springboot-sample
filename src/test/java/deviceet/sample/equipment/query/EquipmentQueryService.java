@@ -1,7 +1,7 @@
 package deviceet.sample.equipment.query;
 
 import deviceet.common.model.AggregateRoot;
-import deviceet.common.model.principal.Principal;
+import deviceet.common.model.principal.Operator;
 import deviceet.sample.equipment.domain.Equipment;
 import deviceet.sample.equipment.domain.EquipmentRepository;
 import deviceet.sample.equipment.domain.EquipmentSummary;
@@ -26,8 +26,8 @@ public class EquipmentQueryService {
     private final MongoTemplate mongoTemplate;
     private final EquipmentRepository equipmentRepository;
 
-    public Page<QListedEquipment> listEquipments(ListEquipmentQuery listEquipmentQuery, Pageable pageable, Principal principal) {
-        Criteria criteria = where(AggregateRoot.Fields.orgId).is(principal.getOrgId());
+    public Page<QListedEquipment> listEquipments(ListEquipmentQuery listEquipmentQuery, Pageable pageable, Operator operator) {
+        Criteria criteria = where(AggregateRoot.Fields.orgId).is(operator.getOrgId());
 
         if (isNotBlank(listEquipmentQuery.search())) {
             criteria.and(Equipment.Fields.name).regex(listEquipmentQuery.search());
@@ -53,8 +53,8 @@ public class EquipmentQueryService {
         return new PageImpl<>(devices, pageable, count);
     }
 
-    public QDetailedEquipment getEquipmentDetail(String equipmentId, Principal principal) {
-        Equipment equipment = equipmentRepository.byId(equipmentId, principal.getOrgId());
+    public QDetailedEquipment getEquipmentDetail(String equipmentId, Operator operator) {
+        Equipment equipment = equipmentRepository.byId(equipmentId, operator.getOrgId());
         return QDetailedEquipment.builder()
                 .id(equipment.getId())
                 .orgId(equipment.getOrgId())
@@ -65,7 +65,7 @@ public class EquipmentQueryService {
                 .build();
     }
 
-    public List<EquipmentSummary> getAllEquipmentSummaries(Principal principal) {
-        return equipmentRepository.cachedEquipmentSummaries(principal.getOrgId());
+    public List<EquipmentSummary> getAllEquipmentSummaries(Operator operator) {
+        return equipmentRepository.cachedEquipmentSummaries(operator.getOrgId());
     }
 }

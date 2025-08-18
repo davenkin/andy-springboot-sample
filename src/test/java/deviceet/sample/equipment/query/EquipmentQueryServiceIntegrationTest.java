@@ -1,7 +1,7 @@
 package deviceet.sample.equipment.query;
 
 import deviceet.IntegrationTest;
-import deviceet.common.model.principal.Principal;
+import deviceet.common.model.principal.Operator;
 import deviceet.sample.equipment.command.EquipmentCommandService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +23,13 @@ class EquipmentQueryServiceIntegrationTest extends IntegrationTest {
 
     @Test
     void should_list_equipments() {
-        Principal principal = randomUserPrincipal();
+        Operator operator = randomUserPrincipal();
         IntStream.range(0, 20).forEach(i -> {
-            equipmentCommandService.createEquipment(randomCreateEquipmentCommand(), principal);
+            equipmentCommandService.createEquipment(randomCreateEquipmentCommand(), operator);
         });
 
         ListEquipmentQuery query = ListEquipmentQuery.builder().build();
-        Page<QListedEquipment> listedEquipments = equipmentQueryService.listEquipments(query, PageRequest.of(0, 12), principal);
+        Page<QListedEquipment> listedEquipments = equipmentQueryService.listEquipments(query, PageRequest.of(0, 12), operator);
 
         assertEquals(12, listedEquipments.getContent().size());
     }
