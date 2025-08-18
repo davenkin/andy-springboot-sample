@@ -1,9 +1,26 @@
 package deviceet.sample.maintenance.query;
 
+import deviceet.common.util.PageableRequest;
 import deviceet.sample.equipment.domain.EquipmentStatus;
-import lombok.Builder;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Max;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
-@Builder
-public record ListMaintenanceRecordsQuery(String search, EquipmentStatus status) {
+import static lombok.AccessLevel.PRIVATE;
+
+@Getter
+@SuperBuilder
+@EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor(access = PRIVATE)
+public class ListMaintenanceRecordsQuery extends PageableRequest {
+    @Schema(description = "Search text")
+    @Max(50)
+    private String search;
+
+    @Schema(description = "Equipment status to query")
+    private EquipmentStatus status;
 }
 

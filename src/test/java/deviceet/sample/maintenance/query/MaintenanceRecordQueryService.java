@@ -3,10 +3,9 @@ package deviceet.sample.maintenance.query;
 import deviceet.common.exception.ServiceException;
 import deviceet.common.model.AggregateRoot;
 import deviceet.common.model.operator.Operator;
+import deviceet.common.util.PagedResponse;
 import deviceet.sample.maintenance.domain.MaintenanceRecord;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -27,18 +26,16 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 public class MaintenanceRecordQueryService {
     private final MongoTemplate mongoTemplate;
 
-    public Page<QListedMaintenanceRecord> listMaintenanceRecords(ListMaintenanceRecordsQuery listQuery,
-                                                                 Pageable pageable,
-                                                                 Operator operator) {
+    public PagedResponse<QListedMaintenanceRecord> listMaintenanceRecords(ListMaintenanceRecordsQuery listQuery, Operator operator) {
         Criteria criteria = where(AggregateRoot.Fields.orgId).is(operator.getOrgId());
 
-        if (isNotBlank(listQuery.search())) {
-            criteria.orOperator(where(MaintenanceRecord.Fields.equipmentName).regex(listQuery.search()),
-                    where(MaintenanceRecord.Fields.description).regex(listQuery.search()));
+        if (isNotBlank(listQuery.getSearch())) {
+            criteria.orOperator(where(MaintenanceRecord.Fields.equipmentName).regex(listQuery.getSearch()),
+                    where(MaintenanceRecord.Fields.description).regex(listQuery.getSearch()));
         }
 
-        if (listQuery.status() != null) {
-            criteria.and(MaintenanceRecord.Fields.status).is(listQuery.status());
+        if (listQuery.getStatus() != null) {
+            criteria.and(MaintenanceRecord.Fields.status).is(listQuery.getStatus());
         }
 
         Query query = Query.query(criteria);
@@ -50,13 +47,14 @@ public class MaintenanceRecordQueryService {
                 AggregateRoot.Fields.createdAt,
                 AggregateRoot.Fields.createdBy);
 
+        Pageable pageable = listQuery.pageable();
         long count = mongoTemplate.count(query, MaintenanceRecord.class);
         if (count == 0) {
-            return Page.empty(pageable);
+            return PagedResponse.empty(pageable);
         }
 
         List<QListedMaintenanceRecord> devices = mongoTemplate.find(query.with(pageable), QListedMaintenanceRecord.class, MAINTENANCE_RECORD_COLLECTION);
-        return new PageImpl<>(devices, pageable, count);
+        return new PagedResponse<>(devices, pageable, count);
     }
 
     public QDetailedMaintenanceRecord getMaintenanceRecordDetail(String maintenanceRecordId, Operator operator) {

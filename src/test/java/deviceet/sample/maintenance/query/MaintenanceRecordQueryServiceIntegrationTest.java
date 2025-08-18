@@ -2,13 +2,12 @@ package deviceet.sample.maintenance.query;
 
 import deviceet.IntegrationTest;
 import deviceet.common.model.operator.Operator;
+import deviceet.common.util.PagedResponse;
 import deviceet.sample.equipment.command.CreateEquipmentCommand;
 import deviceet.sample.equipment.command.EquipmentCommandService;
 import deviceet.sample.maintenance.command.MaintenanceRecordCommandService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 
 import java.util.stream.IntStream;
 
@@ -34,8 +33,8 @@ class MaintenanceRecordQueryServiceIntegrationTest extends IntegrationTest {
             maintenanceRecordCommandService.createMaintenanceRecord(randomCreateMaintenanceRecordCommand(equipmentId), operator);
         });
 
-        ListMaintenanceRecordsQuery query = ListMaintenanceRecordsQuery.builder().build();
-        Page<QListedMaintenanceRecord> records = maintenanceRecordQueryService.listMaintenanceRecords(query, PageRequest.of(0, 12), operator);
+        ListMaintenanceRecordsQuery query = ListMaintenanceRecordsQuery.builder().pageSize(12).build();
+        PagedResponse<QListedMaintenanceRecord> records = maintenanceRecordQueryService.listMaintenanceRecords(query, operator);
 
         assertEquals(12, records.getContent().size());
     }
