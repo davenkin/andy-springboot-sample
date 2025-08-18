@@ -1,6 +1,6 @@
 package deviceet.sample.maintenance.domain;
 
-import deviceet.common.model.principal.UserOperator;
+import deviceet.common.model.operator.UserOperator;
 import org.junit.jupiter.api.Test;
 
 import static deviceet.RandomTestUtils.*;

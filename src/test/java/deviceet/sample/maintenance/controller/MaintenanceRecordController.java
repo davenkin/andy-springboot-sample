@@ -1,6 +1,6 @@
 package deviceet.sample.maintenance.controller;
 
-import deviceet.common.model.principal.Operator;
+import deviceet.common.model.operator.Operator;
 import deviceet.common.util.ResponseId;
 import deviceet.sample.maintenance.command.CreateMaintenanceRecordCommand;
 import deviceet.sample.maintenance.command.MaintenanceRecordCommandService;

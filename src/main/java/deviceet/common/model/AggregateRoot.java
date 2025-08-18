@@ -1,7 +1,7 @@
 package deviceet.common.model;
 
 import deviceet.common.event.DomainEvent;
-import deviceet.common.model.principal.Operator;
+import deviceet.common.model.operator.Operator;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;

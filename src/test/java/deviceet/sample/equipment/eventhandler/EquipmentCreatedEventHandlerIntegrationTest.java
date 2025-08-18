@@ -2,7 +2,7 @@ package deviceet.sample.equipment.eventhandler;
 
 import deviceet.IntegrationTest;
 import deviceet.RandomTestUtils;
-import deviceet.common.model.principal.Operator;
+import deviceet.common.model.operator.Operator;
 import deviceet.sample.equipment.command.CreateEquipmentCommand;
 import deviceet.sample.equipment.command.EquipmentCommandService;
 import deviceet.sample.equipment.domain.EquipmentRepository;

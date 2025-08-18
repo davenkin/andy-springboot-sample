@@ -1,7 +1,7 @@
 package deviceet.sample.equipment.domain;
 
 import deviceet.RandomTestUtils;
-import deviceet.common.model.principal.Operator;
+import deviceet.common.model.operator.Operator;
 import org.junit.jupiter.api.Test;
 
 import static deviceet.common.event.DomainEventType.EQUIPMENT_CREATED_EVENT;

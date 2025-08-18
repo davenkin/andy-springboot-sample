@@ -1,7 +1,7 @@
 package deviceet.sample;
 
-import deviceet.common.model.principal.Operator;
-import deviceet.common.model.principal.UserOperator;
+import deviceet.common.model.operator.Operator;
+import deviceet.common.model.operator.UserOperator;
 
 import static deviceet.common.model.Role.ORG_ADMIN;
 

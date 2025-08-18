@@ -2,7 +2,7 @@ package deviceet.sample.maintenance.query;
 
 import deviceet.common.exception.ServiceException;
 import deviceet.common.model.AggregateRoot;
-import deviceet.common.model.principal.Operator;
+import deviceet.common.model.operator.Operator;
 import deviceet.sample.maintenance.domain.MaintenanceRecord;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

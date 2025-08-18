@@ -1,4 +1,4 @@
-package deviceet.common.model.principal;
+package deviceet.common.model.operator;
 
 import deviceet.common.model.Role;
 import lombok.EqualsAndHashCode;

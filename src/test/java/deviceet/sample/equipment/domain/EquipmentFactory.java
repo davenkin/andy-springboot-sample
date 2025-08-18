@@ -1,6 +1,6 @@
 package deviceet.sample.equipment.domain;
 
-import deviceet.common.model.principal.Operator;
+import deviceet.common.model.operator.Operator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

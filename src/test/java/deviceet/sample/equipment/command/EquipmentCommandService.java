@@ -1,6 +1,6 @@
 package deviceet.sample.equipment.command;
 
-import deviceet.common.model.principal.Operator;
+import deviceet.common.model.operator.Operator;
 import deviceet.sample.equipment.domain.Equipment;
 import deviceet.sample.equipment.domain.EquipmentDomainService;
 import deviceet.sample.equipment.domain.EquipmentFactory;

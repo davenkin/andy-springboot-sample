@@ -1,7 +1,7 @@
 package deviceet.sample.maintenance.query;
 
 import deviceet.IntegrationTest;
-import deviceet.common.model.principal.Operator;
+import deviceet.common.model.operator.Operator;
 import deviceet.sample.equipment.command.CreateEquipmentCommand;
 import deviceet.sample.equipment.command.EquipmentCommandService;
 import deviceet.sample.maintenance.command.MaintenanceRecordCommandService;

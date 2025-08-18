@@ -1,7 +1,7 @@
 package deviceet.sample.equipment.query;
 
 import deviceet.IntegrationTest;
-import deviceet.common.model.principal.Operator;
+import deviceet.common.model.operator.Operator;
 import deviceet.sample.equipment.command.EquipmentCommandService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -2,7 +2,7 @@ package deviceet.sample.maintenance.job;
 
 import deviceet.IntegrationTest;
 import deviceet.common.model.AggregateRoot;
-import deviceet.common.model.principal.Operator;
+import deviceet.common.model.operator.Operator;
 import deviceet.sample.equipment.command.CreateEquipmentCommand;
 import deviceet.sample.equipment.command.EquipmentCommandService;
 import deviceet.sample.maintenance.command.CreateMaintenanceRecordCommand;

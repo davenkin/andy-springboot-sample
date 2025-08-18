@@ -4,7 +4,7 @@ import deviceet.IntegrationTest;
 import deviceet.common.event.consume.ConsumingEvent;
 import deviceet.common.event.consume.ConsumingEventDao;
 import deviceet.common.event.publish.PublishingDomainEventDao;
-import deviceet.common.model.principal.Operator;
+import deviceet.common.model.operator.Operator;
 import deviceet.sample.equipment.domain.Equipment;
 import deviceet.sample.equipment.domain.event.EquipmentCreatedEvent;
 import deviceet.sample.equipment.eventhandler.EquipmentCreatedEventHandler;

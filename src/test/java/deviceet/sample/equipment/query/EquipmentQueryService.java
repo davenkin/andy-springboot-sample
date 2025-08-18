@@ -1,7 +1,7 @@
 package deviceet.sample.equipment.query;
 
 import deviceet.common.model.AggregateRoot;
-import deviceet.common.model.principal.Operator;
+import deviceet.common.model.operator.Operator;
 import deviceet.sample.equipment.domain.Equipment;
 import deviceet.sample.equipment.domain.EquipmentRepository;
 import deviceet.sample.equipment.domain.EquipmentSummary;

@@ -1,6 +1,6 @@
 package deviceet.sample.equipment.controller;
 
-import deviceet.common.model.principal.Operator;
+import deviceet.common.model.operator.Operator;
 import deviceet.common.util.ResponseId;
 import deviceet.sample.equipment.command.CreateEquipmentCommand;
 import deviceet.sample.equipment.command.EquipmentCommandService;
