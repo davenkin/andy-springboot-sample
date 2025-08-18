@@ -1,6 +1,7 @@
 package deviceet.sample.equipment.controller;
 
 import deviceet.common.model.operator.Operator;
+import deviceet.common.util.PagedResponse;
 import deviceet.common.util.ResponseId;
 import deviceet.sample.equipment.command.CreateEquipmentCommand;
 import deviceet.sample.equipment.command.EquipmentCommandService;
@@ -16,9 +17,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -77,12 +75,11 @@ public class EquipmentController {
 
     @Operation(summary = "Query equipments")
     @PostMapping("/list")
-    public Page<QListedEquipment> listEquipments(@RequestBody @Valid ListEquipmentQuery query,
-                                                 @PageableDefault Pageable pageable) {
+    public PagedResponse<QListedEquipment> listEquipments(@RequestBody @Valid ListEquipmentQuery query) {
         // In real situations, operator is normally created from the current user in context, such as Spring Security's SecurityContextHolder
         Operator operator = SAMPLE_USER_OPERATOR;
 
-        return this.equipmentQueryService.listEquipments(query, pageable, operator);
+        return this.equipmentQueryService.listEquipments(query, operator);
     }
 
     @Operation(summary = "Get equipment detail")

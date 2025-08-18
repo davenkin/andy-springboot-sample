@@ -2,11 +2,10 @@ package deviceet.sample.equipment.query;
 
 import deviceet.IntegrationTest;
 import deviceet.common.model.operator.Operator;
+import deviceet.common.util.PagedResponse;
 import deviceet.sample.equipment.command.EquipmentCommandService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 
 import java.util.stream.IntStream;
 
@@ -28,8 +27,8 @@ class EquipmentQueryServiceIntegrationTest extends IntegrationTest {
             equipmentCommandService.createEquipment(randomCreateEquipmentCommand(), operator);
         });
 
-        ListEquipmentQuery query = ListEquipmentQuery.builder().build();
-        Page<QListedEquipment> listedEquipments = equipmentQueryService.listEquipments(query, PageRequest.of(0, 12), operator);
+        ListEquipmentQuery query = ListEquipmentQuery.builder().pageSize(12).build();
+        PagedResponse<QListedEquipment> listedEquipments = equipmentQueryService.listEquipments(query, operator);
 
         assertEquals(12, listedEquipments.getContent().size());
     }

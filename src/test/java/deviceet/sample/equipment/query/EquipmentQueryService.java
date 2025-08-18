@@ -2,12 +2,11 @@ package deviceet.sample.equipment.query;
 
 import deviceet.common.model.AggregateRoot;
 import deviceet.common.model.operator.Operator;
+import deviceet.common.util.PagedResponse;
 import deviceet.sample.equipment.domain.Equipment;
 import deviceet.sample.equipment.domain.EquipmentRepository;
 import deviceet.sample.equipment.domain.EquipmentSummary;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -26,15 +25,15 @@ public class EquipmentQueryService {
     private final MongoTemplate mongoTemplate;
     private final EquipmentRepository equipmentRepository;
 
-    public Page<QListedEquipment> listEquipments(ListEquipmentQuery listEquipmentQuery, Pageable pageable, Operator operator) {
+    public PagedResponse<QListedEquipment> listEquipments(ListEquipmentQuery listEquipmentQuery, Operator operator) {
         Criteria criteria = where(AggregateRoot.Fields.orgId).is(operator.getOrgId());
 
-        if (isNotBlank(listEquipmentQuery.search())) {
-            criteria.and(Equipment.Fields.name).regex(listEquipmentQuery.search());
+        if (isNotBlank(listEquipmentQuery.getSearch())) {
+            criteria.and(Equipment.Fields.name).regex(listEquipmentQuery.getSearch());
         }
 
-        if (listEquipmentQuery.status() != null) {
-            criteria.and(Equipment.Fields.status).is(listEquipmentQuery.status());
+        if (listEquipmentQuery.getStatus() != null) {
+            criteria.and(Equipment.Fields.status).is(listEquipmentQuery.getStatus());
         }
 
         Query query = Query.query(criteria);
@@ -44,13 +43,14 @@ public class EquipmentQueryService {
                 AggregateRoot.Fields.createdAt,
                 AggregateRoot.Fields.createdBy);
 
+        Pageable pageable = listEquipmentQuery.pageable();
         long count = mongoTemplate.count(query, Equipment.class);
         if (count == 0) {
-            return Page.empty(pageable);
+            return PagedResponse.empty(pageable);
         }
 
         List<QListedEquipment> devices = mongoTemplate.find(query.with(pageable), QListedEquipment.class, EQUIPMENT_COLLECTION);
-        return new PageImpl<>(devices, pageable, count);
+        return new PagedResponse<>(devices, pageable, count);
     }
 
     public QDetailedEquipment getEquipmentDetail(String equipmentId, Operator operator) {
