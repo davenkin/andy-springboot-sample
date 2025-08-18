@@ -34,13 +34,13 @@
 - Never use Lombok's `@Setter` and `@Data`(which implicitly creates setters). Reason: Setters are bad as they break the
   principles of cohesion and information hiding. Also, objects with setters are just data containers like C's struct,
   they does not convey any business intent, making the code hard to read and comprehend.
-- Always use `ServiceException` for raising exceptions, don't create your own exception classes. Reason: The
+- Always use [ServiceException](../src/main/java/deviceet/common/exception/ServiceException.java) for raising exceptions, don't create your own exception classes. Reason: The
   `ServiceException` is a flat exception model that makes exception modeling much easier than hierarchical exceptions.
 
   ```java
           throw new ServiceException(EQUIPMENT_NAME_ALREADY_EXISTS,
                   "Equipment Name Already Exists.",
-                  mapOf(AggregateRoot.Fields.id, equipment.getId(), Equipment.Fields.name, newName));
+                  NullableMapUtils.mapOf(AggregateRoot.Fields.id, equipment.getId(), Equipment.Fields.name, newName));
   ```
 
 - All pagination request should extend [PageableRequest](../src/main/java/deviceet/common/util/PageableRequest.java),

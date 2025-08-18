@@ -2,12 +2,12 @@
 
 ## Context
 
-API documentation is important for API consumers, such as frontend applications or external integration parties.
+API documentation is important for API consumers such as frontend applications or external integration parties.
 
 ## Decision
 
-We use [springdoc](https://springdoc.org/) for API documentation, which generates API documentation from source
-code.
+We use [springdoc](https://springdoc.org/) for API documentation, which automatically generates API documentation from
+source code.
 
 ## Implementation
 
