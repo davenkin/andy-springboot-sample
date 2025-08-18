@@ -458,14 +458,24 @@ public class EquipmentQueryService {
 
 - Query objects are quite similar to Command objects, the main difference is that Query objects are request objects that
   instructs the software to read data, yet Command objects are for writing data
-- Query objects should be modeled as Java Record
-- Query objects can be annotated with `@Builder` for testing purpose
+- For queries that return paged data, the query object should
+  extend [PageableRequest](../src/main/java/deviceet/common/util/PageableRequest.java)
 - Query objects should use JSR-303 annotations  (such as `@NotNull`, `@Max` and `@Pattern`) for data validation
+- For API documentation, `@Schema` should be used to on query fields
 
 Example [ListEquipmentsQuery](../src/test/java/deviceet/sample/equipment/query/ListEquipmentsQuery.java):
 
 ```java
-@Builder
-public record ListEquipmentsQuery(String search, EquipmentStatus status) {
+@Getter
+@SuperBuilder
+@EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor(access = PRIVATE)
+public class ListEquipmentsQuery extends PageableRequest {
+    @Schema(description = "Search text")
+    @Max(50)
+    private String search;
+
+    @Schema(description = "Equipment status to query")
+    private EquipmentStatus status;
 }
 ```

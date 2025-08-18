@@ -43,28 +43,37 @@
                   mapOf(AggregateRoot.Fields.id, equipment.getId(), Equipment.Fields.name, newName));
   ```
 
-- Use Spring Data's default pagination mechanism. This means the following query parameters should be used:
-    - `page`: the zero-based page index
-    - `size`: the page size
-    - `sort`: for sorting, format is `sort=abc,desc`, where `abc` is the field to be sorted, `desc` means descending and
-      `asc` means ascending.
-    - Also the following configuration should be applied for responding a stable `Page` object.
+- All pagination request should extend [PageableRequest](../src/main/java/deviceet/common/util/PageableRequest.java),
+  which has the following pagination fields:
+    - `pageNumber`: the zero-based page index
+    - `pageSize`: the page size
+    - `pageSort`: list of sorting fields, each with format `abc,desc`, where `abc` is the field to be sorted, `desc`
+      means descending and `asc` means ascending. The first field is sorted first, then the second.
+    - The following annotations are required on all pagination requests:
+        - `@Getter`: for getter field values
+        - `@SuperBuilder`: for builder
+        - `@EqualsAndHashCode(callSuper = true)`: for equals() and hashcode()
+        - `@NoArgsConstructor(access = PRIVATE)`: for Json deserialization
 
-  ```java
-  @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO)
-  public class CommonConfiguration {}
-  ```
-  Example with `Pageable` and `Page`(always use `@PageableDefault` as well):
-  ```java
-    @PostMapping("/list")
-    public Page<QListedEquipment> listEquipments(@RequestBody @Valid ListEquipmentsQuery query,
-                                                 @PageableDefault Pageable pageable) {
-        // In real situations, operator is normally created from the current user in context, such as Spring Security's SecurityContextHolder
-        Operator operator = SAMPLE_USER_OPERATOR;
+Example pagination
+request [ListEquipmentsQuery](../src/test/java/deviceet/sample/equipment/query/ListEquipmentsQuery.java):
 
-        return this.equipmentQueryService.listEquipments(query, pageable, operator);
-    }
-  ```
+```java
+@Getter
+@SuperBuilder
+@EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor(access = PRIVATE)
+public class ListEquipmentsQuery extends PageableRequest {
+    @Schema(description = "Search text")
+    @Max(50)
+    private String search;
+
+    @Schema(description = "Equipment status to query")
+    private EquipmentStatus status;
+}
+```
+
+- All pagination response should return [PagedResponse](../src/main/java/deviceet/common/util/PagedResponse.java).
 
 - Use Java 8's `Instant` to represent timestamp, don't use `OffsetDateTime` or `ZonedDateTime`. Reason: `Instant` is
   designed for such purpose, there is no point in storing timezone information inside a timestamp.
@@ -145,27 +154,36 @@ expose getters/setters.
 
 - If distributed lock is required, used
   Shedlock's [LockingTaskExecutor](../src/main/java/deviceet/common/configuration/DistributedLockConfiguration.java).
-- Use HTTP POST for controller methods that return a list of objects, and put all query fields into a `Query` object
-  even if there is only one field. Reason: a `Query` object wraps multiple fields together that's easy to pass around.
+- Use HTTP POST for all pagination request, put all query fields into a `Query` object even if there is only one field.
+  Reason: a `Query` object wraps multiple fields together that's easy to pass around.
   Example: use [ListEquipmentsQuery](../src/test/java/deviceet/sample/equipment/query/ListEquipmentsQuery.java) to query
   multiple equipments.
 
 ```java
-@Builder
-public record ListEquipmentsQuery(String search, EquipmentStatus status) {
+@Getter
+@SuperBuilder
+@EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor(access = PRIVATE)
+public class ListEquipmentsQuery extends PageableRequest {
+    @Schema(description = "Search text")
+    @Max(50)
+    private String search;
+
+    @Schema(description = "Equipment status to query")
+    private EquipmentStatus status;
 }
 ```
 
-The controller receives a `ListEquipmentsQuery` object along with a `Pageable` object:
+The controller receives a `ListEquipmentsQuery` object using POST method:
 
 ```java
+    @Operation(summary = "Query equipments")
     @PostMapping("/list")
-    public Page<QListedEquipment> listEquipments(@RequestBody @Valid ListEquipmentsQuery query,
-                                                 @PageableDefault Pageable pageable) {
+    public PagedResponse<QListedEquipment> listEquipments(@RequestBody @Valid ListEquipmentsQuery query) {
         // In real situations, operator is normally created from the current user in context, such as Spring Security's SecurityContextHolder
         Operator operator = SAMPLE_USER_OPERATOR;
 
-        return this.equipmentQueryService.listEquipments(query, pageable, operator);
+        return this.equipmentQueryService.listEquipments(query, operator);
     }
 ```
 
