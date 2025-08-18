@@ -443,14 +443,14 @@ public class EquipmentQueryService {
     private final MongoTemplate mongoTemplate;
     private final EquipmentRepository equipmentRepository;
 
-    public Page<QListedEquipment> listEquipments(ListEquipmentsQuery listEquipmentsQuery, Pageable pageable, Operator operator) {
+    public PagedResponse<QListedEquipment> listEquipments(ListEquipmentsQuery listQuery, Operator operator) {
         Criteria criteria = where(AggregateRoot.Fields.orgId).is(operator.getOrgId());
-
-        if (isNotBlank(listEquipmentsQuery.search())) {
-            criteria.and(Equipment.Fields.name).regex(listEquipmentsQuery.search());
-        }
         
-        // more code ommited
+        // code omitted
+        
+        List<QListedEquipment> devices = mongoTemplate.find(query.with(pageable), QListedEquipment.class, EQUIPMENT_COLLECTION);
+        return new PagedResponse<>(devices, pageable, count);
+    }
 }
 ```
 

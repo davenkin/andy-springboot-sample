@@ -57,16 +57,14 @@ Based on the above, the **lightweight CQRS** approach meets our needs and is our
   used to hit the database directly.
 
 ```java
-    public Page<QListedEquipment> listEquipments(ListEquipmentsQuery listEquipmentsQuery, Pageable pageable, Operator operator) {
+    public PagedResponse<QListedEquipment> listEquipments(ListEquipmentsQuery listQuery, Operator operator) {
         Criteria criteria = where(AggregateRoot.Fields.orgId).is(operator.getOrgId());
-
-        // more code omitted
         
-        Query query = Query.query(criteria);
-
+        // more code omitted
+  
         // use query model QListedEquipment instead of domain model Equipment
         List<QListedEquipment> devices = mongoTemplate.find(query.with(pageable), QListedEquipment.class, EQUIPMENT_COLLECTION);
-        return new PageImpl<>(devices, pageable, count);
+        return new PagedResponse<>(devices, pageable, count);
     }
 ```
 

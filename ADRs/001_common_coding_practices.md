@@ -155,9 +155,9 @@ expose getters/setters.
 - If distributed lock is required, used
   Shedlock's [LockingTaskExecutor](../src/main/java/deviceet/common/configuration/DistributedLockConfiguration.java).
 - Use HTTP POST for all pagination request, put all query fields into a `Query` object even if there is only one field.
-  Reason: a `Query` object wraps multiple fields together that's easy to pass around.
+  Reason: a `Query` object wraps multiple fields along with pagination parameters together, which is easy to pass around.
   Example: use [ListEquipmentsQuery](../src/test/java/deviceet/sample/equipment/query/ListEquipmentsQuery.java) to query
-  multiple equipments.
+  multiple equipments, it should extend [PageableRequest](../src/main/java/deviceet/common/util/PageableRequest.java)
 
 ```java
 @Getter

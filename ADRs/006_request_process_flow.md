@@ -229,13 +229,13 @@ example, when querying a list of `Equipment`s:
 1. The request hits `EquipmentController`, which further calls `EquipmentQueryService.listEquipments()`:
 
 ```java
+    @Operation(summary = "Query equipments")
     @PostMapping("/list")
-    public Page<QListedEquipment> listEquipments(@RequestBody @Valid ListEquipmentsQuery query,
-                                                 @PageableDefault Pageable pageable) {
+    public PagedResponse<QListedEquipment> listEquipments(@RequestBody @Valid ListEquipmentsQuery query) {
         // In real situations, operator is normally created from the current user in context, such as Spring Security's SecurityContextHolder
         Operator operator = SAMPLE_USER_OPERATOR;
 
-        return this.equipmentQueryService.listEquipments(query, pageable, operator);
+        return this.equipmentQueryService.listEquipments(query, operator);
     }
 ```
 
@@ -246,24 +246,17 @@ Here Spring's `Pageable` and `Page` should be used for pagination. `EquipmentQue
    query model `QListedEquipment`:
 
 ```java
-    public Page<QListedEquipment> listEquipments(ListEquipmentsQuery listEquipmentsQuery, Pageable pageable, Operator operator) {
+    public PagedResponse<QListedEquipment> listEquipments(ListEquipmentsQuery listQuery, Operator operator) {
         Criteria criteria = where(AggregateRoot.Fields.orgId).is(operator.getOrgId());
 
-        if (isNotBlank(listEquipmentsQuery.search())) {
-            criteria.and(Equipment.Fields.name).regex(listEquipmentsQuery.search());
+        if (isNotBlank(listQuery.getSearch())) {
+            criteria.and(Equipment.Fields.name).regex(listQuery.getSearch());
         }
         
-        //more code omitted
-
-        Query query = Query.query(criteria);
-
-        long count = mongoTemplate.count(query, Equipment.class);
-        if (count == 0) {
-            return Page.empty(pageable);
-        }
-
+        // code omitted
+        
         List<QListedEquipment> devices = mongoTemplate.find(query.with(pageable), QListedEquipment.class, EQUIPMENT_COLLECTION);
-        return new PageImpl<>(devices, pageable, count);
+        return new PagedResponse<>(devices, pageable, count);
     }
 ```
 
