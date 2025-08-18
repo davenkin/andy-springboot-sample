@@ -181,7 +181,7 @@ public abstract class AbstractMongoRepository<AR extends AggregateRoot> {
         }
     }
 
-    // Here currentOperatorId() is only used for audit purpose, and should not used as business data
+    // Here currentOperatorId() is only used for audit purpose, and should not be used as business data
     private String currentOperatorId() {
         return null;// todo: impl, get current operator id from e.g. SpringSecurityContext
     }
