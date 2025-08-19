@@ -12,7 +12,7 @@ import static deviceet.common.event.consume.ConsumingEvent.Fields.*;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
 
-// Upon consuming, save the event in DB to avoid duplicated event consuming
+// Upon consuming, record the event in DB to avoid duplicated event consuming
 @Slf4j
 @Component
 @RequiredArgsConstructor

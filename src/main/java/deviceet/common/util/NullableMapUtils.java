@@ -3,7 +3,7 @@ package deviceet.common.util;
 import java.util.HashMap;
 import java.util.Map;
 
-//MapUtils allows null values
+// MapUtils allows null values
 public class NullableMapUtils {
     public static Map<String, Object> mapOf(String key, Object value) {
         HashMap<String, Object> map = new HashMap<>(2, 0.9f);

@@ -17,7 +17,7 @@ public class DistributedLockConfiguration {
         return new MongoLockProvider(mongoTemplate.getCollection(SHEDLOCK_COLLECTION));
     }
 
-    // This is used internally by shedlock, you may also use it directly for your own cases
+    // Used internally by shedlock, you may also use it directly for your own cases
     @Bean
     public LockingTaskExecutor lockingTaskExecutor(LockProvider lockProvider) {
         return new DefaultLockingTaskExecutor(lockProvider);

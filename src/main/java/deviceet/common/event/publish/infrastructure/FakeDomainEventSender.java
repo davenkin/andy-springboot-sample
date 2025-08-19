@@ -8,9 +8,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @Getter
@@ -18,7 +18,7 @@ import java.util.concurrent.CompletableFuture;
 @EnableForIT
 @RequiredArgsConstructor
 public class FakeDomainEventSender implements DomainEventSender {
-    private final Map<String, DomainEvent> events = new HashMap<>();
+    private final Map<String, DomainEvent> events = new ConcurrentHashMap<>();
 
     @Override
     public CompletableFuture<String> send(DomainEvent event) {
