@@ -39,12 +39,12 @@
 
 - We do both integration testing and unit testing with a preference on integration testing
 - To run tests, locate them inside IDE and run them directly from there.
-- We have a [Testing Strategy](./ADRs/010_testing_strategy.md), please read it before writing any tests
+- We have a [testing strategy](./ADRs/010_testing_strategy.md), please read it before writing any tests
 
 ## Architecture Decision Records (ADRs)
 
 This project uses [Architecture Decision Records (ADRs)](https://adr.github.io/) to document important architectural
-decisions. Each ADR is stored in the `ADRs` directory and follows a [specific format](ADRs/000_what_is_adr.md).
+decisions. ADRs are stored in the `ADRs` directory and follow a [specific format](ADRs/000_what_is_adr.md).
 
 ## Sample implementation code
 
