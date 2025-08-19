@@ -3,8 +3,8 @@
 ## Context
 
 There are various types of objects in software, such as Controllers, Domain Objects, Factory, Repositories and Services,
-etc. Their responsibilities and characteristics differ, but the same type of object share something in common and it's
-important that we keep our coding practices consistent within the same type of objects.
+etc. Their responsibilities and characteristics differ, but the same type of objects share something in common and it's
+important that we keep our coding practices consistent for them.
 
 ## Decision
 
@@ -48,8 +48,9 @@ For the same type of objects, we follow the same implementation patterns.
     - `@TypeAlias(EQUIPMENT_COLLECTION)`: use a explict type alias, otherwise the FQCN will be used by Spring Data
       MongoDB which does not survive refactorings of changing package locations
     - `@Document(EQUIPMENT_COLLECTION)`: for MongoDB collection
-    - `@NoArgsConstructor(access = PRIVATE)`: for Jackson deserialization
-- Aggregate Root should not be annotated with `@Setter`, `@Builder` or  `@Data`
+    - `@NoArgsConstructor(access = PRIVATE)`: for Jackson deserialization, should be `PRIVATE` it's not supposed to be
+      called manually
+- Aggregate Root should not be annotated with `@Setter`, `@Builder` or `@Data`
 - Besides Aggregate Root, there can be other types of domain objects in the domain model, such as `EquipmentStatus`
 
 Example [Equipment](../src/test/java/deviceet/sample/equipment/domain/Equipment.java):
@@ -93,8 +94,9 @@ public class Equipment extends AggregateRoot {
 - Repository abstracts database interactions for accessing Aggregate Roots
 - Every Aggregate Root class has its own Repository class
 - Repositories should firstly have an interface class and then a concrete implementation class
-  Example for Repository
-  interface [EquipmentRepository](../src/test/java/deviceet/sample/equipment/domain/EquipmentRepository.java):
+
+Example for Repository
+interface [EquipmentRepository](../src/test/java/deviceet/sample/equipment/domain/EquipmentRepository.java):
 
 ```java
 public interface EquipmentRepository {
@@ -187,7 +189,7 @@ public class EquipmentController {
 - CommandService serves as the facade for the domain model
 - Every public method in CommandService should represent a use case, and should be annotated with `@Transactional` if it
   writes to database
-- Methods in CommandService usually accepts a Command object as parameter, as well as a `Operator` object
+- Methods in CommandService usually accepts a Command object as parameter, as well as an `Operator` object
 - CommandService should not contain business logic
 - CommandService returns the Aggregate Root's ID for creating objects, and return `void` for updating or deleting
   Aggregate Roots
@@ -351,7 +353,7 @@ public class EquipmentDeletedEventEventHandler extends AbstractEventHandler<Equi
 - Factory is used to create Aggregate Roots
 - In Factories, before calling Aggregate Roots's constructors, there usually exists some business validations
 - If no business validation is required, the Factory can be as simple as just call Aggregate Roots's constructors, but
-  for consistency, let's always use Factory to create Aggregate Roots.
+  for consistency, let's always use Factory to create Aggregate Roots no matter how simple the Factory is
 - Use Factory to create Aggregate Roots makes our code more explict as the creation of Aggregate Roots is an important
   moment in software
 

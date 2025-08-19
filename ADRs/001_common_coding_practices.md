@@ -171,3 +171,8 @@ expose getters/setters.
 - Make configuration files, e.g. `application.yaml` as simple as possible, prefer using constants in the code.
 - Do not create interface classes for services until really needed. The public methods on service classes already serve
   as interfaces.
+- Use [Operator](../src/main/java/deviceet/common/model/operator/Operator.java) to pass current user context around, do
+  not use Spring Security's `SecurityContextHolder` for retrieving user information. Reason:
+  `SecurityContextHolder`s are essentially thread scoped global variables, it makes the code implicit and also makes
+  testing harder. In practices, we cannot get rid of `SecurityContextHolder`, but we what we can do is: upon receiving
+  HTTP request in the Controller, convert `SecurityContextHolder` into a `Operator` and then use `Operator` ever since.
