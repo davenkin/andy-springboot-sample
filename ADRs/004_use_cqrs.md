@@ -6,7 +6,7 @@ Software usually provides two types of operations: the **write** side and the **
 some
 commands you send to you software to do something which usually results in data changes, and the read side merely
 queries some data without changing the
-software data. Write is also called **command** and read is also called **query**.
+software state. Write is also called **command** and read is also called **query**.
 
 When it comes to implementation, command and query can be modeled with the same set of objects. Or they can be treated
 separately using different models, which is
@@ -23,11 +23,11 @@ simpler than full scale CQRS.
 
 ## Decision
 
-We choose to use **lightweight CQRS**. Because we believe that the command side and query side are essentially very
+We choose to use **lightweight CQRS**, because we believe that the command side and query side are essentially very
 different. In command side, business rules should be strictly validated and the
 business logic should be modeled
 according to commonly accepted principles like [SOLID](https://en.wikipedia.org/wiki/SOLID)
-and [GRASP](https://en.wikipedia.org/wiki/GRASP_(object-oriented_design)). In query side, the restrictions are much more
+and [GRASP](https://en.wikipedia.org/wiki/GRASP_(object-oriented_design)). In query side, the restrictions are more
 loosen and we can use whatever means to hit the database for fast and high performant queries.
 
 Also we think CQRS should not be a heavyweight architecture that scares developers away, but should be just enough to
@@ -53,8 +53,7 @@ Based on the above, the **lightweight CQRS** approach meets our needs and is our
 - Apart from CommandServices, we create standalone QueryServices to implement the query side. In
   QueryService, we use `MongoTemplate` to query database directly, bypassing the domain models, and also we use a
   separate set of query objects other than domain objects. For example, in `EquipmentQueryService.listEquipments()`, we
-  don't use the domain object `Equipment`, instead a query model `QListedEquipment` is created and `MongoTemplate` is
-  used to hit the database directly.
+  don't use the domain object `Equipment`, instead a query model `QListedEquipment` is used.
 
 ```java
     public PagedResponse<QListedEquipment> listEquipments(ListEquipmentsQuery listQuery, Operator operator) {
