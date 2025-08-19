@@ -9,7 +9,7 @@ styles include:
   modeling in it but just
   CRUD(Create, Read, Update, Delete) operations.
 - [Domain Driven Design (DDD)](https://martinfowler.com/bliki/DomainDrivenDesign.html): Focus on the business domains,
-  and let code to express the domain rules and behaviors,
+  and let code to directly express the domain rules and behaviors,
   aims to decouple the
   domain complexity from technical complexity.
 
@@ -27,8 +27,7 @@ This is an ADR but not a lecture on DDD, so here we only list some common DDD pr
 - Make sure everybody speaks the same language over the business domain, this includes domain experts, product owners,
   UX, DEVs and QAs. Also, the same language should be used in the code. This is
   called [Ubiquitous Language](https://martinfowler.com/bliki/UbiquitousLanguage.html).
-- Remember, the sole reason that your software exists is to solve a specific business problem. This business
-  problem is the first letter `D` in `DDD`.
+- Remember, the sole reason that your software exists is to solve a specific problem of a domain. Here the "domain" represents the first letter `D` in `DDD`.
 - Make a clear separation between domain code and technical code, this is why we have the concept of `Domain Model`.
 - In domain model, the most important concept is **Aggregate Root**s. You may roughly think of them as the major
   business
@@ -77,7 +76,7 @@ public class EquipmentDomainService {
 ```
 
 - Aggregate Roots represent the business logic, but not the use case, in order to bridge the use case and the business
-  logic, DDD introduced **ApplicationService**. ApplicationService orchestrates the process flow from use case
+  logic, DDD introduces **ApplicationService**. ApplicationService orchestrates the process flow from use case
   entrypoint to Aggregate Roots. ApplicationService should not contain business logic.
 - Together with **CQRS**, ApplicationService can be further categorised into **CommandService** and **QueryService**.
   CommandService deals with the write side and QueryService handles the read side.
@@ -121,11 +120,11 @@ public class EquipmentQueryService {
 }
 ```
 
-- In DDD, we have both ApplicationService and DomainService and they serves differently purposes. When you are creating
+- In DDD, we have both ApplicationService and DomainService and they serve differently purposes. When you are creating
   a service class, you should know which kind of services you are creating.
 - When retrieving and persisting Aggregate Roots, use **Repository**. Compared with Data Access Object(DAO),
   Repositories
-  have a restriction that only Aggregate Root can have its Repository, other classes in the domain model should not have
+  have a restriction that only Aggregate Roots can have its Repository, other classes in the domain model should not have
   Repository. Also, Repository handles the whole Aggregate Root, but not partially.
 
 Example
