@@ -29,6 +29,34 @@ technical layers, use the following structure:
 
 The `1` in `(class:1)` indicates there can be only one class, `(class:N)` for multiple.
 
+- `Aggregate Root`(folder:1)
+    - `command`(folder:1)
+        - `XxxCommandService`(class:1)
+        - `XxxCommand`(class:N)
+    - `controller`(folder:1)
+        - `XxxController`(class:1)
+    - `domain`(folder:1)
+        - `Xxx`(class:N)
+        - `XxxRepository`(class:1)
+        - `XxxFactory`(class:1)
+        - `XxxDomainService`(class:N)
+        - `event`(folder:1)
+        - `task`(folder:1)
+            - `XxxTask`
+    - `eventhandler`(folder:1)
+        - `XxxEventHandler`(class:N)
+    - `infrastructure`(folder:1)
+        - `MongoXxxRepository`(class:N)
+    - `job`(folder:1)
+        - `XxxScheduler`(class:N)
+        - `XxxJob`(class:N)
+    - `query`(folder:1)
+        - `XxxQueryService`(class:N)
+        - `XxxQuery`(class:N)
+        - `QXxx`(class:N)
+
+More detailed explanation:
+
 - `Aggregate Root`(folder:1): The top level package, an Aggregate Root represents a major business entity(e.g.
   `equipment`).
     - `command`(folder:1): For sending commands to the application, "command" represents the "C"
@@ -80,15 +108,16 @@ The `1` in `(class:1)` indicates there can be only one class, `(class:N)` for mu
               usually called from jobs and event handlers.
               Example: [CountMaintenanceRecordsForEquipmentTask](../src/test/java/deviceet/sample/equipment/domain/task/CountMaintenanceRecordsForEquipmentTask.java).
     - `eventhandler`(folder:1): Contains all the event handler classes.
-        - `XxxEventHandler`(class): Event handler class, should end with "EventHandler". Example:
+        - `XxxEventHandler`(class:N): Event handler class, should end with "EventHandler". Example:
           [EquipmentCreatedEventHandler](../src/test/java/deviceet/sample/equipment/eventhandler/EquipmentCreatedEventHandler.java).
     - `infrastructure`(folder:1): Contains the infrastructure code that is related to the Aggregate Root.
         - `MongoXxxRepository`(class:N): The repository implementations, should end with "Repository".
           Example: [MongoEquipmentRepository](../src/test/java/deviceet/sample/equipment/infrastructure/MongoEquipmentRepository.java).
     - `job`(folder:1):Contains background jobs that are related to the Aggregate Root.
-        - XxxScheduler(class:N): Scheduling configuration, should end with "Scheduler".
+        - `XxxScheduler`(class:N): Scheduling configuration, should end with "Scheduler".
           Example: [EquipmentScheduler](../src/test/java/deviceet/sample/equipment/job/EquipmentScheduler.java).
-        - XxxJob(class:N): Represents a background job, should end with "Job". A job might run multiple tasks. Example:
+        - `XxxJob`(class:N): Represents a background job, should end with "Job". A job might run multiple tasks.
+          Example:
           [RemoveOldMaintenanceRecordsJob](../src/test/java/deviceet/sample/maintenance/job/RemoveOldMaintenanceRecordsJob.java).
     - `query`(folder:1): For querying data, "query" represents the "Q"
       in [CQRS](https://microservices.io/patterns/data/cqrs.html). Queries can bypass the domain model and hit database
