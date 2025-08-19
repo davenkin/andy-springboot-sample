@@ -34,7 +34,8 @@
 - Never use Lombok's `@Setter` and `@Data`(which implicitly creates setters). Reason: Setters are bad as they break the
   principles of cohesion and information hiding. Also, objects with setters are just data containers like C's struct,
   they does not convey any business intent, making the code hard to read and comprehend.
-- Always use [ServiceException](../src/main/java/deviceet/common/exception/ServiceException.java) for raising exceptions, don't create your own exception classes. Reason: The
+- Always use [ServiceException](../src/main/java/deviceet/common/exception/ServiceException.java) for raising
+  exceptions, don't create your own exception classes. Reason: The
   `ServiceException` is a flat exception model that makes exception modeling much easier than hierarchical exceptions.
 
   ```java
@@ -43,8 +44,9 @@
                   NullableMapUtils.mapOf(AggregateRoot.Fields.id, equipment.getId(), Equipment.Fields.name, newName));
   ```
 
-- All pagination request should extend [PageableRequest](../src/main/java/deviceet/common/util/PageableRequest.java),
-  which has the following pagination fields:
+- All pagination request use HTTP POST method. The query class should
+  extend [PageableRequest](../src/main/java/deviceet/common/util/PageableRequest.java) which has the following
+  pagination fields:
     - `pageNumber`: the zero-based page index
     - `pageSize`: the page size
     - `pageSort`: list of sorting fields, each with format `abc,desc`, where `abc` is the field to be sorted, `desc`
@@ -55,8 +57,7 @@
         - `@EqualsAndHashCode(callSuper = true)`: for equals() and hashcode()
         - `@NoArgsConstructor(access = PRIVATE)`: for Json deserialization
 
-Example pagination
-request [ListEquipmentsQuery](../src/test/java/deviceet/sample/equipment/query/ListEquipmentsQuery.java):
+Example query class [ListEquipmentsQuery](../src/test/java/deviceet/sample/equipment/query/ListEquipmentsQuery.java):
 
 ```java
 @Getter
@@ -73,12 +74,25 @@ public class ListEquipmentsQuery extends PageableRequest {
 }
 ```
 
-- All pagination response should return [PagedResponse](../src/main/java/deviceet/common/util/PagedResponse.java).
+All pagination response should return [PagedResponse](../src/main/java/deviceet/common/util/PagedResponse.java).
+
+The controller receives a `Query` object using POST method:
+
+```java
+    @Operation(summary = "Query equipments")
+    @PostMapping("/list")
+    public PagedResponse<QListedEquipment> listEquipments(@RequestBody @Valid ListEquipmentsQuery query) {
+        // In real situations, operator is normally created from the current user in context, such as Spring Security's SecurityContextHolder
+        Operator operator = SAMPLE_USER_OPERATOR;
+
+        return this.equipmentQueryService.listEquipments(query, operator);
+    }
+```
 
 - Use Java 8's `Instant` to represent timestamp, don't use `OffsetDateTime` or `ZonedDateTime`. Reason: `Instant` is
   designed for such purpose, there is no point in storing timezone information inside a timestamp.
 - Set application default timezone to 'UTC' explicitly by `TimeZone.setDefault(TimeZone.getTimeZone("UTC"))`. Reason: A
-  unified default timezone makes things much easier.
+  unified default timezone makes time handling much easier.
 
 ```java
 @SpringBootApplication
@@ -154,39 +168,6 @@ expose getters/setters.
 
 - If distributed lock is required, used
   Shedlock's [LockingTaskExecutor](../src/main/java/deviceet/common/configuration/DistributedLockConfiguration.java).
-- Use HTTP POST for all pagination request, put all query fields into a `Query` object even if there is only one field.
-  Reason: a `Query` object wraps multiple fields along with pagination parameters together, which is easy to pass around.
-  Example: use [ListEquipmentsQuery](../src/test/java/deviceet/sample/equipment/query/ListEquipmentsQuery.java) to query
-  multiple equipments, it should extend [PageableRequest](../src/main/java/deviceet/common/util/PageableRequest.java)
-
-```java
-@Getter
-@SuperBuilder
-@EqualsAndHashCode(callSuper = true)
-@NoArgsConstructor(access = PRIVATE)
-public class ListEquipmentsQuery extends PageableRequest {
-    @Schema(description = "Search text")
-    @Max(50)
-    private String search;
-
-    @Schema(description = "Equipment status to query")
-    private EquipmentStatus status;
-}
-```
-
-The controller receives a `ListEquipmentsQuery` object using POST method:
-
-```java
-    @Operation(summary = "Query equipments")
-    @PostMapping("/list")
-    public PagedResponse<QListedEquipment> listEquipments(@RequestBody @Valid ListEquipmentsQuery query) {
-        // In real situations, operator is normally created from the current user in context, such as Spring Security's SecurityContextHolder
-        Operator operator = SAMPLE_USER_OPERATOR;
-
-        return this.equipmentQueryService.listEquipments(query, operator);
-    }
-```
-
 - Make configuration files, e.g. `application.yaml` as simple as possible, prefer using constants in the code.
 - Do not create interface classes for services until really needed. The public methods on service classes already serve
   as interfaces.
