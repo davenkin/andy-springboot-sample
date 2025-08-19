@@ -239,8 +239,8 @@ example, when querying a list of `Equipment`s:
     }
 ```
 
-Here Spring's `Pageable` and `Page` should be used for pagination. `EquipmentQueryService` is at the same level with
-`EquipmentCommandService`, they both are under the category of `ApplicationService`.
+`EquipmentQueryService` is at the same level with `EquipmentCommandService`, they both are under the category of
+`ApplicationService`.
 
 2. `EquipmentQueryService.listEquipments()` uses `MongoTemplate` to query data from database directly, and uses its own
    query model `QListedEquipment`:
