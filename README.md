@@ -1,9 +1,26 @@
 ## Introduction
 
-- This is a sample Spring Boot project for building Microservices with an emphasis on the following areas:
-    - [Command Query Responsibility Segregation (CQRS)](https://learn.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/apply-simplified-microservice-cqrs-ddd-patterns)
-    - [Event Driven Architecture (EDA)](https://microservices.io/patterns/data/event-driven-architecture.html)
-    - [Domain Driven Design (DDD)](https://martinfowler.com/bliki/DomainDrivenDesign.html)
+- This is a sample Spring Boot project for building Microservices with the following features:
+    - Data persistence with MongoDB
+    - Messaging using Kafka
+    - Cache using Redis
+    - API documentation using [Springdoc](https://springdoc.org/)
+    - Data migration using [Mongock](https://mongock.io/)
+    - Architecture validation using [ArchUnit](https://www.archunit.org/)
+    - Distributed lock for scheduled jobs using [Shedlock](https://github.com/lukas-krecan/ShedLock)
+    - Standardized [folder structure](./ADRs/005_project_structure.md) with business first approach
+    - Standardized pagination support with [PageableRequest](./src/main/java/deviceet/common/util/PageableRequest.java)
+      and [PagedResponse](./src/main/java/deviceet/common/util/PagedResponse.java)
+    - Builtin [Snowflake ID generator](./src/main/java/deviceet/common/util/SnowflakeIdGenerator.java)
+    - Domain event modeling based on [DomainEvent](./src/main/java/deviceet/common/event/DomainEvent.java)
+    - [Domain event publishing](./ADRs/008_domain_event_publishing.md)
+      using [Transactional Outbox](https://microservices.io/patterns/data/transactional-outbox.html) pattern
+    - [Event consuming](./ADRs/009_event_consuming.md) mechanism with idempotency support
+    - Standardized [exception handling](./ADRs/012_exception_handling.md)
+    - Lightweight [Command Query Responsibility Segregation (CQRS)](./ADRs/004_use_cqrs.md) support
+    - Domain modeling using [Domain Driven Design (DDD)](./ADRs/003_use_ddd.md)
+    - Standardized [request process flow](./ADRs/006_request_process_flow.md)
+    - Standardized [object implementation pattern](./ADRs/007_object_implementation_patterns.md)
 
 ## Tech stack
 

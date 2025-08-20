@@ -30,7 +30,7 @@ Whenever you need to throw an exception, throw this `ServiceException` with the 
 
 ## API error responses
 
-A unified error response structure is built from `ServiceException`:
+A unified error response [QErrorResponse](../src/main/java/deviceet/common/exception/QErrorResponse.java) is built from `ServiceException`:
 
 ```json
 {
