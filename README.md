@@ -4,7 +4,7 @@
     - Data persistence with MongoDB
     - Messaging using Kafka
     - Cache using Redis
-    - API documentation using [Springdoc](https://springdoc.org/)
+    - API documentation using [Springdoc](./ADRs/011_api_documentation.md)
     - Data migration using [Mongock](https://mongock.io/)
     - Architecture validation using [ArchUnit](https://www.archunit.org/)
     - Distributed lock for scheduled jobs using [Shedlock](https://github.com/lukas-krecan/ShedLock)

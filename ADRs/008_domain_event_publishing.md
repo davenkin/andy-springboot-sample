@@ -2,7 +2,7 @@
 
 ## Context
 
-Publishing Domain Events can be as easy as calling `kafkaTemplate.send()` whenever you need to. But doing so has a big
+Publishing Domain Events can be as easy as calling `kafkaTemplate.send()` whenever you need to. But doing so has a
 problem:
 
 - In normal use cases we will firstly write to database and then send events to Kafka, yet these two operations cannot
@@ -32,7 +32,7 @@ refer to [event consuming](./009_event_consuming.md) for more detail.
 
 ## Implementation
 
-- For sending a Domain Event, the only action that you need is to call `raiseEvent()` from an Aggregate Root:
+- For sending a Domain Event, the only action that you need is calling `raiseEvent()` from an Aggregate Root:
 
 ```java
     public void updateName(String newName) {
@@ -46,7 +46,7 @@ refer to [event consuming](./009_event_consuming.md) for more detail.
 
 The following steps are already been implemented for you, but for illustration let's walk them through.
 
-- After `AggregateRoot.raiseEvent()` is called, the event is stored inside the Aggregate Root object:
+- After `AggregateRoot.raiseEvent()` is called, the event is stored inside the Aggregate Root object temporarily:
 
 ```java
     protected final void raiseEvent(DomainEvent event) {
@@ -129,8 +129,9 @@ directly, instead we
 treat this change merely as a trigger, which calls `DomainEventPublishJob.publishStagedDomainEvents()` to start the
 publishing of Domain Events to Kafka.
 
-- The `DomainEventPublishJob.publishStagedDomainEvents()` method loads un-published events from the `publishing-event`
-  collection and send them to Kafka:
+- The `DomainEventPublishJob.publishStagedDomainEvents()` method loads all un-published events from the
+  `publishing-event`
+  collection and send them to Kafka in the order they are created:
 
 ```java
     public void publishStagedDomainEvents(int batchSize) {

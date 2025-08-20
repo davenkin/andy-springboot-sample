@@ -7,11 +7,12 @@ API documentation is important for API consumers such as frontend applications o
 ## Decision
 
 We use [springdoc](https://springdoc.org/) for API documentation, which automatically generates API documentation from
-source code.
+the source code.
 
 ## Implementation
 
-There are various annotations from springdoc to guide the generation of API docs, here lists the most common ones:
+There are various annotations from springdoc to guide the generation of API docs, here lists the most common ones which
+suffices your majority needs:
 
 - `@Tag`: Used on controller's class level to describe the controller
 
@@ -56,5 +57,8 @@ public record UpdateEquipmentNameCommand(
                                     @RequestBody @Valid UpdateEquipmentNameCommand updateEquipmentNameCommand) {
     }
 ```
+
+Configurations for Springdoc can be found
+in [SpringdocConfiguration](../src/main/java/deviceet/common/configuration/SpringdocConfiguration.java).
 
 

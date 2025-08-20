@@ -61,9 +61,9 @@ events with type `EquipmentCreatedEvent`.
     - If `isIdempotent()` return `false` and `isTransactional()` return `true`, the `consuming-event` table is used for
       idempotency, both the `consuming-event` table and the handler will be put inside the same transaction, this is the
       most common case
-    - If `isIdempotent()` return `false` and `isTransactional()` return `false`,the `consuming-event` table is used for
-      idempotency,but there is not transactions, which means it could such happen that the event is marked as consumed
-      regardless of whether the handler succeeds or not, hence when retry, the handler will not be processed
+    - If `isIdempotent()` return `false` and `isTransactional()` return `false`, the `consuming-event` table is used for
+      idempotency, but there is no transactions, which means it could such happen that the event is marked as consumed
+      regardless of whether the handler succeeds or not, hence when retry the handler will not be retried
     - If `isIdempotent()` return `true` and `isTransactional()` return `true`, the `consuming-event` table is not used
       for
       idempotency as the handler is already idempotent itself, also the handler will be put inside a transaction

@@ -27,7 +27,8 @@ This is an ADR but not a lecture on DDD, so here we only list some common DDD pr
 - Make sure everybody speaks the same language over the business domain, this includes domain experts, product owners,
   UX, DEVs and QAs. Also, the same language should be used in the code. This is
   called [Ubiquitous Language](https://martinfowler.com/bliki/UbiquitousLanguage.html).
-- Remember, the sole reason that your software exists is to solve a specific problem of a domain. Here the "domain" represents the first letter `D` in `DDD`.
+- Remember, the sole reason that your software exists is to solve a specific problem of a domain. Here the "domain"
+  represents the first letter `D` in `DDD`.
 - Make a clear separation between domain code and technical code, this is why we have the concept of `Domain Model`.
 - In domain model, the most important concept is **Aggregate Root**s. You may roughly think of them as the major
   business
@@ -124,7 +125,8 @@ public class EquipmentQueryService {
   a service class, you should know which kind of services you are creating.
 - When retrieving and persisting Aggregate Roots, use **Repository**. Compared with Data Access Object(DAO),
   Repositories
-  have a restriction that only Aggregate Roots can have its Repository, other classes in the domain model should not have
+  have a restriction that only Aggregate Roots can have its Repository, other classes in the domain model should not
+  have
   Repository. Also, Repository handles the whole Aggregate Root, but not partially.
 
 Example

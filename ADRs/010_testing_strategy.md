@@ -109,6 +109,7 @@ assist you testing.
 ```
 
 - In order to [enhance testing performance](https://www.baeldung.com/spring-tests), please use as less mocks as possible
+  in integration tests
 
 ### Unit Tests
 
