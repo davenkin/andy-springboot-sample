@@ -69,7 +69,7 @@ decisions. ADRs are stored in the `ADRs` directory and follow a [specific format
   writing your own code. Please refer
   to [sample code introduction](src/test/java/deviceet/sample/sample-code-introduction.md) for more detail.
 
-## Top level business entities
+## Top level business entities (aggregate roots)
 
 | Entity Name       | Chinese Name | Abbreviation | Description                                                                                                                           |
 |-------------------|--------------|--------------|---------------------------------------------------------------------------------------------------------------------------------------|
