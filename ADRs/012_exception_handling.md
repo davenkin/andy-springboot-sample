@@ -1,4 +1,4 @@
-# API documentation
+# Exception handling
 
 ## Context
 
