@@ -71,8 +71,8 @@ decisions. ADRs are stored in the `ADRs` directory and follow a [specific format
 
 ## Top level business entities
 
-| Business Entity   | Chinese | Abbreviation | Description                                                                                                                           |
-|-------------------|---------|--------------|---------------------------------------------------------------------------------------------------------------------------------------|
-| Equipment         | 装备      |              | Sample top level business entity that serves as a reference for consistent coding practice. An Equipment has many MaintenanceRecords. |
-| MaintenanceRecord | 装备维护记录  |              | Another sample top level business entity. Multiple MaintenanceRecords can be created for a single  Equipment.                         |
+| Business Entity   | Chinese Name | Abbreviation | Description                                                                                                                           |
+|-------------------|--------------|--------------|---------------------------------------------------------------------------------------------------------------------------------------|
+| Equipment         | 装备           |              | Sample top level business entity that serves as a reference for consistent coding practice. An Equipment has many MaintenanceRecords. |
+| MaintenanceRecord | 装备维护记录       |              | Another sample top level business entity. Multiple MaintenanceRecords can be created for a single  Equipment.                         |
 
