@@ -1,26 +1,28 @@
 ## Introduction
 
-- This is a sample Spring Boot project for building Microservices with the following features:
-    - Data persistence with MongoDB
-    - Messaging using Kafka
-    - Cache using Redis
-    - API documentation using [Springdoc](./ADRs/011_api_documentation.md)
-    - Data migration using [Mongock](https://mongock.io/)
-    - Architecture validation using [ArchUnit](https://www.archunit.org/)
-    - Distributed lock for scheduled jobs using [Shedlock](https://github.com/lukas-krecan/ShedLock)
-    - Standardized [folder structure](./ADRs/005_project_structure.md) with business first approach
-    - Standardized pagination support with [PageableRequest](src/main/java/com/company/andy/common/util/PageableRequest.java)
-      and [PagedResponse](src/main/java/com/company/andy/common/util/PagedResponse.java)
-    - Builtin [Snowflake ID generator](src/main/java/com/company/andy/common/util/SnowflakeIdGenerator.java)
-    - Domain event modeling based on [DomainEvent](src/main/java/com/company/andy/common/event/DomainEvent.java)
-    - [Domain event publishing](./ADRs/008_domain_event_publishing.md)
-      using [Transactional Outbox](https://microservices.io/patterns/data/transactional-outbox.html) pattern
-    - [Event consuming](./ADRs/009_event_consuming.md) mechanism with idempotency support
-    - Standardized [exception handling](./ADRs/012_exception_handling.md)
-    - Lightweight [Command Query Responsibility Segregation (CQRS)](./ADRs/004_use_cqrs.md) support
-    - Domain modeling using [Domain Driven Design (DDD)](./ADRs/003_use_ddd.md)
-    - Standardized [request process flow](./ADRs/006_request_process_flow.md)
-    - Standardized [object implementation pattern](./ADRs/007_object_implementation_patterns.md)
+This is a sample Spring Boot project for building Microservices with the following features:
+
+- Data persistence with MongoDB
+- Messaging using Kafka
+- Cache using Redis
+- API documentation using [Springdoc](./ADRs/011_api_documentation.md)
+- Data migration using [Mongock](https://mongock.io/)
+- Architecture validation using [ArchUnit](https://www.archunit.org/)
+- Distributed lock for scheduled jobs using [Shedlock](https://github.com/lukas-krecan/ShedLock)
+- Standardized [folder structure](./ADRs/005_project_structure.md) with business first approach
+- Standardized pagination support
+  with [PageableRequest](src/main/java/com/company/andy/common/util/PageableRequest.java)
+  and [PagedResponse](src/main/java/com/company/andy/common/util/PagedResponse.java)
+- Builtin [Snowflake ID generator](src/main/java/com/company/andy/common/util/SnowflakeIdGenerator.java)
+- Domain event modeling based on [DomainEvent](src/main/java/com/company/andy/common/event/DomainEvent.java)
+- [Domain event publishing](./ADRs/008_domain_event_publishing.md)
+  using [Transactional Outbox](https://microservices.io/patterns/data/transactional-outbox.html) pattern
+- [Event consuming](./ADRs/009_event_consuming.md) mechanism with idempotency support
+- Standardized [exception handling](./ADRs/012_exception_handling.md)
+- Lightweight [Command Query Responsibility Segregation (CQRS)](./ADRs/004_use_cqrs.md) support
+- Domain modeling using [Domain Driven Design (DDD)](./ADRs/003_use_ddd.md)
+- Standardized [request process flow](./ADRs/006_request_process_flow.md)
+- Standardized [object implementation pattern](./ADRs/007_object_implementation_patterns.md)
 
 ## Tech stack
 
@@ -65,9 +67,9 @@ decisions. ADRs are stored in the `ADRs` directory and follow a [specific format
 
 ## Sample implementation code
 
-- The `src/test/java/com/company/andy/sample` folder contains various common coding practices that should be followed when
-  writing your own code. Please refer
-  to [sample code introduction](src/test/java/com/company/andy/sample/sample-code-introduction.md) for more detail.
+The `src/test/java/com/company/andy/sample` folder contains various common coding practices that should be followed
+when writing your own code. Please refer
+to [sample code introduction](src/test/java/com/company/andy/sample/sample-code-introduction.md) for more detail.
 
 ## Top level business entities (Aggregate Roots)
 
