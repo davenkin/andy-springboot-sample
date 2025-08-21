@@ -1,7 +1,8 @@
 # Common coding practices
 
 - Do not rely on database to generate IDs, instead, generate IDs within the code
-  using [SnowflakeIdGenerator.newSnowflakeId()](../src/main/java/deviceet/common/util/SnowflakeIdGenerator.java). This
+  using [SnowflakeIdGenerator.newSnowflakeId()](../src/main/java/com/company/andy/common/util/SnowflakeIdGenerator.java).
+  This
   means when the object is created,
   its ID should already been generated. Reason: This decouples the code from database implementations and also makes
   testing much easier.
@@ -34,7 +35,7 @@
 - Never use Lombok's `@Setter` and `@Data`(which implicitly creates setters). Reason: Setters are bad as they break the
   principles of cohesion and information hiding. Also, objects with setters are just data containers like C's struct,
   they does not convey any business intent, making the code hard to read and comprehend.
-- Always use [ServiceException](../src/main/java/deviceet/common/exception/ServiceException.java) for raising
+- Always use [ServiceException](../src/main/java/com/company/andy/common/exception/ServiceException.java) for raising
   exceptions, don't create your own exception classes. Reason: The
   `ServiceException` is a flat exception model that makes exception modeling much easier than hierarchical exceptions.
 
@@ -45,7 +46,7 @@
   ```
 
 - All pagination request use HTTP POST method. The query class should
-  extend [PageableRequest](../src/main/java/deviceet/common/util/PageableRequest.java) which has the following
+  extend [PageableRequest](../src/main/java/com/company/andy/common/util/PageableRequest.java) which has the following
   pagination fields:
     - `pageNumber`: the zero-based page index
     - `pageSize`: the page size
@@ -57,7 +58,8 @@
         - `@EqualsAndHashCode(callSuper = true)`: for equals() and hashcode()
         - `@NoArgsConstructor(access = PRIVATE)`: for Json deserialization
 
-Example query class [ListEquipmentsQuery](../src/test/java/deviceet/sample/equipment/query/ListEquipmentsQuery.java):
+Example query
+class [ListEquipmentsQuery](../src/test/java/com/company/andy/sample/equipment/query/ListEquipmentsQuery.java):
 
 ```java
 @Getter
@@ -74,7 +76,7 @@ public class ListEquipmentsQuery extends PageableRequest {
 }
 ```
 
-All pagination response should return [PagedResponse](../src/main/java/deviceet/common/util/PagedResponse.java).
+All pagination response should return [PagedResponse](../src/main/java/com/company/andy/common/util/PagedResponse.java).
 
 The controller receives a `Query` object using POST method:
 
@@ -124,7 +126,8 @@ if (listEquipmentsQuery.status() != null) {
   use [Spring Data Repository](https://docs.spring.io/spring-data/commons/reference/repositories/query-methods-details.html).
   Reason: Spring Data's auto generated repository query method names can be very long and hard to read, also it cannot
   survive code refactoring. Instead, implement your own repository classes which
-  extends [AbstractMongoRepository](../src/main/java/deviceet/common/infrastructure/AbstractMongoRepository.java), this
+  extends [AbstractMongoRepository](../src/main/java/com/company/andy/common/infrastructure/AbstractMongoRepository.java),
+  this
   gives you more freedom.
 
 ```java
@@ -136,7 +139,7 @@ public class MongoEquipmentRepository extends AbstractMongoRepository<Equipment>
 - Use a single instance of `ObjectMapper` across the whole application as much as possible. Reason: A single
   `ObjectMapper` behaves
   the same for all scenarios. The single `ObejctMapper` is already configured
-  inside [CommonConfiguration](../src/main/java/deviceet/common/configuration/CommonConfiguration.java).
+  inside [CommonConfiguration](../src/main/java/com/company/andy/common/configuration/CommonConfiguration.java).
 
 ```java
     @Bean
@@ -167,11 +170,12 @@ expose getters/setters.
 ```
 
 - If distributed lock is required, used
-  Shedlock's [LockingTaskExecutor](../src/main/java/deviceet/common/configuration/DistributedLockConfiguration.java).
+  Shedlock's [LockingTaskExecutor](../src/main/java/com/company/andy/common/configuration/DistributedLockConfiguration.java).
 - Make configuration files, e.g. `application.yaml` as simple as possible, prefer using constants in the code.
 - Do not create interface classes for services until really needed. The public methods on service classes already serve
   as interfaces.
-- Use [Operator](../src/main/java/deviceet/common/model/operator/Operator.java) to pass current user context around, do
+- Use [Operator](../src/main/java/com/company/andy/common/model/operator/Operator.java) to pass current user context
+  around, do
   not use Spring Security's `SecurityContextHolder` for retrieving user information. Reason:
   `SecurityContextHolder`s are essentially thread scoped global variables, it makes the code implicit and also makes
   testing harder. In practices, we cannot get rid of `SecurityContextHolder`, but we what we can do is: upon receiving

@@ -10,13 +10,13 @@ server:
 
 spring:
   application:
-    name: deviceet-device-management-service
+    name: andy-springboot-sample-service
   profiles:
     active: local # use "local" profile by default for local run
 
 mongock:
   enabled: true
-  migration-scan-package: deviceet.common.migration
+  migration-scan-package: com.company.andy.common.migration
   transactional: true
   lock-repository-name: mongock-lock
   migration-repository-name: mongock-migration

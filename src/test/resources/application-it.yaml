@@ -11,6 +11,6 @@ spring:
       - org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration # Disable Kafka
   data:
     mongodb:
-      uri: mongodb://localhost:27123/deviceet-local # Only used for real MongoDB, no effect for Embedded MongoDB
+      uri: mongodb://localhost:27123/andy-local # Only used for real MongoDB, no effect for Embedded MongoDB
     redis:
       port: 6124 # embedded Redis, can be accessed via 127.0.0.1:6124

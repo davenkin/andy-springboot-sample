@@ -59,6 +59,6 @@ public record UpdateEquipmentNameCommand(
 ```
 
 Configurations for Springdoc can be found
-in [SpringdocConfiguration](../src/main/java/deviceet/common/configuration/SpringdocConfiguration.java).
+in [SpringdocConfiguration](../src/main/java/com/company/andy/common/configuration/SpringdocConfiguration.java).
 
 

@@ -25,9 +25,10 @@ events:
 ## Implementation
 
 - When consuming an event, the only thing from your side is to create an event handler class that
-  extends [AbstractEventHandler](../src/main/java/deviceet/common/event/consume/AbstractEventHandler.java), and make
+  extends [AbstractEventHandler](../src/main/java/com/company/andy/common/event/consume/AbstractEventHandler.java), and
+  make
   sure the event's topic is subscribed to
-  in [SpringKafkaEventListener](../src/main/java/deviceet/common/event/consume/infrastructure/SpringKafkaEventListener.java)
+  in [SpringKafkaEventListener](../src/main/java/com/company/andy/common/event/consume/infrastructure/SpringKafkaEventListener.java)
 - Example event handler:
 
 ```java
@@ -45,10 +46,13 @@ public class EquipmentCreatedEventHandler extends AbstractEventHandler<Equipment
 ```
 
 By declaring `EquipmentCreatedEventHandler` as above, the event consuming
-infrastructure([EventConsumer](../src/main/java/deviceet/common/event/consume/EventConsumer.java)) knows that it handles
+infrastructure([EventConsumer](../src/main/java/com/company/andy/common/event/consume/EventConsumer.java)) knows that it
+handles
 events with type `EquipmentCreatedEvent`.
 
-- When extending [AbstractEventHandler](../src/main/java/deviceet/common/event/consume/AbstractEventHandler.java), you
+- When
+  extending [AbstractEventHandler](../src/main/java/com/company/andy/common/event/consume/AbstractEventHandler.java),
+  you
   may
   override the following methods:
     - `isIdempotent()`: Returns `true` if the handler itself is idempotent, if `false` is returned, the
@@ -75,7 +79,7 @@ events with type `EquipmentCreatedEvent`.
 
 The below section explains how the event consuming infrastructure works.
 
-- [SpringKafkaEventListener](../src/main/java/deviceet/common/event/consume/infrastructure/SpringKafkaEventListener.java)
+- [SpringKafkaEventListener](../src/main/java/com/company/andy/common/event/consume/infrastructure/SpringKafkaEventListener.java)
   is the entry point of the whole event consuming process, it's also the only place that Kafka is referenced
 - Multiple `@KafkaListener` methods can be added inside `SpringKafkaEventListener` to listen to multiple categories of
   events
@@ -98,7 +102,8 @@ public class SpringKafkaEventListener {
 ```
 
 - `SpringKafkaEventListener` passes the event
-  to [EventConsumer](../src/main/java/deviceet/common/event/consume/EventConsumer.java). `EventConsumer` is agnostic to
+  to [EventConsumer](../src/main/java/com/company/andy/common/event/consume/EventConsumer.java). `EventConsumer` is
+  agnostic to
   messaging middlewares and it manages all handlers. The below code uses `consumeDomainEvent(DomainEvent event)` to
   handle Domain Events. If you are also consuming other types of events from other external systems, you may add more
   methods in addition to `consumeDomainEvent()`, like `consumeXxxEvent(XxxEvent event)`
@@ -114,11 +119,13 @@ public class SpringKafkaEventListener {
 
 - `EventConsumer` finds all handlers that can handle the event, and calls their `handle()` methods, the handlers'
   `priority`, `isTransactional()` and `isIdempotent()` are checked during this orchestration process
-- A wrapper class [ConsumingEvent](../src/main/java/deviceet/common/event/consume/ConsumingEvent.java) is created to
+- A wrapper class [ConsumingEvent](../src/main/java/com/company/andy/common/event/consume/ConsumingEvent.java) is
+  created to
   enable uniform handling of various types of events, not only Domain Events
 - `EventConsumer` uses `ConsumingEventDao.markEventAsConsumedByHandler()` to implement idempotency if the handler is not
   idempotent by itself, under the
-  hood [ConsumingEventDao](../src/main/java/deviceet/common/event/consume/ConsumingEventDao.java) uses a table named
+  hood [ConsumingEventDao](../src/main/java/com/company/andy/common/event/consume/ConsumingEventDao.java) uses a table
+  named
   `consuming-event` to achieve idempotency
 
 ```java
@@ -145,7 +152,8 @@ public class SpringKafkaEventListener {
   creation,
   otherwise the idempotency mechanism might not work
 - A `DefaultErrorHandler` is configured
-  in [EventConfiguration](../src/main/java/deviceet/common/event/EventConfiguration.java) to retry the event for at
+  in [EventConfiguration](../src/main/java/com/company/andy/common/event/EventConfiguration.java) to retry the event for
+  at
   most 3 times, then put the event into DLT if retry exhausts. If the event is consumed by multiple handlers, any
   handler that raises exception will result in retry on all handlers.
 

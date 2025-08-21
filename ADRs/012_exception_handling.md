@@ -10,13 +10,14 @@ There are 2 ways to model exceptions:
 ## Decision
 
 We use "Flat exceptions" model and use a
-single [ServiceException](../src/main/java/deviceet/common/exception/ServiceException.java) class for all.
+single [ServiceException](../src/main/java/com/company/andy/common/exception/ServiceException.java) class for all.
 
 ## Implementation
 
 Whenever you need to throw an exception, throw this `ServiceException` with the following parameters:
 
-- an [ErrorCode](../src/main/java/deviceet/common/exception/ErrorCode.java): the type of the exception, you may add more
+- an [ErrorCode](../src/main/java/com/company/andy/common/exception/ErrorCode.java): the type of the exception, you may
+  add more
   types according to your own needs. The `ErrorCode` is very useful for consumers to decide their actions.
 - an error message
 - Context data: key-value pairs that hold the context data of the exception, usually used by consumers to create their
@@ -30,7 +31,8 @@ Whenever you need to throw an exception, throw this `ServiceException` with the 
 
 ## API error responses
 
-A unified error response [QErrorResponse](../src/main/java/deviceet/common/exception/QErrorResponse.java) is built from
+A unified error response [QErrorResponse](../src/main/java/com/company/andy/common/exception/QErrorResponse.java) is
+built from
 `ServiceException`:
 
 ```json
@@ -53,9 +55,11 @@ A unified error response [QErrorResponse](../src/main/java/deviceet/common/excep
 
 There are 2 places of configuration that enables unified API errors:
 
-- [GlobalExceptionHandler](../src/main/java/deviceet/common/exception/GlobalExceptionHandler.java): handles exceptions
+- [GlobalExceptionHandler](../src/main/java/com/company/andy/common/exception/GlobalExceptionHandler.java): handles
+  exceptions
   raised from Spring MVC
-- [RestErrorController](../src/main/java/deviceet/common/exception/RestErrorController.java): serves as a fall back for
+- [RestErrorController](../src/main/java/com/company/andy/common/exception/RestErrorController.java): serves as a fall
+  back for
   handling exceptions for the whole application  
 
 

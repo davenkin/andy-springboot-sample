@@ -9,10 +9,10 @@
     </parent>
 
     <groupId>com.andy</groupId>
-    <artifactId>deviceet-device-management-service</artifactId>
+    <artifactId>andy-springboot-sample-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>deviceet-device-management-service</name>
-    <description>Device management API for deviceet.</description>
+    <name>andy-springboot-sample-service</name>
+    <description>Andy's sample Spring Boot project for building Microservices.</description>
 
     <properties>
         <java.version>17</java.version>

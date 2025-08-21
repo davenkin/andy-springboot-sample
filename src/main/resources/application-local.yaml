@@ -3,7 +3,7 @@ server:
 spring:
   data:
     mongodb:
-      uri: mongodb://localhost:27123/deviceet-local
+      uri: mongodb://localhost:27123/andy-local
     redis:
       database: 0
       host: localhost
