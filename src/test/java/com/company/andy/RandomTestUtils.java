@@ -3,6 +3,7 @@ package com.company.andy;
 import com.company.andy.common.model.Role;
 import com.company.andy.common.model.operator.UserOperator;
 import com.company.andy.sample.equipment.command.CreateEquipmentCommand;
+import com.company.andy.sample.equipment.command.UpdateEquipmentHolderCommand;
 import com.company.andy.sample.equipment.command.UpdateEquipmentNameCommand;
 import com.company.andy.sample.equipment.domain.EquipmentStatus;
 import com.company.andy.sample.maintenance.command.CreateMaintenanceRecordCommand;
@@ -16,12 +17,20 @@ public class RandomTestUtils {
         return "EQUIPMENT_NAME_" + RandomStringUtils.secure().nextAlphanumeric(10);
     }
 
+    public static String randomEquipmentHolderName() {
+        return "HOLDER_NAME_" + RandomStringUtils.secure().nextAlphanumeric(10);
+    }
+
     public static CreateEquipmentCommand randomCreateEquipmentCommand() {
         return new CreateEquipmentCommand(randomEquipmentName());
     }
 
     public static UpdateEquipmentNameCommand randomUpdateEquipmentNameCommand() {
         return new UpdateEquipmentNameCommand(randomEquipmentName());
+    }
+
+    public static UpdateEquipmentHolderCommand randomUpdateEquipmentHolderCommand() {
+        return new UpdateEquipmentHolderCommand(randomEquipmentHolderName());
     }
 
     public static CreateMaintenanceRecordCommand randomCreateMaintenanceRecordCommand(String equipmentId) {
