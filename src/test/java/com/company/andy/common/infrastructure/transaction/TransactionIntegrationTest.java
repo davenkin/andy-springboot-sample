@@ -48,13 +48,14 @@ class TransactionIntegrationTest extends IntegrationTest {
     }
 
     @Test
-    void should_work_for_multiple_aggregate_roots_with_transaction() {
+    void should_not_work_for_multiple_aggregate_roots_when_exception_thrown_with_transaction() {
         Operator operator = randomUserOperator();
         CreateEquipmentCommand createEquipmentCommand = randomCreateEquipmentCommand();
         String equipmentId = equipmentCommandService.createEquipment(createEquipmentCommand, operator);
         UpdateEquipmentNameCommand updateEquipmentNameCommand = randomUpdateEquipmentNameCommand();
         UpdateEquipmentHolderCommand updateEquipmentHolderCommand = randomUpdateEquipmentHolderCommand();
-        assertThrows(RuntimeException.class, () -> transactionTestingService.updateEquipmentNameAndHolderWithTransaction(equipmentId,
+
+        assertThrows(RuntimeException.class, () -> transactionTestingService.throwExceptionWithTransaction(equipmentId,
                 updateEquipmentNameCommand,
                 updateEquipmentHolderCommand, operator));
 
@@ -65,13 +66,32 @@ class TransactionIntegrationTest extends IntegrationTest {
     }
 
     @Test
-    void should_not_work_for_multiple_aggregate_roots_without_transaction() {
+    void should_work_for_multiple_aggregate_roots_when_exception_thrown_at_the_end_without_transaction() {
         Operator operator = randomUserOperator();
         CreateEquipmentCommand createEquipmentCommand = randomCreateEquipmentCommand();
         String equipmentId = equipmentCommandService.createEquipment(createEquipmentCommand, operator);
         UpdateEquipmentNameCommand updateEquipmentNameCommand = randomUpdateEquipmentNameCommand();
         UpdateEquipmentHolderCommand updateEquipmentHolderCommand = randomUpdateEquipmentHolderCommand();
-        assertThrows(RuntimeException.class, () -> transactionTestingService.updateEquipmentNameAndHolderWithoutTransaction(equipmentId,
+
+        assertThrows(RuntimeException.class, () -> transactionTestingService.throwExceptionAtTheEndWithoutTransaction(equipmentId,
+                updateEquipmentNameCommand,
+                updateEquipmentHolderCommand, operator));
+
+        Equipment dbEquipment = equipmentRepository.byId(equipmentId);
+        assertEquals(updateEquipmentNameCommand.name(), dbEquipment.getName());
+        assertEquals(updateEquipmentHolderCommand.name(), dbEquipment.getHolder());
+        assertNotNull(latestEventFor(equipmentId, EQUIPMENT_NAME_UPDATED_EVENT, EquipmentNameUpdatedEvent.class));
+    }
+
+    @Test
+    void should_not_work_for_multiple_aggregate_roots_when_exception_thrown_in_the_middle_without_transaction() {
+        Operator operator = randomUserOperator();
+        CreateEquipmentCommand createEquipmentCommand = randomCreateEquipmentCommand();
+        String equipmentId = equipmentCommandService.createEquipment(createEquipmentCommand, operator);
+        UpdateEquipmentNameCommand updateEquipmentNameCommand = randomUpdateEquipmentNameCommand();
+        UpdateEquipmentHolderCommand updateEquipmentHolderCommand = randomUpdateEquipmentHolderCommand();
+
+        assertThrows(RuntimeException.class, () -> transactionTestingService.throwExceptionInTheMiddleWithoutTransaction(equipmentId,
                 updateEquipmentNameCommand,
                 updateEquipmentHolderCommand, operator));
 
