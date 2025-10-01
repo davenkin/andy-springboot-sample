@@ -53,7 +53,7 @@ public abstract class IntegrationTest {
 ```
 
 The `IntegrationTest` is annotated with `@SpringBootTest`, instructing the test to load the whole Spring application
-context, hence creating an integration test environment.
+context, hence creating an integration test environment. Docker is not used for integration tests, instead embedded MongoDB and Redis are used.
 
 It's also annotated with `@ActiveProfiles(IT_PROFILE)` which
 uses [application-it.yaml](../src/test/resources/application-it.yaml) for Spring configuration.
