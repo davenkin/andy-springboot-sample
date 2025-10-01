@@ -59,6 +59,7 @@ This is a sample Spring Boot project for building Microservices with the followi
 - We do both integration testing and unit testing with a preference on integration testing
 - To run tests, locate them inside IDE and run them directly from there.
 - We have a [testing strategy](./ADRs/010_testing_strategy.md), please read it before writing any tests
+- There is no need to start docker-compose for running integration tests, as they do not use dockerized MongoDB or Redis but their embedded versions.
 
 ## Architecture Decision Records (ADRs)
 
