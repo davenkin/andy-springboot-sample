@@ -59,7 +59,9 @@ services:
     environment:
       - KC_BOOTSTRAP_ADMIN_USERNAME=admin
       - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
-    command: start-dev
+    volumes:
+      - ./test-realm-realm.json:/opt/keycloak/data/import/test-realm-realm.json
+    command: start-dev --import-realm
     networks:
       - andy-local-network
     restart: always

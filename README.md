@@ -49,6 +49,7 @@ This is a sample Spring Boot project for building Microservices with the followi
 - Open [http://localhost:5123/about](http://localhost:5123/about) to check if the application runs
   successfully.
 - To stop docker-compose and delete data, run `./stop-docker-compose.sh`.
+- If you need Keycloak, open [http://localhost:7123](http://localhost:7123), navigate to `test-realm` and create a user with credentials, then you will be able to login with this user.
 
 ## How to build
 
