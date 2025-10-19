@@ -33,8 +33,8 @@ class MaintenanceRecordQueryServiceIntegrationTest extends IntegrationTest {
             maintenanceRecordCommandService.createMaintenanceRecord(randomCreateMaintenanceRecordCommand(equipmentId), operator);
         });
 
-        ListMaintenanceRecordsQuery query = ListMaintenanceRecordsQuery.builder().pageSize(12).build();
-        PagedResponse<QListedMaintenanceRecord> records = maintenanceRecordQueryService.listMaintenanceRecords(query, operator);
+        MaintenanceRecordPagedQuery query = MaintenanceRecordPagedQuery.builder().pageSize(12).build();
+        PagedResponse<QPagedMaintenanceRecord> records = maintenanceRecordQueryService.listMaintenanceRecords(query, operator);
 
         assertEquals(12, records.getContent().size());
     }

@@ -26,16 +26,16 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 public class MaintenanceRecordQueryService {
     private final MongoTemplate mongoTemplate;
 
-    public PagedResponse<QListedMaintenanceRecord> listMaintenanceRecords(ListMaintenanceRecordsQuery listQuery, Operator operator) {
+    public PagedResponse<QPagedMaintenanceRecord> listMaintenanceRecords(MaintenanceRecordPagedQuery pagedQuery, Operator operator) {
         Criteria criteria = where(AggregateRoot.Fields.orgId).is(operator.getOrgId());
 
-        if (isNotBlank(listQuery.getSearch())) {
-            criteria.orOperator(where(MaintenanceRecord.Fields.equipmentName).regex(listQuery.getSearch()),
-                    where(MaintenanceRecord.Fields.description).regex(listQuery.getSearch()));
+        if (isNotBlank(pagedQuery.getSearch())) {
+            criteria.orOperator(where(MaintenanceRecord.Fields.equipmentName).regex(pagedQuery.getSearch()),
+                    where(MaintenanceRecord.Fields.description).regex(pagedQuery.getSearch()));
         }
 
-        if (listQuery.getStatus() != null) {
-            criteria.and(MaintenanceRecord.Fields.status).is(listQuery.getStatus());
+        if (pagedQuery.getStatus() != null) {
+            criteria.and(MaintenanceRecord.Fields.status).is(pagedQuery.getStatus());
         }
 
         Query query = Query.query(criteria);
@@ -47,14 +47,14 @@ public class MaintenanceRecordQueryService {
                 AggregateRoot.Fields.createdAt,
                 AggregateRoot.Fields.createdBy);
 
-        Pageable pageable = listQuery.pageable();
+        Pageable pageable = pagedQuery.pageable();
         long count = mongoTemplate.count(query, MaintenanceRecord.class);
         if (count == 0) {
             return PagedResponse.empty(pageable);
         }
 
-        List<QListedMaintenanceRecord> devices = mongoTemplate.find(query.with(pageable), QListedMaintenanceRecord.class, MAINTENANCE_RECORD_COLLECTION);
-        return new PagedResponse<>(devices, pageable, count);
+        List<QPagedMaintenanceRecord> records = mongoTemplate.find(query.with(pageable), QPagedMaintenanceRecord.class, MAINTENANCE_RECORD_COLLECTION);
+        return new PagedResponse<>(records, pageable, count);
     }
 
     public QDetailedMaintenanceRecord getMaintenanceRecordDetail(String maintenanceRecordId, Operator operator) {

@@ -6,7 +6,7 @@ import lombok.Builder;
 import java.time.Instant;
 
 @Builder
-public record QListedMaintenanceRecord(
+public record QPagedMaintenanceRecord(
         String id,
         String equipmentId,
         String equipmentName,

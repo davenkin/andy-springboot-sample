@@ -4,7 +4,7 @@ import com.company.andy.sample.equipment.domain.EquipmentStatus;
 
 import java.time.Instant;
 
-public record QListedEquipment(
+public record QPagedEquipment(
         String id,
         String orgId,
         String name,

@@ -46,7 +46,7 @@
   ```
 
 - All pagination request use HTTP POST method. The query class should
-  extend [PageableRequest](../src/main/java/com/company/andy/common/util/PageableRequest.java) which has the following
+  extend [PagedQuery](../src/main/java/com/company/andy/common/util/PagedQuery.java) which has the following
   pagination fields:
     - `pageNumber`: the zero-based page index
     - `pageSize`: the page size
@@ -59,14 +59,14 @@
         - `@NoArgsConstructor(access = PRIVATE)`: for Json deserialization
 
 Example query
-class [ListEquipmentsQuery](../src/test/java/com/company/andy/sample/equipment/query/ListEquipmentsQuery.java):
+class [EquipmentPagedQuery](../src/test/java/com/company/andy/sample/equipment/query/EquipmentPagedQuery.java):
 
 ```java
 @Getter
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor(access = PRIVATE)
-public class ListEquipmentsQuery extends PageableRequest {
+public class EquipmentPagedQuery extends PagedQuery {
     @Schema(description = "Search text")
     @Max(50)
     private String search;
@@ -83,7 +83,7 @@ The controller receives a `Query` object using POST method:
 ```java
     @Operation(summary = "Query equipments")
     @PostMapping("/list")
-    public PagedResponse<QListedEquipment> listEquipments(@RequestBody @Valid ListEquipmentsQuery query) {
+    public PagedResponse<QPagedEquipment> listEquipments(@RequestBody @Valid EquipmentPagedQuery query) {
         // In real situations, operator is normally created from the current user in context, such as Spring Security's SecurityContextHolder
         Operator operator = SAMPLE_USER_OPERATOR;
 

@@ -25,15 +25,15 @@ public class EquipmentQueryService {
     private final MongoTemplate mongoTemplate;
     private final EquipmentRepository equipmentRepository;
 
-    public PagedResponse<QListedEquipment> listEquipments(ListEquipmentsQuery listQuery, Operator operator) {
+    public PagedResponse<QPagedEquipment> listEquipments(EquipmentPagedQuery pagedQuery, Operator operator) {
         Criteria criteria = where(AggregateRoot.Fields.orgId).is(operator.getOrgId());
 
-        if (isNotBlank(listQuery.getSearch())) {
-            criteria.and(Equipment.Fields.name).regex(listQuery.getSearch());
+        if (isNotBlank(pagedQuery.getSearch())) {
+            criteria.and(Equipment.Fields.name).regex(pagedQuery.getSearch());
         }
 
-        if (listQuery.getStatus() != null) {
-            criteria.and(Equipment.Fields.status).is(listQuery.getStatus());
+        if (pagedQuery.getStatus() != null) {
+            criteria.and(Equipment.Fields.status).is(pagedQuery.getStatus());
         }
 
         Query query = Query.query(criteria);
@@ -43,14 +43,14 @@ public class EquipmentQueryService {
                 AggregateRoot.Fields.createdAt,
                 AggregateRoot.Fields.createdBy);
 
-        Pageable pageable = listQuery.pageable();
+        Pageable pageable = pagedQuery.pageable();
         long count = mongoTemplate.count(query, Equipment.class);
         if (count == 0) {
             return PagedResponse.empty(pageable);
         }
 
-        List<QListedEquipment> devices = mongoTemplate.find(query.with(pageable), QListedEquipment.class, EQUIPMENT_COLLECTION);
-        return new PagedResponse<>(devices, pageable, count);
+        List<QPagedEquipment> equipments = mongoTemplate.find(query.with(pageable), QPagedEquipment.class, EQUIPMENT_COLLECTION);
+        return new PagedResponse<>(equipments, pageable, count);
     }
 
     public QDetailedEquipment getEquipmentDetail(String equipmentId, Operator operator) {

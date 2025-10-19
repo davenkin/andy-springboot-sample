@@ -5,10 +5,10 @@ import com.company.andy.common.util.PagedResponse;
 import com.company.andy.common.util.ResponseId;
 import com.company.andy.sample.maintenance.command.CreateMaintenanceRecordCommand;
 import com.company.andy.sample.maintenance.command.MaintenanceRecordCommandService;
-import com.company.andy.sample.maintenance.query.ListMaintenanceRecordsQuery;
+import com.company.andy.sample.maintenance.query.MaintenanceRecordPagedQuery;
 import com.company.andy.sample.maintenance.query.MaintenanceRecordQueryService;
 import com.company.andy.sample.maintenance.query.QDetailedMaintenanceRecord;
-import com.company.andy.sample.maintenance.query.QListedMaintenanceRecord;
+import com.company.andy.sample.maintenance.query.QPagedMaintenanceRecord;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -50,7 +50,7 @@ public class MaintenanceRecordController {
 
     @Operation(summary = "Query maintenance records")
     @PostMapping("/list")
-    public PagedResponse<QListedMaintenanceRecord> listMaintenanceRecords(@RequestBody @Valid ListMaintenanceRecordsQuery query) {
+    public PagedResponse<QPagedMaintenanceRecord> listMaintenanceRecords(@RequestBody @Valid MaintenanceRecordPagedQuery query) {
         // In real situations, operator is normally created from the current user in context, such as Spring Security's SecurityContextHolder
         Operator operator = SAMPLE_USER_OPERATOR;
 

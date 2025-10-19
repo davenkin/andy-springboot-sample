@@ -11,7 +11,7 @@ This is a sample Spring Boot project for building Microservices with the followi
 - Distributed lock for scheduled jobs using [Shedlock](https://github.com/lukas-krecan/ShedLock)
 - Standardized [folder structure](./ADRs/005_project_structure.md) with business first approach
 - Standardized pagination support
-  with [PageableRequest](src/main/java/com/company/andy/common/util/PageableRequest.java)
+  with [PagedQuery](src/main/java/com/company/andy/common/util/PagedQuery.java)
   and [PagedResponse](src/main/java/com/company/andy/common/util/PagedResponse.java)
 - Builtin [Snowflake ID generator](src/main/java/com/company/andy/common/util/SnowflakeIdGenerator.java)
 - Domain event modeling based on [DomainEvent](src/main/java/com/company/andy/common/event/DomainEvent.java)

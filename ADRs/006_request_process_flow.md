@@ -231,7 +231,7 @@ example, when querying a list of `Equipment`s:
 ```java
     @Operation(summary = "Query equipments")
     @PostMapping("/list")
-    public PagedResponse<QListedEquipment> listEquipments(@RequestBody @Valid ListEquipmentsQuery query) {
+    public PagedResponse<QPagedEquipment> listEquipments(@RequestBody @Valid EquipmentPagedQuery query) {
         // In real situations, operator is normally created from the current user in context, such as Spring Security's SecurityContextHolder
         Operator operator = SAMPLE_USER_OPERATOR;
 
@@ -243,20 +243,20 @@ example, when querying a list of `Equipment`s:
 `ApplicationService`.
 
 2. `EquipmentQueryService.listEquipments()` uses `MongoTemplate` to query data from database directly, and uses its own
-   query model `QListedEquipment`:
+   query model `QPagedEquipment`:
 
 ```java
-    public PagedResponse<QListedEquipment> listEquipments(ListEquipmentsQuery listQuery, Operator operator) {
+    public PagedResponse<QPagedEquipment> listEquipments(EquipmentPagedQuery pagedQuery, Operator operator) {
         Criteria criteria = where(AggregateRoot.Fields.orgId).is(operator.getOrgId());
 
-        if (isNotBlank(listQuery.getSearch())) {
-            criteria.and(Equipment.Fields.name).regex(listQuery.getSearch());
+        if (isNotBlank(pagedQuery.getSearch())) {
+            criteria.and(Equipment.Fields.name).regex(pagedQuery.getSearch());
         }
         
         // code omitted
         
-        List<QListedEquipment> devices = mongoTemplate.find(query.with(pageable), QListedEquipment.class, EQUIPMENT_COLLECTION);
-        return new PagedResponse<>(devices, pageable, count);
+        List<QPagedEquipment> equipments = mongoTemplate.find(query.with(pageable), QPagedEquipment.class, EQUIPMENT_COLLECTION);
+        return new PagedResponse<>(equipments, pageable, count);
     }
 ```
 

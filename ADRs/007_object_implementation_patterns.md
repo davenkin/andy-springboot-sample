@@ -435,7 +435,7 @@ public class RemoveOldMaintenanceRecordsJob {
 - QueryService follows CQRS principle in that it can access database directly, bypassing the Domain Model which
   CommandService relies on
 - QueryService can have its own data model just for querying data, for
-  example [QListedEquipment](../src/test/java/com/company/andy/sample/equipment/query/QListedEquipment.java) represents
+  example [QPagedEquipment](../src/test/java/com/company/andy/sample/equipment/query/QPagedEquipment.java) represents
   an
   Equipment item in the list
 
@@ -448,13 +448,13 @@ public class EquipmentQueryService {
     private final MongoTemplate mongoTemplate;
     private final EquipmentRepository equipmentRepository;
 
-    public PagedResponse<QListedEquipment> listEquipments(ListEquipmentsQuery listQuery, Operator operator) {
+    public PagedResponse<QPagedEquipment> listEquipments(EquipmentPagedQuery pagedQuery, Operator operator) {
         Criteria criteria = where(AggregateRoot.Fields.orgId).is(operator.getOrgId());
         
         // code omitted
         
-        List<QListedEquipment> devices = mongoTemplate.find(query.with(pageable), QListedEquipment.class, EQUIPMENT_COLLECTION);
-        return new PagedResponse<>(devices, pageable, count);
+        List<QPagedEquipment> equipments = mongoTemplate.find(query.with(pageable), QPagedEquipment.class, EQUIPMENT_COLLECTION);
+        return new PagedResponse<>(equipments, pageable, count);
     }
 }
 ```
@@ -464,18 +464,18 @@ public class EquipmentQueryService {
 - Query objects are quite similar to Command objects, the main difference is that Query objects are request objects that
   instructs the software to read data, yet Command objects are for writing data
 - For queries that return paged data, the query object should
-  extend [PageableRequest](../src/main/java/com/company/andy/common/util/PageableRequest.java)
+  extend [PagedQuery](../src/main/java/com/company/andy/common/util/PagedQuery.java)
 - Query objects should use JSR-303 annotations  (such as `@NotNull`, `@Max` and `@Pattern`) for data validation
 - For API documentation, `@Schema` should be used to on query fields
 
-Example [ListEquipmentsQuery](../src/test/java/com/company/andy/sample/equipment/query/ListEquipmentsQuery.java):
+Example [EquipmentPagedQuery](../src/test/java/com/company/andy/sample/equipment/query/EquipmentPagedQuery.java):
 
 ```java
 @Getter
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor(access = PRIVATE)
-public class ListEquipmentsQuery extends PageableRequest {
+public class EquipmentPagedQuery extends PagedQuery {
     @Schema(description = "Search text")
     @Max(50)
     private String search;

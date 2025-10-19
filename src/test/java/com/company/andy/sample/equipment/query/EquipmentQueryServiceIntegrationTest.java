@@ -27,8 +27,8 @@ class EquipmentQueryServiceIntegrationTest extends IntegrationTest {
             equipmentCommandService.createEquipment(randomCreateEquipmentCommand(), operator);
         });
 
-        ListEquipmentsQuery query = ListEquipmentsQuery.builder().pageSize(12).build();
-        PagedResponse<QListedEquipment> listedEquipments = equipmentQueryService.listEquipments(query, operator);
+        EquipmentPagedQuery query = EquipmentPagedQuery.builder().pageSize(12).build();
+        PagedResponse<QPagedEquipment> listedEquipments = equipmentQueryService.listEquipments(query, operator);
 
         assertEquals(12, listedEquipments.getContent().size());
     }
