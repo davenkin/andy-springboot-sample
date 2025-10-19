@@ -46,7 +46,7 @@
   ```
 
 - All pagination request use HTTP POST method. The query class should
-  extend [PagedQuery](../src/main/java/com/company/andy/common/util/PagedQuery.java) which has the following
+  extend [PageQuery](../src/main/java/com/company/andy/common/util/PageQuery.java) which has the following
   pagination fields:
     - `pageNumber`: the zero-based page index
     - `pageSize`: the page size
@@ -59,14 +59,14 @@
         - `@NoArgsConstructor(access = PRIVATE)`: for Json deserialization
 
 Example query
-class [EquipmentPagedQuery](../src/test/java/com/company/andy/sample/equipment/query/EquipmentPagedQuery.java):
+class [PageEquipmentQuery](../src/test/java/com/company/andy/sample/equipment/query/PageEquipmentQuery.java):
 
 ```java
 @Getter
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor(access = PRIVATE)
-public class EquipmentPagedQuery extends PagedQuery {
+public class PageEquipmentQuery extends PageQuery {
     @Schema(description = "Search text")
     @Max(50)
     private String search;
@@ -83,7 +83,7 @@ The controller receives a `Query` object using POST method:
 ```java
     @Operation(summary = "Query equipments")
     @PostMapping("/paged")
-    public PagedResponse<QPagedEquipment> pageEquipments(@RequestBody @Valid EquipmentPagedQuery pagedQuery) {
+    public PagedResponse<QPagedEquipment> pageEquipments(@RequestBody @Valid PageEquipmentQuery query) {
         // In real situations, operator is normally created from the current user in context, such as Spring Security's SecurityContextHolder
         Operator operator = SAMPLE_USER_OPERATOR;
 
@@ -115,10 +115,10 @@ public class Equipment extends AggregateRoot {}
 ```
 
 ```java
-if (pagedQuery.status() != null) {
+if (query.status() != null) {
 
    // Use "Equipment.Fields.status" to access Equipment's "status" field
-   criteria.and(Equipment.Fields.status).is(pagedQuery.status());
+   criteria.and(Equipment.Fields.status).is(query.status());
 }
 ```
 

@@ -16,11 +16,11 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.springframework.data.domain.Sort.Direction.ASC;
 import static org.springframework.data.domain.Sort.Direction.DESC;
 
-class PagedQueryTest {
+class PageQueryTest {
 
     @Test
     void should_get_pageable_for_empty_pagination_fields() {
-        TestPagedQuery query = TestPagedQuery.builder().build();
+        TestPageQuery query = TestPageQuery.builder().build();
         Pageable pageable = query.pageable();
         assertEquals(0, pageable.getPageNumber());
         assertEquals(25, pageable.getPageSize());
@@ -29,7 +29,7 @@ class PagedQueryTest {
 
     @Test
     void should_get_pageable_for_normal_request() {
-        TestPagedQuery query = TestPagedQuery.builder().pageNumber(1).pageSize(30).pageSort(List.of("field1,ASC", "field2,DESC")).build();
+        TestPageQuery query = TestPageQuery.builder().pageNumber(1).pageSize(30).pageSort(List.of("field1,ASC", "field2,DESC")).build();
 
         Pageable pageable = query.pageable();
         assertEquals(1, pageable.getPageNumber());
@@ -43,7 +43,7 @@ class PagedQueryTest {
 
     @Test
     void should_get_pageable_for_at_most_3_sorts() {
-        TestPagedQuery query = TestPagedQuery.builder().pageNumber(1).pageSize(30)
+        TestPageQuery query = TestPageQuery.builder().pageNumber(1).pageSize(30)
                 .pageSort(List.of("field1,ASC", "field2,DESC", "field3,DESC", "field4,DESC")).build();
 
         Pageable pageable = query.pageable();
@@ -55,7 +55,7 @@ class PagedQueryTest {
 
     @Test
     void should_get_pageable_with_default_sort_direction_of_asc() {
-        TestPagedQuery query = TestPagedQuery.builder().pageNumber(1).pageSize(30).pageSort(List.of("field1")).build();
+        TestPageQuery query = TestPageQuery.builder().pageNumber(1).pageSize(30).pageSort(List.of("field1")).build();
 
         Pageable pageable = query.pageable();
 
@@ -65,7 +65,7 @@ class PagedQueryTest {
 
     @Test
     void should_get_pageable_with_default_sort_direction_of_asc_for_wrong_direction_name() {
-        TestPagedQuery query = TestPagedQuery.builder().pageNumber(1).pageSize(30).pageSort(List.of("field1,wrongdirection")).build();
+        TestPageQuery query = TestPageQuery.builder().pageNumber(1).pageSize(30).pageSort(List.of("field1,wrongdirection")).build();
 
         Pageable pageable = query.pageable();
 
@@ -75,7 +75,7 @@ class PagedQueryTest {
 
     @Test
     void should_get_pageable_with_sortable_property_missing() {
-        TestPagedQuery query = TestPagedQuery.builder().pageNumber(1).pageSize(30).pageSort(List.of(",asc")).build();
+        TestPageQuery query = TestPageQuery.builder().pageNumber(1).pageSize(30).pageSort(List.of(",asc")).build();
 
         Pageable pageable = query.pageable();
 
@@ -85,7 +85,7 @@ class PagedQueryTest {
 
     @Test
     void should_get_pageable_with_sortable_element_empty() {
-        TestPagedQuery query = TestPagedQuery.builder().pageNumber(1).pageSize(30).pageSort(List.of("")).build();
+        TestPageQuery query = TestPageQuery.builder().pageNumber(1).pageSize(30).pageSort(List.of("")).build();
 
         Pageable pageable = query.pageable();
 
@@ -94,7 +94,7 @@ class PagedQueryTest {
 
     @Test
     void should_deduplicate_same_property_and_keep_the_first() {
-        TestPagedQuery query = TestPagedQuery.builder().pageNumber(1).pageSize(30)
+        TestPageQuery query = TestPageQuery.builder().pageNumber(1).pageSize(30)
                 .pageSort(List.of("field1,ASC", "field1,DESC")).build();
 
         Pageable pageable = query.pageable();
@@ -108,6 +108,6 @@ class PagedQueryTest {
     @SuperBuilder
     @EqualsAndHashCode(callSuper = true)
     @NoArgsConstructor(access = PRIVATE)
-    static class TestPagedQuery extends PagedQuery {
+    static class TestPageQuery extends PageQuery {
     }
 }

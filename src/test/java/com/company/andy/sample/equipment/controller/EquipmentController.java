@@ -9,7 +9,7 @@ import com.company.andy.sample.equipment.command.UpdateEquipmentHolderCommand;
 import com.company.andy.sample.equipment.command.UpdateEquipmentNameCommand;
 import com.company.andy.sample.equipment.domain.EquipmentSummary;
 import com.company.andy.sample.equipment.query.EquipmentQueryService;
-import com.company.andy.sample.equipment.query.EquipmentPagedQuery;
+import com.company.andy.sample.equipment.query.PageEquipmentsQuery;
 import com.company.andy.sample.equipment.query.QDetailedEquipment;
 import com.company.andy.sample.equipment.query.QPagedEquipment;
 import io.swagger.v3.oas.annotations.Operation;
@@ -78,11 +78,11 @@ public class EquipmentController {
 
     @Operation(summary = "Query equipments")
     @PostMapping("/paged")
-    public PagedResponse<QPagedEquipment> pageEquipments(@RequestBody @Valid EquipmentPagedQuery pagedQuery) {
+    public PagedResponse<QPagedEquipment> pageEquipments(@RequestBody @Valid PageEquipmentsQuery query) {
         // In real situations, operator is normally created from the current user in context, such as Spring Security's SecurityContextHolder
         Operator operator = SAMPLE_USER_OPERATOR;
 
-        return this.equipmentQueryService.pageEquipments(pagedQuery, operator);
+        return this.equipmentQueryService.pageEquipments(query, operator);
     }
 
     @Operation(summary = "Get equipment detail")

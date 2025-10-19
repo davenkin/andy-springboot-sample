@@ -25,15 +25,15 @@ public class EquipmentQueryService {
     private final MongoTemplate mongoTemplate;
     private final EquipmentRepository equipmentRepository;
 
-    public PagedResponse<QPagedEquipment> pageEquipments(EquipmentPagedQuery pagedQuery, Operator operator) {
+    public PagedResponse<QPagedEquipment> pageEquipments(PageEquipmentsQuery query, Operator operator) {
         Criteria criteria = where(AggregateRoot.Fields.orgId).is(operator.getOrgId());
 
-        if (isNotBlank(pagedQuery.getSearch())) {
-            criteria.and(Equipment.Fields.name).regex(pagedQuery.getSearch());
+        if (isNotBlank(query.getSearch())) {
+            criteria.and(Equipment.Fields.name).regex(query.getSearch());
         }
 
-        if (pagedQuery.getStatus() != null) {
-            criteria.and(Equipment.Fields.status).is(pagedQuery.getStatus());
+        if (query.getStatus() != null) {
+            criteria.and(Equipment.Fields.status).is(query.getStatus());
         }
 
         Query mongoQuery = Query.query(criteria);
@@ -43,7 +43,7 @@ public class EquipmentQueryService {
                 AggregateRoot.Fields.createdAt,
                 AggregateRoot.Fields.createdBy);
 
-        Pageable pageable = pagedQuery.pageable();
+        Pageable pageable = query.pageable();
         long count = mongoTemplate.count(mongoQuery, Equipment.class);
         if (count == 0) {
             return PagedResponse.empty(pageable);

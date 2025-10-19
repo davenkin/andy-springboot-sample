@@ -1,6 +1,6 @@
-package com.company.andy.sample.equipment.query;
+package com.company.andy.sample.maintenance.query;
 
-import com.company.andy.common.util.PagedQuery;
+import com.company.andy.common.util.PageQuery;
 import com.company.andy.sample.equipment.domain.EquipmentStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Max;
@@ -15,7 +15,7 @@ import static lombok.AccessLevel.PRIVATE;
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor(access = PRIVATE)
-public class EquipmentPagedQuery extends PagedQuery {
+public class PageMaintenanceRecordsQuery extends PageQuery {
     @Schema(description = "Search text")
     @Max(50)
     private String search;

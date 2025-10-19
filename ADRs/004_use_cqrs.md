@@ -56,7 +56,7 @@ Based on the above, the **lightweight CQRS** approach meets our needs and is our
   don't use the domain object `Equipment`, instead a query model `QPagedEquipment` is used.
 
 ```java
-    public PagedResponse<QPagedEquipment> pageEquipments(EquipmentPagedQuery pagedQuery, Operator operator) {
+    public PagedResponse<QPagedEquipment> pageEquipments(PageEquipmentQuery query, Operator operator) {
         Criteria criteria = where(AggregateRoot.Fields.orgId).is(operator.getOrgId());
         
         // more code omitted

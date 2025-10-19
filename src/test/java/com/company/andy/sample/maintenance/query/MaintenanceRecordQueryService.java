@@ -26,16 +26,16 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 public class MaintenanceRecordQueryService {
     private final MongoTemplate mongoTemplate;
 
-    public PagedResponse<QPagedMaintenanceRecord> pageMaintenanceRecords(MaintenanceRecordPagedQuery pagedQuery, Operator operator) {
+    public PagedResponse<QPagedMaintenanceRecord> pageMaintenanceRecords(PageMaintenanceRecordsQuery query, Operator operator) {
         Criteria criteria = where(AggregateRoot.Fields.orgId).is(operator.getOrgId());
 
-        if (isNotBlank(pagedQuery.getSearch())) {
-            criteria.orOperator(where(MaintenanceRecord.Fields.equipmentName).regex(pagedQuery.getSearch()),
-                    where(MaintenanceRecord.Fields.description).regex(pagedQuery.getSearch()));
+        if (isNotBlank(query.getSearch())) {
+            criteria.orOperator(where(MaintenanceRecord.Fields.equipmentName).regex(query.getSearch()),
+                    where(MaintenanceRecord.Fields.description).regex(query.getSearch()));
         }
 
-        if (pagedQuery.getStatus() != null) {
-            criteria.and(MaintenanceRecord.Fields.status).is(pagedQuery.getStatus());
+        if (query.getStatus() != null) {
+            criteria.and(MaintenanceRecord.Fields.status).is(query.getStatus());
         }
 
         Query mongoQuery = Query.query(criteria);
@@ -47,7 +47,7 @@ public class MaintenanceRecordQueryService {
                 AggregateRoot.Fields.createdAt,
                 AggregateRoot.Fields.createdBy);
 
-        Pageable pageable = pagedQuery.pageable();
+        Pageable pageable = query.pageable();
         long count = mongoTemplate.count(mongoQuery, MaintenanceRecord.class);
         if (count == 0) {
             return PagedResponse.empty(pageable);

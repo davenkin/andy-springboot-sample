@@ -231,7 +231,7 @@ example, when querying a list of `Equipment`s:
 ```java
     @Operation(summary = "Query equipments")
     @PostMapping("/paged")
-    public PagedResponse<QPagedEquipment> pageEquipments(@RequestBody @Valid EquipmentPagedQuery pagedQuery) {
+    public PagedResponse<QPagedEquipment> pageEquipments(@RequestBody @Valid PageEquipmentQuery query) {
         // In real situations, operator is normally created from the current user in context, such as Spring Security's SecurityContextHolder
         Operator operator = SAMPLE_USER_OPERATOR;
 
@@ -246,11 +246,11 @@ example, when querying a list of `Equipment`s:
    query model `QPagedEquipment`:
 
 ```java
-    public PagedResponse<QPagedEquipment> pageEquipments(EquipmentPagedQuery pagedQuery, Operator operator) {
+    public PagedResponse<QPagedEquipment> pageEquipments(PageEquipmentQuery query, Operator operator) {
         Criteria criteria = where(AggregateRoot.Fields.orgId).is(operator.getOrgId());
 
-        if (isNotBlank(pagedQuery.getSearch())) {
-            criteria.and(Equipment.Fields.name).regex(pagedQuery.getSearch());
+        if (isNotBlank(query.getSearch())) {
+            criteria.and(Equipment.Fields.name).regex(query.getSearch());
         }
         
         // code omitted

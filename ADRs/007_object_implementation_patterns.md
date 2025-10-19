@@ -448,7 +448,7 @@ public class EquipmentQueryService {
     private final MongoTemplate mongoTemplate;
     private final EquipmentRepository equipmentRepository;
 
-    public PagedResponse<QPagedEquipment> pageEquipments(EquipmentPagedQuery pagedQuery, Operator operator) {
+    public PagedResponse<QPagedEquipment> pageEquipments(PageEquipmentQuery query, Operator operator) {
         Criteria criteria = where(AggregateRoot.Fields.orgId).is(operator.getOrgId());
         
         // code omitted
@@ -464,18 +464,18 @@ public class EquipmentQueryService {
 - Query objects are quite similar to Command objects, the main difference is that Query objects are request objects that
   instructs the software to read data, yet Command objects are for writing data
 - For queries that return paged data, the query object should
-  extend [PagedQuery](../src/main/java/com/company/andy/common/util/PagedQuery.java)
+  extend [PageQuery](../src/main/java/com/company/andy/common/util/PageQuery.java)
 - Query objects should use JSR-303 annotations  (such as `@NotNull`, `@Max` and `@Pattern`) for data validation
 - For API documentation, `@Schema` should be used to on query fields
 
-Example [EquipmentPagedQuery](../src/test/java/com/company/andy/sample/equipment/query/EquipmentPagedQuery.java):
+Example [PageEquipmentQuery](../src/test/java/com/company/andy/sample/equipment/query/PageEquipmentQuery.java):
 
 ```java
 @Getter
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor(access = PRIVATE)
-public class EquipmentPagedQuery extends PagedQuery {
+public class PageEquipmentQuery extends PageQuery {
     @Schema(description = "Search text")
     @Max(50)
     private String search;
