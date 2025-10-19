@@ -21,15 +21,15 @@ class EquipmentQueryServiceIntegrationTest extends IntegrationTest {
     private EquipmentCommandService equipmentCommandService;
 
     @Test
-    void should_list_equipments() {
+    void should_page_equipments() {
         Operator operator = randomUserOperator();
         IntStream.range(0, 20).forEach(i -> {
             equipmentCommandService.createEquipment(randomCreateEquipmentCommand(), operator);
         });
 
         EquipmentPagedQuery query = EquipmentPagedQuery.builder().pageSize(12).build();
-        PagedResponse<QPagedEquipment> listedEquipments = equipmentQueryService.listEquipments(query, operator);
+        PagedResponse<QPagedEquipment> equipments = equipmentQueryService.pageEquipments(query, operator);
 
-        assertEquals(12, listedEquipments.getContent().size());
+        assertEquals(12, equipments.getContent().size());
     }
 }

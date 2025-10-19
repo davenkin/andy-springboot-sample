@@ -113,7 +113,7 @@ public class EquipmentQueryService {
     private final MongoTemplate mongoTemplate;
     private final EquipmentRepository equipmentRepository;
 
-    public PagedResponse<QPagedEquipment> listEquipments(EquipmentPagedQuery pagedQuery, Operator operator) {
+    public PagedResponse<QPagedEquipment> pageEquipments(EquipmentPagedQuery pagedQuery, Operator operator) {
         Criteria criteria = where(AggregateRoot.Fields.orgId).is(operator.getOrgId());
 
         // code omitted

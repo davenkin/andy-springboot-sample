@@ -25,7 +25,7 @@ class MaintenanceRecordQueryServiceIntegrationTest extends IntegrationTest {
     private MaintenanceRecordCommandService maintenanceRecordCommandService;
 
     @Test
-    void should_list_maintenance_records() {
+    void should_page_maintenance_records() {
         Operator operator = randomUserOperator();
         CreateEquipmentCommand createEquipmentCommand = randomCreateEquipmentCommand();
         String equipmentId = equipmentCommandService.createEquipment(createEquipmentCommand, operator);
@@ -34,7 +34,7 @@ class MaintenanceRecordQueryServiceIntegrationTest extends IntegrationTest {
         });
 
         MaintenanceRecordPagedQuery query = MaintenanceRecordPagedQuery.builder().pageSize(12).build();
-        PagedResponse<QPagedMaintenanceRecord> records = maintenanceRecordQueryService.listMaintenanceRecords(query, operator);
+        PagedResponse<QPagedMaintenanceRecord> records = maintenanceRecordQueryService.pageMaintenanceRecords(query, operator);
 
         assertEquals(12, records.getContent().size());
     }

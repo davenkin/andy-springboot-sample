@@ -82,12 +82,12 @@ The controller receives a `Query` object using POST method:
 
 ```java
     @Operation(summary = "Query equipments")
-    @PostMapping("/list")
-    public PagedResponse<QPagedEquipment> listEquipments(@RequestBody @Valid EquipmentPagedQuery query) {
+    @PostMapping("/paged")
+    public PagedResponse<QPagedEquipment> pageEquipments(@RequestBody @Valid EquipmentPagedQuery pagedQuery) {
         // In real situations, operator is normally created from the current user in context, such as Spring Security's SecurityContextHolder
         Operator operator = SAMPLE_USER_OPERATOR;
 
-        return this.equipmentQueryService.listEquipments(query, operator);
+        return this.equipmentQueryService.pageEquipments(query, operator);
     }
 ```
 
@@ -115,10 +115,10 @@ public class Equipment extends AggregateRoot {}
 ```
 
 ```java
-if (listEquipmentsQuery.status() != null) {
+if (pagedQuery.status() != null) {
 
    // Use "Equipment.Fields.status" to access Equipment's "status" field
-   criteria.and(Equipment.Fields.status).is(listEquipmentsQuery.status());
+   criteria.and(Equipment.Fields.status).is(pagedQuery.status());
 }
 ```
 

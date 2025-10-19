@@ -49,12 +49,12 @@ public class MaintenanceRecordController {
     }
 
     @Operation(summary = "Query maintenance records")
-    @PostMapping("/list")
-    public PagedResponse<QPagedMaintenanceRecord> listMaintenanceRecords(@RequestBody @Valid MaintenanceRecordPagedQuery query) {
+    @PostMapping("/paged")
+    public PagedResponse<QPagedMaintenanceRecord> pageMaintenanceRecords(@RequestBody @Valid MaintenanceRecordPagedQuery pagedQuery) {
         // In real situations, operator is normally created from the current user in context, such as Spring Security's SecurityContextHolder
         Operator operator = SAMPLE_USER_OPERATOR;
 
-        return maintenanceRecordQueryService.listMaintenanceRecords(query, operator);
+        return maintenanceRecordQueryService.pageMaintenanceRecords(pagedQuery, operator);
     }
 
     @Operation(summary = "Get maintenance record detail")

@@ -77,12 +77,12 @@ public class EquipmentController {
     }
 
     @Operation(summary = "Query equipments")
-    @PostMapping("/list")
-    public PagedResponse<QPagedEquipment> listEquipments(@RequestBody @Valid EquipmentPagedQuery query) {
+    @PostMapping("/paged")
+    public PagedResponse<QPagedEquipment> pageEquipments(@RequestBody @Valid EquipmentPagedQuery pagedQuery) {
         // In real situations, operator is normally created from the current user in context, such as Spring Security's SecurityContextHolder
         Operator operator = SAMPLE_USER_OPERATOR;
 
-        return this.equipmentQueryService.listEquipments(query, operator);
+        return this.equipmentQueryService.pageEquipments(pagedQuery, operator);
     }
 
     @Operation(summary = "Get equipment detail")

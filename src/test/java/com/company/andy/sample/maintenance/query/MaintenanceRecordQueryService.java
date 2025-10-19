@@ -26,7 +26,7 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 public class MaintenanceRecordQueryService {
     private final MongoTemplate mongoTemplate;
 
-    public PagedResponse<QPagedMaintenanceRecord> listMaintenanceRecords(MaintenanceRecordPagedQuery pagedQuery, Operator operator) {
+    public PagedResponse<QPagedMaintenanceRecord> pageMaintenanceRecords(MaintenanceRecordPagedQuery pagedQuery, Operator operator) {
         Criteria criteria = where(AggregateRoot.Fields.orgId).is(operator.getOrgId());
 
         if (isNotBlank(pagedQuery.getSearch())) {
@@ -38,8 +38,8 @@ public class MaintenanceRecordQueryService {
             criteria.and(MaintenanceRecord.Fields.status).is(pagedQuery.getStatus());
         }
 
-        Query query = Query.query(criteria);
-        query.fields().include(
+        Query mongoQuery = Query.query(criteria);
+        mongoQuery.fields().include(
                 MaintenanceRecord.Fields.equipmentId,
                 MaintenanceRecord.Fields.equipmentName,
                 MaintenanceRecord.Fields.status,
@@ -48,12 +48,12 @@ public class MaintenanceRecordQueryService {
                 AggregateRoot.Fields.createdBy);
 
         Pageable pageable = pagedQuery.pageable();
-        long count = mongoTemplate.count(query, MaintenanceRecord.class);
+        long count = mongoTemplate.count(mongoQuery, MaintenanceRecord.class);
         if (count == 0) {
             return PagedResponse.empty(pageable);
         }
 
-        List<QPagedMaintenanceRecord> records = mongoTemplate.find(query.with(pageable), QPagedMaintenanceRecord.class, MAINTENANCE_RECORD_COLLECTION);
+        List<QPagedMaintenanceRecord> records = mongoTemplate.find(mongoQuery.with(pageable), QPagedMaintenanceRecord.class, MAINTENANCE_RECORD_COLLECTION);
         return new PagedResponse<>(records, pageable, count);
     }
 

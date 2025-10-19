@@ -52,11 +52,11 @@ Based on the above, the **lightweight CQRS** approach meets our needs and is our
 
 - Apart from CommandServices, we create standalone QueryServices to implement the query side. In
   QueryService, we use `MongoTemplate` to query database directly, bypassing the domain models, and also we use a
-  separate set of query objects other than domain objects. For example, in `EquipmentQueryService.listEquipments()`, we
+  separate set of query objects other than domain objects. For example, in `EquipmentQueryService.pageEquipments()`, we
   don't use the domain object `Equipment`, instead a query model `QPagedEquipment` is used.
 
 ```java
-    public PagedResponse<QPagedEquipment> listEquipments(EquipmentPagedQuery pagedQuery, Operator operator) {
+    public PagedResponse<QPagedEquipment> pageEquipments(EquipmentPagedQuery pagedQuery, Operator operator) {
         Criteria criteria = where(AggregateRoot.Fields.orgId).is(operator.getOrgId());
         
         // more code omitted

@@ -226,27 +226,27 @@ For deleting data, first load the `AggregateRoot` and then delete it. For exampl
 As we are using [CQRS](./004_use_cqrs.md), querying data can bypass the domain models and talk to database directly. For
 example, when querying a list of `Equipment`s:
 
-1. The request hits `EquipmentController`, which further calls `EquipmentQueryService.listEquipments()`:
+1. The request hits `EquipmentController`, which further calls `EquipmentQueryService.pageEquipments()`:
 
 ```java
     @Operation(summary = "Query equipments")
-    @PostMapping("/list")
-    public PagedResponse<QPagedEquipment> listEquipments(@RequestBody @Valid EquipmentPagedQuery query) {
+    @PostMapping("/paged")
+    public PagedResponse<QPagedEquipment> pageEquipments(@RequestBody @Valid EquipmentPagedQuery pagedQuery) {
         // In real situations, operator is normally created from the current user in context, such as Spring Security's SecurityContextHolder
         Operator operator = SAMPLE_USER_OPERATOR;
 
-        return this.equipmentQueryService.listEquipments(query, operator);
+        return this.equipmentQueryService.pageEquipments(query, operator);
     }
 ```
 
 `EquipmentQueryService` is at the same level with `EquipmentCommandService`, they both are under the category of
 `ApplicationService`.
 
-2. `EquipmentQueryService.listEquipments()` uses `MongoTemplate` to query data from database directly, and uses its own
+2. `EquipmentQueryService.pageEquipments()` uses `MongoTemplate` to query data from database directly, and uses its own
    query model `QPagedEquipment`:
 
 ```java
-    public PagedResponse<QPagedEquipment> listEquipments(EquipmentPagedQuery pagedQuery, Operator operator) {
+    public PagedResponse<QPagedEquipment> pageEquipments(EquipmentPagedQuery pagedQuery, Operator operator) {
         Criteria criteria = where(AggregateRoot.Fields.orgId).is(operator.getOrgId());
 
         if (isNotBlank(pagedQuery.getSearch())) {
