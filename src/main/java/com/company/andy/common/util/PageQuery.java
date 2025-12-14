@@ -7,27 +7,14 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Order;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 
-import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.toList;
 import static lombok.AccessLevel.PROTECTED;
-import static org.apache.commons.collections4.CollectionUtils.isEmpty;
-import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
-import static org.apache.commons.lang3.StringUtils.isBlank;
-import static org.springframework.data.domain.Sort.Direction.ASC;
-import static org.springframework.data.domain.Sort.Direction.fromOptionalString;
-import static org.springframework.data.domain.Sort.Order.asc;
-import static org.springframework.data.domain.Sort.by;
-import static org.springframework.data.domain.Sort.unsorted;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @Getter
 @SuperBuilder
@@ -49,47 +36,18 @@ public abstract class PageQuery {
     @Max(value = 1000)
     private int pageSize;
 
-    @Schema(description = "Array of sorting criteria. Format for each criteria: property,(asc|desc). Default sort order is ascending.", defaultValue = "[]")
-    private List<String> pageSort;
+    @Schema(description = "The field name to be sorted.")
+    private String sortField;
+
+    @Schema(description = "The sort order for sortField.", defaultValue = "ASC")
+    private SortOrder sortOrder;
 
     public Pageable pageable() {
         int pageNumber = this.pageNumber > 0 ? this.pageNumber : DEFAULT_PAGE_NUMBER;
         int pageSize = this.pageSize > 0 ? this.pageSize : DEFAULT_PAGE_SIZE;
-        return PageRequest.of(pageNumber, pageSize, this.calculateSort());
-    }
-
-    private Sort calculateSort() {
-        if (isEmpty(this.pageSort)) {
-            return unsorted();
-        }
-
-        List<Order> orders = pageSort.stream()
-                .filter(StringUtils::isNotBlank)
-                .map(it -> {
-                    String[] split = it.trim().split(PROPERTY_DIRECTION_DELIMITER);
-                    String property = split[0].trim();
-                    if (isBlank(property)) {
-                        return null;
-                    }
-
-                    if (split.length == 1) {
-                        return asc(property);
-                    }
-
-                    String directionStr = split[1].trim();
-                    Sort.Direction direction = fromOptionalString(directionStr).orElse(ASC);
-                    return new Order(direction, property);
-                })
-                .filter(Objects::nonNull)
-                .collect(groupingBy(
-                        Order::getProperty,
-                        LinkedHashMap::new,   // preserves order of first occurrence
-                        toList()
-                )).values().stream()
-                .map(theOrders -> theOrders.get(0))
-                .limit(MAX_SORT_PROPERTIES)
-                .toList();
-
-        return isNotEmpty(orders) ? by(orders) : unsorted();
+        Sort sort = isNotBlank(this.sortField) ?
+                Sort.by(Sort.Direction.fromString(Optional.ofNullable(this.sortOrder).orElse(SortOrder.ASC).name()), this.sortField) :
+                Sort.unsorted();
+        return PageRequest.of(pageNumber, pageSize, sort);
     }
 }
