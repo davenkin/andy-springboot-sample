@@ -9,9 +9,9 @@
     </parent>
 
     <groupId>com.andy</groupId>
-    <artifactId>andy-springboot-sample</artifactId>
+    <artifactId>andy-springboot3-template</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>andy-springboot-sample</name>
+    <name>andy-springboot3-template</name>
     <description>Andy's sample Spring Boot project for building Microservices.</description>
 
     <properties>
