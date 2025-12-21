@@ -10,7 +10,7 @@ This is a sample Spring Boot project for building Microservices with the followi
 - Architecture validation using [ArchUnit](https://www.archunit.org/)
 - Distributed lock for scheduled jobs using [Shedlock](https://github.com/lukas-krecan/ShedLock)
 - Standardized [folder structure](./ADRs/005_project_structure.md) with business first approach
-- Standardized pagination support
+- Standardized pagination implementation
   with [PageQuery](src/main/java/com/company/andy/common/util/PageQuery.java)
   and [PagedResponse](src/main/java/com/company/andy/common/util/PagedResponse.java)
 - Builtin [Snowflake ID generator](src/main/java/com/company/andy/common/util/SnowflakeIdGenerator.java)
@@ -19,7 +19,7 @@ This is a sample Spring Boot project for building Microservices with the followi
   using [Transactional Outbox](https://microservices.io/patterns/data/transactional-outbox.html) pattern
 - [Event consuming](./ADRs/009_event_consuming.md) mechanism with idempotency support
 - Standardized [exception handling](./ADRs/012_exception_handling.md)
-- Lightweight [Command Query Responsibility Segregation (CQRS)](./ADRs/004_use_cqrs.md) support
+- Lightweight [Command Query Responsibility Segregation (CQRS)](./ADRs/004_use_cqrs.md) implementation
 - Domain modeling using [Domain Driven Design (DDD)](./ADRs/003_use_ddd.md)
 - Standardized [request process flow](./ADRs/006_request_process_flow.md)
 - Standardized [object implementation pattern](./ADRs/007_object_implementation_patterns.md)

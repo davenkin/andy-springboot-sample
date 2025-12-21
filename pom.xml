@@ -8,11 +8,11 @@
         <version>3.5.0</version>
     </parent>
 
-    <groupId>com.andy</groupId>
+    <groupId>com.company.andy</groupId>
     <artifactId>andy-springboot3-template</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>andy-springboot3-template</name>
-    <description>Andy's sample Spring Boot project for building Microservices.</description>
+    <description>A template Spring Boot 3 project for building Microservices.</description>
 
     <properties>
         <java.version>17</java.version>
