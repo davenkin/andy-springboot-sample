@@ -4,7 +4,7 @@ services:
     ports:
       - "27123:27017"
     environment:
-      - "MONGO_INITDB_DATABASE=andy-local"
+      - "MONGO_INITDB_DATABASE=andy-springboot3-template-local"
     volumes:
       - andy-springboot3-template-mongo-volume:/data/db
     command: mongod --replSet rs0
