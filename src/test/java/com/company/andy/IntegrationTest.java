@@ -4,7 +4,6 @@ import static java.util.Objects.requireNonNull;
 
 import static com.company.andy.common.util.CommonUtils.mongoConcatFields;
 import static com.company.andy.common.util.CommonUtils.requireNonBlank;
-import static org.junit.jupiter.api.parallel.ExecutionMode.SAME_THREAD;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.data.domain.Sort.Direction.DESC;
 import static org.springframework.data.domain.Sort.by;
@@ -20,7 +19,6 @@ import com.company.andy.common.event.publish.PublishingDomainEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.parallel.Execution;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -32,7 +30,6 @@ import redis.embedded.RedisServer;
 @Slf4j
 @ActiveProfiles("it")
 //@ActiveProfiles("it-local")
-@Execution(SAME_THREAD)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 public abstract class IntegrationTest {
   private static RedisServer redisServer;
