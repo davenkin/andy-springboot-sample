@@ -10,7 +10,5 @@ spring:
       port: 6123
       password: aredissecret
       timeout: 10000
-  cache:
-    type: redis
   kafka:
     bootstrap-servers: localhost:9123
