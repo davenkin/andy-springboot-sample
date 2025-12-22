@@ -10,7 +10,6 @@ import static com.company.andy.common.event.publish.DomainEventPublishStatus.PUB
 import static com.company.andy.common.event.publish.DomainEventPublishStatus.PUBLISH_SUCCEED;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.parallel.ExecutionMode.SAME_THREAD;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.doReturn;
 
@@ -23,12 +22,10 @@ import com.company.andy.sample.equipment.command.CreateEquipmentCommand;
 import com.company.andy.sample.equipment.command.EquipmentCommandService;
 import com.company.andy.sample.equipment.domain.event.EquipmentCreatedEvent;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Execution;
 import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
-@Execution(SAME_THREAD)
 class DomainEventPublishJobIntegrationTest extends IntegrationTest {
 
   @Autowired

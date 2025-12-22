@@ -7,7 +7,6 @@ import static com.company.andy.common.event.DomainEventType.EQUIPMENT_NAME_UPDAT
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.parallel.ExecutionMode.SAME_THREAD;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
@@ -26,13 +25,11 @@ import com.company.andy.sample.equipment.eventhandler.EquipmentCreatedEventHandl
 import com.company.andy.sample.equipment.eventhandler.EquipmentNameUpdatedEventHandler;
 import com.company.andy.sample.equipment.eventhandler.EquipmentUpdatedEventHandler;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Execution;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
-@Execution(SAME_THREAD)
 class EventConsumerIntegrationTest extends IntegrationTest {
 
   @Autowired

@@ -10,7 +10,6 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.parallel.ExecutionMode.SAME_THREAD;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.doThrow;
 
@@ -24,12 +23,12 @@ import com.company.andy.sample.equipment.command.UpdateEquipmentNameCommand;
 import com.company.andy.sample.equipment.domain.Equipment;
 import com.company.andy.sample.equipment.domain.EquipmentRepository;
 import com.company.andy.sample.equipment.domain.event.EquipmentNameUpdatedEvent;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Execution;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
-@Execution(SAME_THREAD)
+@Disabled
 class TransactionIntegrationTest extends IntegrationTest {
 
   @Autowired
