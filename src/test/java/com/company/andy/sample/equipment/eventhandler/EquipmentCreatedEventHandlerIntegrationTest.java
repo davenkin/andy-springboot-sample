@@ -14,8 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 import static com.company.andy.common.event.DomainEventType.EQUIPMENT_CREATED_EVENT;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class EquipmentCreatedEventHandlerIntegrationTest extends IntegrationTest {
     @Autowired
@@ -35,6 +34,9 @@ class EquipmentCreatedEventHandlerIntegrationTest extends IntegrationTest {
         String cacheKey = "Cache:ORG_EQUIPMENTS::" + operator.getOrgId();
         assertFalse(stringRedisTemplate.hasKey(cacheKey));
         List<EquipmentSummary> equipmentSummaries = equipmentRepository.cachedEquipmentSummaries(operator.getOrgId());
+        assertNotNull(equipmentSummaries);
+        List<EquipmentSummary> cachedEquipmentSummaries = equipmentRepository.cachedEquipmentSummaries(operator.getOrgId());
+        assertNotNull(cachedEquipmentSummaries);
         assertTrue(stringRedisTemplate.hasKey(cacheKey));
         EquipmentCreatedEvent equipmentCreatedEvent = latestEventFor(equipmentId, EQUIPMENT_CREATED_EVENT, EquipmentCreatedEvent.class);
 
