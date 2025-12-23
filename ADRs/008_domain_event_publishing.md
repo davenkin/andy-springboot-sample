@@ -32,6 +32,17 @@ refer to [event consuming](./009_event_consuming.md) for more detail.
 
 ## Implementation
 
+- For every domain event class, you need to register it inside [DomainEvent](../src/main/java/com/company/andy/common/event/DomainEvent.java). This is for Jackson to work properly even without the type information(`__TypeId__`) in Kafka message headers.
+```java
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME,
+    include = JsonTypeInfo.As.EXISTING_PROPERTY,
+    property = "type",
+    visible = true)
+@JsonSubTypes(value = {
+    @Type(value = EquipmentNameUpdatedEvent.class, name = "EQUIPMENT_NAME_UPDATED_EVENT"),
+})
+```
+
 - For sending a Domain Event, the only action that you need is calling `raiseEvent()` from an Aggregate Root:
 
 ```java
@@ -43,6 +54,8 @@ public void updateName(String newName) {
   raiseEvent(new EquipmentNameUpdatedEvent(name, this));
 }
 ```
+
+After the entity is saved into MongoDB, the event infrastructure will take care of sending the raised event into Kafka.
 
 #### Domain event publishing architecture
 
