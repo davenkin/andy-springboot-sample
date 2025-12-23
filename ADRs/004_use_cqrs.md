@@ -28,9 +28,9 @@ different. In command side, business rules should be strictly validated and the
 business logic should be modeled
 according to commonly accepted principles like [SOLID](https://en.wikipedia.org/wiki/SOLID)
 and [GRASP](https://en.wikipedia.org/wiki/GRASP_(object-oriented_design)). In query side, the restrictions are more
-loosen and we can use whatever means to hit the database for fast and high performant queries.
+loosen, and we can use whatever means to hit the database for fast and high performant queries.
 
-Also we think CQRS should not be a heavyweight architecture that scares developers away, but should be just enough to
+Also, we think CQRS should not be a heavyweight architecture that scares developers away, but should be just enough to
 fulfil its job.
 
 Based on the above, the **lightweight CQRS** approach meets our needs and is our way to go.
@@ -41,13 +41,13 @@ Based on the above, the **lightweight CQRS** approach meets our needs and is our
   Aggregate Roots, and the Aggregate Roots contains the domain logic.
 
 ```java
-    @Transactional
-    public void updateEquipmentName(String id, UpdateEquipmentNameCommand command, Operator operator) {
+@Transactional
+public void updateEquipmentName(String id, UpdateEquipmentNameCommand command, Operator operator) {
         Equipment equipment = equipmentRepository.byId(id, operator.getOrgId());
         equipmentDomainService.updateEquipmentName(equipment, command.name());
         equipmentRepository.save(equipment);
         log.info("Updated name for Equipment[{}].", equipment.getId());
-    }
+}
 ```
 
 - Apart from CommandServices, we create standalone QueryServices to implement the query side. In
@@ -56,15 +56,15 @@ Based on the above, the **lightweight CQRS** approach meets our needs and is our
   don't use the domain object `Equipment`, instead a query model `QPagedEquipment` is used.
 
 ```java
-    public PagedResponse<QPagedEquipment> pageEquipments(PageEquipmentQuery query, Operator operator) {
-        Criteria criteria = where(AggregateRoot.Fields.orgId).is(operator.getOrgId());
-        
-        // more code omitted
-  
-        // use query model QPagedEquipment instead of domain model Equipment
-        List<QPagedEquipment> equipments = mongoTemplate.find(query.with(pageable), QPagedEquipment.class, EQUIPMENT_COLLECTION);
-        return new PagedResponse<>(equipments, pageable, count);
-    }
+public PagedResponse<QPagedEquipment> pageEquipments(PageEquipmentQuery query, Operator operator) {
+  Criteria criteria = where(AggregateRoot.Fields.orgId).is(operator.getOrgId());
+
+  // more code omitted
+
+  // use query model QPagedEquipment instead of domain model Equipment
+  List<QPagedEquipment> equipments = mongoTemplate.find(query.with(pageable), QPagedEquipment.class, EQUIPMENT_COLLECTION);
+  return new PagedResponse<>(equipments, pageable, count);
+}
 ```
 
 - Database table serves as a container for both command side data and query side data. For
@@ -73,9 +73,10 @@ Based on the above, the **lightweight CQRS** approach meets our needs and is our
 
 ```java
 public class Equipment extends AggregateRoot {
-    private String name; 
-    private EquipmentStatus status;
-    private String holder;
-    private long maintenanceRecordCount; // Query side field
+  private String name;
+  private EquipmentStatus status;
+  private String holder;
+  private long maintenanceRecordCount; // Query side field
+}
 ```
 

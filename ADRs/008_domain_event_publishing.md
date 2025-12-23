@@ -35,64 +35,68 @@ refer to [event consuming](./009_event_consuming.md) for more detail.
 - For sending a Domain Event, the only action that you need is calling `raiseEvent()` from an Aggregate Root:
 
 ```java
-    public void updateName(String newName) {
-        if (Objects.equals(newName, this.name)) {
-            return;
-        }
-        this.name = newName;
-        raiseEvent(new EquipmentNameUpdatedEvent(name, this));
-    }
+public void updateName(String newName) {
+  if (Objects.equals(newName, this.name)) {
+    return;
+  }
+  this.name = newName;
+  raiseEvent(new EquipmentNameUpdatedEvent(name, this));
+}
 ```
+
+#### Domain event publishing architecture
+
+![domain event publishing](../ADRs/asset/domain-event-publishing.png)
 
 The following steps are already been implemented for you, but for illustration let's walk them through.
 
 - After `AggregateRoot.raiseEvent()` is called, the event is stored inside the Aggregate Root object temporarily:
 
 ```java
-    protected final void raiseEvent(DomainEvent event) {
-        requireNonNull(event, "event must not be null.");
-        requireNonNull(event.getType(), "event's type must not be null.");
-        requireNonBlank(event.getArId(), "event's arId must not be null.");
+protected final void raiseEvent(DomainEvent event) {
+  requireNonNull(event, "event must not be null.");
+  requireNonNull(event.getType(), "event's type must not be null.");
+  requireNonBlank(event.getArId(), "event's arId must not be null.");
 
-        events().add(event);
-    }
+  events().add(event);
+}
 ```
 
 - Then when you save the Aggregate Root object by calling `AbstractMongoRepository.save()`, the event will be
   staged(saved) into a MongoDB collection named `publishing-event`:
 
 ```java
-    //AbstractMongoRepository
-    
-    @Transactional
-    public void save(AR ar) {
-        requireNonNull(ar, arType() + " must not be null.");
-        requireNonBlank(ar.getId(), arType() + " ID must not be blank.");
+//AbstractMongoRepository
 
-        ar.onModify(currentOperator.id());
-        mongoTemplate.save(ar);
-        stageEvents(ar.getEvents());
-        ar.clearEvents();
-    }
-    
-    private void stageEvents(List<DomainEvent> events) {
-        if (isNotEmpty(events)) {
-            List<DomainEvent> orderedEvents = events.stream().sorted(comparing(DomainEvent::getRaisedAt)).toList();
-            String raisedBy = currentOperator.id();
-            orderedEvents.forEach(event -> event.raisedBy(raisedBy));
-            publishingDomainEventDao.stage(orderedEvents);
-        }
-    }
+@Transactional
+public void save(AR ar) {
+  requireNonNull(ar, arType() + " must not be null.");
+  requireNonBlank(ar.getId(), arType() + " ID must not be blank.");
+
+  ar.onModify(currentOperator.id());
+  mongoTemplate.save(ar);
+  stageEvents(ar.getEvents());
+  ar.clearEvents();
+}
+
+private void stageEvents(List<DomainEvent> events) {
+  if (isNotEmpty(events)) {
+    List<DomainEvent> orderedEvents = events.stream().sorted(comparing(DomainEvent::getRaisedAt)).toList();
+    String raisedBy = currentOperator.id();
+    orderedEvents.forEach(event -> event.raisedBy(raisedBy));
+    publishingDomainEventDao.stage(orderedEvents);
+  }
+}
 ```
 
 ```java
-    //PublishingDomainEventDao
-    
-    public void stage(List<DomainEvent> events) {
-        requireNonNull(events, "Domain events must not be null.");
-        List<PublishingDomainEvent> publishingDomainEvents = events.stream().map(PublishingDomainEvent::new).toList();
-        mongoTemplate.insertAll(publishingDomainEvents);
-    }
+//PublishingDomainEventDao
+
+public void stage(List<DomainEvent> events) {
+  requireNonNull(events, "Domain events must not be null.");
+  List<PublishingDomainEvent> publishingDomainEvents = events.stream().map(PublishingDomainEvent::new).toList();
+  mongoTemplate.insertAll(publishingDomainEvents);
+}
 ```
 
 As the Domain Event is saved into the database along with Aggregate Root in the same database transaction, we ensure
@@ -104,24 +108,24 @@ or rollback together.
   configuration in `EventConfiguration`:
 
 ```java
+@Bean(destroyMethod = "stop")
+MessageListenerContainer mongoDomainEventChangeStreamListenerContainer(
+    MongoTemplate mongoTemplate,
+    TaskExecutor taskExecutor,
+    DomainEventPublishJob domainEventPublishJob) {
+  MessageListenerContainer container = new DefaultMessageListenerContainer(mongoTemplate, taskExecutor);
 
-    @Bean(destroyMethod = "stop")
-    MessageListenerContainer mongoDomainEventChangeStreamListenerContainer(MongoTemplate mongoTemplate,
-                                                                           TaskExecutor taskExecutor,
-                                                                           DomainEventPublishJob domainEventPublishJob) {
-        MessageListenerContainer container = new DefaultMessageListenerContainer(mongoTemplate, taskExecutor);
-
-        // Get notification on DomainEvent insertion in MongoDB, then publish staged Domain Events to messaging middleware such as Kafka
-        container.register(ChangeStreamRequest.builder(
-                        (MessageListener<ChangeStreamDocument<Document>, PublishingDomainEvent>) message -> {
-                            domainEventPublishJob.publishStagedDomainEvents(100);
-                        })
-                .collection(PUBLISHING_EVENT_COLLECTION)
-                .filter(new Document("$match", new Document("operationType", OperationType.INSERT.getValue())))
-                .build(), PublishingDomainEvent.class);
-        container.start();
-        return container;
-    }
+  // Get notification on DomainEvent insertion in MongoDB, then publish staged Domain Events to messaging middleware such as Kafka
+  container.register(ChangeStreamRequest.builder(
+          (MessageListener<ChangeStreamDocument<Document>, PublishingDomainEvent>) message -> {
+            domainEventPublishJob.publishStagedDomainEvents(100);
+          })
+      .collection(PUBLISHING_EVENT_COLLECTION)
+      .filter(new Document("$match", new Document("operationType", OperationType.INSERT.getValue())))
+      .build(), PublishingDomainEvent.class);
+  container.start();
+  return container;
+}
 ```
 
 Upon receiving MongoDB Change Streams on event insertion, we are not sending the currently inserted event into Kafka
@@ -134,23 +138,23 @@ publishing of Domain Events to Kafka.
   collection and send them to Kafka in the order they are created:
 
 ```java
-    public void publishStagedDomainEvents(int batchSize) {
-        if (batchSize > MAX_BATCH_SIZE || batchSize < 1) {
-            throw new IllegalArgumentException("batchSize must be greater than or equal to 1 and less than 500.");
-        }
+public void publishStagedDomainEvents(int batchSize) {
+  if (batchSize > MAX_BATCH_SIZE || batchSize < 1) {
+    throw new IllegalArgumentException("batchSize must be greater than or equal to 1 and less than 500.");
+  }
 
-        try {
-            // Use a distributed lock to ensure only one node get run as a time, otherwise it may easily result in duplicated events
-            var result = lockingTaskExecutor.executeWithLock(() -> doPublishStagedDomainEvents(batchSize),
-                    new LockConfiguration(now(), "publish-domain-events", ofMinutes(1), ofMillis(1)));
-            List<String> publishedEventIds = result.getResult();
-            if (isNotEmpty(publishedEventIds)) {
-                log.debug("Published domain events {}.", publishedEventIds);
-            }
-        } catch (Throwable e) {
-            log.error("Error happened while publish domain events.", e);
-        }
+  try {
+    // Use a distributed lock to ensure only one node get run as a time, otherwise it may easily result in duplicated events
+    var result = lockingTaskExecutor.executeWithLock(() -> doPublishStagedDomainEvents(batchSize),
+        new LockConfiguration(now(), "publish-domain-events", ofMinutes(1), ofMillis(1)));
+    List<String> publishedEventIds = result.getResult();
+    if (isNotEmpty(publishedEventIds)) {
+      log.debug("Published domain events {}.", publishedEventIds);
     }
+  } catch (Throwable e) {
+    log.error("Error happened while publish domain events.", e);
+  }
+}
 ```
 
 - Once the event is sent to Kafka, the event in the database will be marked as sent. This also creates a distributed
