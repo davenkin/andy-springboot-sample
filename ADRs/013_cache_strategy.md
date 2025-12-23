@@ -31,14 +31,16 @@ public record EquipmentSummary(String id,
 ```java
 @Bean
 public RedisCacheManagerBuilderCustomizer redisBuilderCustomizer(ObjectMapper objectMapper) {
+  var defaultSerializer = new GenericJackson2JsonRedisSerializer(objectMapper);
+
   return builder -> builder
       .cacheDefaults(defaultCacheConfig()
           .prefixCacheNameWith(Constants.CACHE_PREFIX)
-          .serializeValuesWith(fromSerializer(new GenericJacksonJsonRedisSerializer(objectMapper)))
+          .serializeValuesWith(fromSerializer(defaultSerializer))
           .entryTtl(ofDays(7)))
       .withCacheConfiguration(ORG_EQUIPMENTS_CACHE, defaultCacheConfig()
           .prefixCacheNameWith(Constants.CACHE_PREFIX)
-          .serializeValuesWith(fromSerializer(new JacksonJsonRedisSerializer<>(objectMapper, CachedOrgEquipmentSummaries.class)))
+          .serializeValuesWith(fromSerializer(new Jackson2JsonRedisSerializer<>(objectMapper, CachedOrgEquipmentSummaries.class)))
           .entryTtl(ofDays(7)))
       ;
 }

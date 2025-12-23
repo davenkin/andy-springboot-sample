@@ -1,5 +1,14 @@
 package com.company.andy.common.configuration;
 
+import static java.time.Duration.ofDays;
+
+import static com.company.andy.common.util.Constants.ORG_EQUIPMENTS_CACHE;
+import static org.springframework.data.redis.cache.RedisCacheConfiguration.defaultCacheConfig;
+import static org.springframework.data.redis.serializer.RedisSerializationContext.SerializationPair.fromSerializer;
+
+import com.company.andy.common.util.Constants;
+import com.company.andy.feature.equipment.infrastructure.CachedOrgEquipmentSummaries;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.autoconfigure.cache.RedisCacheManagerBuilderCustomizer;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -7,29 +16,30 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
-
-import static java.time.Duration.ofDays;
-import static org.springframework.data.redis.cache.RedisCacheConfiguration.defaultCacheConfig;
-import static org.springframework.data.redis.serializer.RedisSerializationContext.SerializationPair.fromSerializer;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 
 @EnableCaching
 @Configuration(proxyBeanMethods = false)
 public class RedisConfiguration {
-    private static final String CACHE_PREFIX = "Cache:";
 
-    @Bean
-    public RedisCacheManagerBuilderCustomizer redisBuilderCustomizer() {
-        var defaultSerializer = new GenericJackson2JsonRedisSerializer();
+  @Bean
+  public RedisCacheManagerBuilderCustomizer redisBuilderCustomizer(ObjectMapper objectMapper) {
+    var defaultSerializer = new GenericJackson2JsonRedisSerializer(objectMapper);
 
-        return builder -> builder
-                .cacheDefaults(defaultCacheConfig()
-                        .prefixCacheNameWith(CACHE_PREFIX)
-                        .serializeValuesWith(fromSerializer(defaultSerializer))
-                        .entryTtl(ofDays(7)));
-    }
+    return builder -> builder
+        .cacheDefaults(defaultCacheConfig()
+            .prefixCacheNameWith(Constants.CACHE_PREFIX)
+            .serializeValuesWith(fromSerializer(defaultSerializer))
+            .entryTtl(ofDays(7)))
+        .withCacheConfiguration(ORG_EQUIPMENTS_CACHE, defaultCacheConfig()
+            .prefixCacheNameWith(Constants.CACHE_PREFIX)
+            .serializeValuesWith(fromSerializer(new Jackson2JsonRedisSerializer<>(objectMapper, CachedOrgEquipmentSummaries.class)))
+            .entryTtl(ofDays(7)))
+        ;
+  }
 
-    @Bean
-    public StringRedisTemplate stringRedisTemplate(RedisConnectionFactory redisConnectionFactory) {
-        return new StringRedisTemplate(redisConnectionFactory);
-    }
+  @Bean
+  public StringRedisTemplate stringRedisTemplate(RedisConnectionFactory redisConnectionFactory) {
+    return new StringRedisTemplate(redisConnectionFactory);
+  }
 }
