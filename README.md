@@ -2,7 +2,7 @@
 
 This is a sample Spring Boot project for building Microservices with the following features:
 
-- Data persistence with MongoDB
+- Data persistence using MongoDB
 - Messaging using Kafka
 - Cache using Redis
 - API documentation using [Springdoc](./ADRs/011_api_documentation.md)
@@ -28,9 +28,9 @@ This is a sample Spring Boot project for building Microservices with the followi
 
 - Java 17
 - Spring Boot 3.5.3
-- Spring Data Mongodb 4.5.1
-- Spring Data Redis 3.5.0
-- Spring Kafka 3.3.7
+- Spring Data Mongodb
+- Spring Data Redis
+- Spring Kafka
 
 ## How to run locally
 
@@ -60,7 +60,8 @@ This is a sample Spring Boot project for building Microservices with the followi
 - We do both integration testing and unit testing with a preference on integration testing
 - To run tests, locate them inside IDE and run them directly from there.
 - We have a [testing strategy](./ADRs/010_testing_strategy.md), please read it before writing any tests
-- There is no need to start docker-compose for running integration tests, as they do not use dockerized MongoDB or Redis but their embedded versions.
+- There is no need to start docker-compose for running integration tests, as they do not use dockerized MongoDB or Redis
+  but their embedded versions.
 
 ## Architecture Decision Records (ADRs)
 
@@ -69,9 +70,25 @@ decisions. ADRs are stored in the `ADRs` directory and follow a [specific format
 
 ## Sample implementation code
 
-The `src/test/java/com/company/andy/sample` folder contains various common coding practices that should be followed
-when writing your own code. Please refer
-to [sample code introduction](src/test/java/com/company/andy/sample/sample-code-introduction.md) for more detail.
+The `src/main/java/com/company/andy/feature/equipment` and `src/main/java/com/company/andy/feature/maintenance` folder
+contain various common coding practices that should be followed
+when writing your own code.
+
+- There are 2 main business entities:
+    - `Equipment`: Represents an equipment that needs to be managed, such as a computer.
+    - `MaintenanceRecord`: Represents a maintenance record created for an `Equipment`.
+- The business stories includes:
+    - Create an `Equipment`.
+    - Update the `name` of an `Equipment`. The updated name should also be reflected in all `MaintenanceRecord`s for
+      this
+      `Equipment`,this is achieved using domain event.
+    - Update the `holder` of an `Equipment`.
+    - Delete an `Equipment`. This should also delete all `MaintenanceRecord`s for this `Equipment`, this is achieved
+      using domain event.
+    - Create a `MaintenanceRecord`. Its `status` will be used to update the `status` of the `Equipment`, this
+      is achieved using domain event.
+- It is recommended that you keep these sample code as references until you have implemented at least two real business
+  entities.
 
 ## Top level business entities (Aggregate Roots)
 
