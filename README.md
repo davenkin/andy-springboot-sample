@@ -48,6 +48,7 @@ This is a sample Spring Boot project for building Microservices with the followi
     - Run `main` in  `SpringBootWebApplication`, assuming that docker-compose is already up running.
 - Open [http://localhost:5123/about](http://localhost:5123/about) to check if the application runs
   successfully.
+- Swagger UI: [http://localhost:5125/swagger-ui/index.html](http://localhost:5125/swagger-ui/index.html)
 - To stop docker-compose and delete data, run `./stop-docker-compose.sh`.
 - If you need integrate with Keycloak, open [http://localhost:7123](http://localhost:7123) for Keycloak management
 

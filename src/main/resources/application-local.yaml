@@ -12,3 +12,9 @@ spring:
       timeout: 10000
   kafka:
     bootstrap-servers: localhost:9123
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
