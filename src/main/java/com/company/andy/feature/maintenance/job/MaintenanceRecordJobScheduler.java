@@ -1,4 +1,4 @@
-package com.company.andy.feature.equipment.job;
+package com.company.andy.feature.maintenance.job;
 
 import com.company.andy.common.configuration.profile.DisableForIT;
 import lombok.RequiredArgsConstructor;
@@ -12,13 +12,13 @@ import org.springframework.scheduling.annotation.Scheduled;
 @DisableForIT
 @RequiredArgsConstructor
 @Configuration(proxyBeanMethods = false)
-public class EquipmentScheduler {
-    private final MaintenanceReminderJob maintenanceReminderJob;
+public class MaintenanceRecordJobScheduler {
+    private final RemoveOldMaintenanceRecordsJob removeOldMaintenanceRecordsJob;
 
-    @Scheduled(cron = "0 10 2 1 * ?")
-    @SchedulerLock(name = "maintenanceReminderJob")
-    public void maintenanceReminderJob() {
+    @Scheduled(cron = "0 0 2 1 * ?")
+    @SchedulerLock(name = "removeOldMaintenanceRecordsJob")
+    public void removeOldMaintenanceRecordsJob() {
         LockAssert.assertLocked();
-        this.maintenanceReminderJob.run();
+        this.removeOldMaintenanceRecordsJob.run();
     }
 }
