@@ -61,7 +61,10 @@ There are 2 places of configuration that enables unified API errors:
   exceptions
   raised from Spring MVC
 - [RestErrorController](../src/main/java/com/company/andy/common/exception/RestErrorController.java): serves as a fallback for
-  handling exceptions for the whole application  
+  handling exceptions for the whole application
+
+![exception handling](../ADRs/asset/exception-hanlding.png)
+
 
 
 
