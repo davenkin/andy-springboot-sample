@@ -8,7 +8,7 @@ import com.company.andy.feature.equipment.command.UpdateEquipmentNameCommand;
 import com.company.andy.feature.equipment.domain.event.EquipmentCreatedEvent;
 import com.company.andy.feature.equipment.domain.event.EquipmentNameUpdatedEvent;
 import com.company.andy.feature.equipment.eventhandler.EquipmentCreatedEventHandler;
-import com.company.andy.feature.equipment.eventhandler.EquipmentCreatedEventHandler2;
+import com.company.andy.feature.equipment.eventhandler.EquipmentCreatedAnotherEventHandler;
 import com.company.andy.feature.equipment.eventhandler.EquipmentNameUpdatedEventHandler;
 import com.company.andy.feature.equipment.eventhandler.EquipmentUpdatedEventHandler;
 import org.junit.jupiter.api.Test;
@@ -34,7 +34,7 @@ class EventConsumerIntegrationTest extends IntegrationTest {
     private EquipmentCreatedEventHandler createdEventHandler;
 
     @MockitoSpyBean
-    private EquipmentCreatedEventHandler2 createdEventHandler2;
+    private EquipmentCreatedAnotherEventHandler createdEventHandler2;
 
     @MockitoSpyBean
     private EquipmentUpdatedEventHandler updatedEventHandler;
@@ -147,7 +147,7 @@ class EventConsumerIntegrationTest extends IntegrationTest {
         eventConsumer.consumeDomainEvent(createdEvent);
 
         verify(consumingEventDao, times(0)).markEventAsConsumedByHandler(any(), any(EquipmentCreatedEventHandler.class));
-        verify(consumingEventDao, times(1)).markEventAsConsumedByHandler(any(), any(EquipmentCreatedEventHandler2.class));
+        verify(consumingEventDao, times(1)).markEventAsConsumedByHandler(any(), any(EquipmentCreatedAnotherEventHandler.class));
         assertFalse(consumingEventDao.exists(createdEvent.getId(), createdEventHandler));
         verify(createdEventHandler, times(1)).handle(any(EquipmentCreatedEvent.class));
     }
