@@ -3,6 +3,7 @@ package com.company.andy.common.configuration;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -23,13 +24,18 @@ import static com.fasterxml.jackson.databind.SerializationFeature.WRITE_DURATION
 public class CommonConfiguration {
 
     @Bean
+    @Primary
     public TaskExecutor taskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(5);
-        executor.setMaxPoolSize(50);
+        executor.setMaxPoolSize(20);
         executor.setQueueCapacity(500);
+        executor.setThreadNamePrefix("default-executor-");
+        executor.setKeepAliveSeconds(60);
+        executor.setAllowCoreThreadTimeOut(false);
+        executor.setWaitForTasksToCompleteOnShutdown(true);
+        executor.setAwaitTerminationSeconds(30);
         executor.initialize();
-        executor.setThreadNamePrefix("default-");
         return executor;
     }
 
